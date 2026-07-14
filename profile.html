@@ -19,28 +19,28 @@
           },
           colors: {
             ink: {
-              50: "#f3f7f6",
-              100: "#e2ece9",
-              200: "#c3d7d1",
-              300: "#95b8af",
-              400: "#649489",
-              500: "#47786f",
-              600: "#366059",
-              700: "#2c4d48",
-              800: "#263f3b",
-              900: "#213532",
-              950: "#0f1d1b",
+              50: "#eef8f6",
+              100: "#d5efe9",
+              200: "#a9ddd3",
+              300: "#74c4b7",
+              400: "#45a799",
+              500: "#2b8b7e",
+              600: "#216f66",
+              700: "#1e5953",
+              800: "#1c4844",
+              900: "#1a3c39",
+              950: "#0a1f1d",
             },
             bloom: {
-              300: "#f2b8a8",
-              400: "#e8957d",
-              500: "#d97056",
-              600: "#c2553d",
+              300: "#7ee0d2",
+              400: "#3fcfbc",
+              500: "#14b8a6",
+              600: "#0f9488",
             },
             mist: {
-              50: "#f7f4ef",
-              100: "#efe8dc",
-              200: "#dfd2bc",
+              50: "#eef5f3",
+              100: "#dceae6",
+              200: "#bfd6d0",
             },
           },
           boxShadow: {
@@ -52,29 +52,29 @@
   </script>
   <style>
     :root {
-      --bg: #f7f4ef;
-      --bg-elevated: rgba(255, 255, 255, 0.72);
-      --ink: #213532;
-      --muted: #4d665f;
-      --line: rgba(33, 53, 50, 0.12);
-      --accent: #c2553d;
-      --accent-soft: #e8957d;
-      --glow-a: rgba(71, 120, 111, 0.28);
-      --glow-b: rgba(226, 149, 125, 0.22);
-      --hero-veil: linear-gradient(160deg, rgba(247, 244, 239, 0.18) 0%, rgba(247, 244, 239, 0.78) 58%, #f7f4ef 100%);
+      --bg: #eef5f3;
+      --bg-elevated: rgba(255, 255, 255, 0.7);
+      --ink: #0a1f1d;
+      --muted: #3d5c57;
+      --line: rgba(10, 31, 29, 0.12);
+      --accent: #0f9488;
+      --accent-soft: #14b8a6;
+      --glow-a: rgba(20, 184, 166, 0.28);
+      --glow-b: rgba(45, 139, 126, 0.22);
+      --hero-veil: linear-gradient(160deg, rgba(238, 245, 243, 0.12) 0%, rgba(238, 245, 243, 0.72) 55%, #eef5f3 100%);
     }
 
     html.dark {
-      --bg: #0f1d1b;
-      --bg-elevated: rgba(38, 63, 59, 0.55);
-      --ink: #f3f7f6;
-      --muted: #b5cac4;
-      --line: rgba(243, 247, 246, 0.12);
-      --accent: #e8957d;
-      --accent-soft: #f2b8a8;
-      --glow-a: rgba(100, 148, 137, 0.28);
-      --glow-b: rgba(217, 112, 86, 0.2);
-      --hero-veil: linear-gradient(160deg, rgba(15, 29, 27, 0.2) 0%, rgba(15, 29, 27, 0.72) 55%, #0f1d1b 100%);
+      --bg: #0a1f1d;
+      --bg-elevated: rgba(28, 72, 68, 0.5);
+      --ink: #eef8f6;
+      --muted: #a9ddd3;
+      --line: rgba(238, 248, 246, 0.12);
+      --accent: #3fcfbc;
+      --accent-soft: #7ee0d2;
+      --glow-a: rgba(63, 207, 188, 0.22);
+      --glow-b: rgba(20, 184, 166, 0.18);
+      --hero-veil: linear-gradient(160deg, rgba(10, 31, 29, 0.15) 0%, rgba(10, 31, 29, 0.72) 55%, #0a1f1d 100%);
     }
 
     * { box-sizing: border-box; }
@@ -150,16 +150,16 @@
       position: absolute;
       inset: 0;
       background:
-        radial-gradient(ellipse 80% 55% at 70% 35%, rgba(71, 120, 111, 0.18), transparent 60%),
-        radial-gradient(ellipse 60% 50% at 20% 70%, rgba(226, 149, 125, 0.14), transparent 55%),
-        linear-gradient(135deg, #d7e6e1 0%, #efe8dc 42%, #f4d7cc 100%);
+        radial-gradient(ellipse 80% 55% at 70% 35%, rgba(20, 184, 166, 0.22), transparent 60%),
+        radial-gradient(ellipse 60% 50% at 18% 72%, rgba(33, 111, 102, 0.16), transparent 55%),
+        linear-gradient(135deg, #cfe8e3 0%, #d9ebe7 45%, #e7f3f0 100%);
     }
 
     html.dark .hero-plane {
       background:
-        radial-gradient(ellipse 80% 55% at 72% 30%, rgba(100, 148, 137, 0.28), transparent 60%),
-        radial-gradient(ellipse 55% 45% at 18% 75%, rgba(217, 112, 86, 0.18), transparent 55%),
-        linear-gradient(145deg, #132826 0%, #1a3330 48%, #2a241f 100%);
+        radial-gradient(ellipse 80% 55% at 72% 30%, rgba(63, 207, 188, 0.2), transparent 60%),
+        radial-gradient(ellipse 55% 45% at 18% 75%, rgba(15, 148, 136, 0.16), transparent 55%),
+        linear-gradient(145deg, #071716 0%, #0f2a27 48%, #123330 100%);
     }
 
     .hero-veil {
@@ -256,7 +256,7 @@
       border-radius: 1.1rem;
       overflow: hidden;
       background:
-        linear-gradient(145deg, rgba(71, 120, 111, 0.35), rgba(226, 149, 125, 0.28)),
+        linear-gradient(145deg, rgba(20, 184, 166, 0.4), rgba(33, 111, 102, 0.28)),
         var(--bg);
       display: grid;
       place-items: center;
