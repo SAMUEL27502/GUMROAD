@@ -334,7 +334,7 @@
           "url": "https://hormonedecoder7.gumroad.com/l/snkphr",
           "price": "$15+",
           "native_type": "digital",
-          "thumbnail_url": "https://public-files.gumroad.com/ajiy945f9myjn1h1lbm1mlre572s",
+          "thumbnail_url": null,
           "description": "A 4-week tracking system that turns your symptoms into clinical data your doctor can't dismiss."
         },
         {
@@ -342,7 +342,7 @@
           "url": "https://hormonedecoder7.gumroad.com/l/kcpuz",
           "price": "$19+",
           "native_type": "digital",
-          "thumbnail_url": "https://public-files.gumroad.com/gwouudxeei1syk4xttn7pd2g54re",
+          "thumbnail_url": null,
           "description": "The 4-Driver Method and a 12-week protocol for weight changes driven by hormones, not willpower."
         },
         {
@@ -350,7 +350,7 @@
           "url": "https://hormonedecoder7.gumroad.com/l/ddhxxr",
           "price": "$17+",
           "native_type": "digital",
-          "thumbnail_url": "https://public-files.gumroad.com/zth5gzo1ikqee073zvl97m8agzpk",
+          "thumbnail_url": null,
           "description": "A 4-week structured meal plan focused on blood sugar stability and estrogen metabolism."
         },
         {
@@ -358,7 +358,7 @@
           "url": "https://hormonedecoder7.gumroad.com/l/jeqiio",
           "price": "$27+",
           "native_type": "digital",
-          "thumbnail_url": "https://public-files.gumroad.com/zu5qfk1pj60tkk878kabyowkp93t",
+          "thumbnail_url": null,
           "description": "A complete education guide for PCOS, perimenopause, and menopause."
         }
       ],
@@ -575,21 +575,11 @@ Too many women spend years hearing their symptoms are “just stress,” “anxi
           item.href = product.url || "#";
           item.setAttribute("role", "listitem");
 
+          // Sandbox blocks external image hosts — use CSS marks only.
           var thumb = document.createElement("div");
           thumb.className = "product-thumb";
           thumb.setAttribute("aria-hidden", "true");
-          if (product.thumbnail_url) {
-            var img = document.createElement("img");
-            img.src = product.thumbnail_url;
-            img.alt = "";
-            img.loading = "lazy";
-            img.addEventListener("error", function () {
-              thumb.innerHTML = '<div class="product-thumb-fallback"></div>';
-            });
-            thumb.appendChild(img);
-          } else {
-            thumb.innerHTML = '<div class="product-thumb-fallback"></div>';
-          }
+          thumb.innerHTML = '<div class="product-thumb-fallback"></div>';
 
           var copy = document.createElement("div");
           copy.innerHTML =
