@@ -1,0 +1,263 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  USER
+  ADMIN
+  AFFILIATE
+}
+
+enum RiskLevel {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  CANCELLED
+  PAST_DUE
+  TRIALING
+}
+
+enum PlanTier {
+  STARTER
+  PRO
+  ELITE
+}
+
+enum AccountType {
+  DEMO
+  REAL
+  INVESTOR
+}
+
+enum NotificationType {
+  BOT_PERFORMANCE
+  MT5_UPDATE
+  SUBSCRIPTION
+  SYSTEM
+  REVIEW
+}
+
+model User {
+  id                String             @id @default(cuid())
+  email             String             @unique
+  name              String?
+  avatarUrl         String?
+  role              Role               @default(USER)
+  plan              PlanTier           @default(STARTER)
+  emailVerified     Boolean            @default(false)
+  referralCode      String             @unique @default(cuid())
+  referredBy        String?
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+  subscriptions     Subscription[]
+  reviews           Review[]
+  favorites         Favorite[]
+  connectedAccounts ConnectedAccount[]
+  trades            Trade[]
+  notifications     Notification[]
+  payments          Payment[]
+  journalEntries    JournalEntry[]
+  watchlistItems    WatchlistItem[]
+  apiKeys           ApiKey[]
+}
+
+model Bot {
+  id              String           @id @default(cuid())
+  slug            String           @unique
+  name            String
+  description     String
+  strategy        String
+  tradingPair     String
+  riskLevel       RiskLevel
+  roi             Float
+  drawdown        Float
+  winRate         Float
+  profitFactor    Float
+  subscribers     Int              @default(0)
+  price           Float
+  rating          Float            @default(0)
+  imageUrl        String?
+  verified        Boolean          @default(false)
+  category        String
+  tags            String[]
+  featured        Boolean          @default(false)
+  monthlyReturns  Json?
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  subscriptions   Subscription[]
+  reviews         Review[]
+  favorites       Favorite[]
+  performances    BotPerformance[]
+  trades          Trade[]
+}
+
+model Subscription {
+  id        String             @id @default(cuid())
+  userId    String
+  botId     String
+  status    SubscriptionStatus @default(ACTIVE)
+  plan      PlanTier           @default(STARTER)
+  price     Float
+  startedAt DateTime           @default(now())
+  endsAt    DateTime?
+  createdAt DateTime           @default(now())
+  updatedAt DateTime           @updatedAt
+  user      User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  bot       Bot                @relation(fields: [botId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, botId])
+}
+
+model Review {
+  id        String   @id @default(cuid())
+  userId    String
+  botId     String
+  rating    Int
+  title     String
+  content   String
+  approved  Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  bot       Bot      @relation(fields: [botId], references: [id], onDelete: Cascade)
+}
+
+model Favorite {
+  id        String   @id @default(cuid())
+  userId    String
+  botId     String
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  bot       Bot      @relation(fields: [botId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, botId])
+}
+
+model ConnectedAccount {
+  id           String      @id @default(cuid())
+  userId       String
+  brokerServer String
+  accountNumber String
+  nickname     String
+  accountType  AccountType @default(INVESTOR)
+  balance      Float       @default(0)
+  equity       Float       @default(0)
+  freeMargin   Float       @default(0)
+  marginLevel  Float       @default(0)
+  leverage     String      @default("1:100")
+  broker       String
+  connected    Boolean     @default(true)
+  lastSyncAt   DateTime?
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+  user         User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  trades       Trade[]
+}
+
+model Trade {
+  id                 String            @id @default(cuid())
+  userId             String
+  botId              String?
+  connectedAccountId String?
+  symbol             String
+  type               String
+  volume             Float
+  openPrice          Float
+  closePrice         Float?
+  profit             Float             @default(0)
+  openTime           DateTime          @default(now())
+  closeTime          DateTime?
+  status             String            @default("OPEN")
+  user               User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  bot                Bot?              @relation(fields: [botId], references: [id])
+  connectedAccount   ConnectedAccount? @relation(fields: [connectedAccountId], references: [id])
+}
+
+model BotPerformance {
+  id           String   @id @default(cuid())
+  botId        String
+  date         DateTime
+  equity       Float
+  roi          Float
+  drawdown     Float
+  trades       Int
+  winRate      Float
+  bot          Bot      @relation(fields: [botId], references: [id], onDelete: Cascade)
+
+  @@index([botId, date])
+}
+
+model Notification {
+  id        String           @id @default(cuid())
+  userId    String
+  type      NotificationType
+  title     String
+  message   String
+  read      Boolean          @default(false)
+  href      String?
+  createdAt DateTime         @default(now())
+  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Payment {
+  id            String   @id @default(cuid())
+  userId        String
+  amount        Float
+  currency      String   @default("USD")
+  provider      String
+  status        String
+  externalId    String?
+  description   String?
+  createdAt     DateTime @default(now())
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model JournalEntry {
+  id        String   @id @default(cuid())
+  userId    String
+  title     String
+  content   String
+  symbol    String?
+  mood      String?
+  pnl       Float?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model WatchlistItem {
+  id        String   @id @default(cuid())
+  userId    String
+  symbol    String
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, symbol])
+}
+
+model ApiKey {
+  id        String    @id @default(cuid())
+  userId    String
+  name      String
+  keyHash   String
+  lastUsed  DateTime?
+  createdAt DateTime  @default(now())
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Category {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  slug        String   @unique
+  description String?
+  createdAt   DateTime @default(now())
+}
