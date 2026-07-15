@@ -44,14 +44,46 @@ const seeded: UserSubscription[] = [
 
 interface SubscriptionsState {
   subscriptions: UserSubscription[];
+  subscribe: (bot: { id: string; name: string; price: number }) => string;
   cancel: (id: string) => void;
   reactivate: (id: string) => void;
 }
 
+function nextRenewalDate() {
+  const d = new Date();
+  d.setMonth(d.getMonth() + 1);
+  return d.toISOString().slice(0, 10);
+}
+
 export const useSubscriptionsStore = create<SubscriptionsState>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       subscriptions: seeded.filter((s) => bots.some((b) => b.id === s.botId)),
+      subscribe: (bot) => {
+        const existing = get().subscriptions.find((s) => s.botId === bot.id);
+        if (existing?.status === "ACTIVE") return existing.id;
+        if (existing?.status === "CANCELLED" || existing?.status === "PAST_DUE") {
+          get().reactivate(existing.id);
+          return existing.id;
+        }
+        const id = `sub-${bot.id}-${Date.now()}`;
+        const today = new Date().toISOString().slice(0, 10);
+        set((state) => ({
+          subscriptions: [
+            {
+              id,
+              botId: bot.id,
+              botName: bot.name,
+              price: bot.price,
+              status: "ACTIVE",
+              renewsAt: nextRenewalDate(),
+              startedAt: today,
+            },
+            ...state.subscriptions,
+          ],
+        }));
+        return id;
+      },
       cancel: (id) =>
         set((state) => ({
           subscriptions: state.subscriptions.map((s) =>

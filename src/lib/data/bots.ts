@@ -544,3 +544,59 @@ export function getBotBySlug(slug: string) {
 export function getFeaturedBots() {
   return bots.filter((b) => b.featured);
 }
+
+export interface BotTrade {
+  id: string;
+  symbol: string;
+  type: "BUY" | "SELL";
+  volume: number;
+  openPrice: number;
+  closePrice: number;
+  profit: number;
+  openTime: string;
+  closeTime: string;
+  status: "CLOSED" | "OPEN";
+}
+
+/** Deterministic sample trade history for bot details pages. */
+export function getBotTradeHistory(bot: Bot): BotTrade[] {
+  const seed = bot.id.split("").reduce((acc, ch) => acc + ch.charCodeAt(0), 0);
+  const symbol = bot.tradingPair.includes(" ") ? bot.tradingPair.split(" ")[0] : bot.tradingPair;
+  const basePrice =
+    symbol.includes("XAU") || symbol.includes("Gold")
+      ? 2350
+      : symbol.includes("BTC")
+        ? 64000
+        : symbol.includes("JPY")
+          ? 155
+          : 1.08;
+
+  return Array.from({ length: 12 }, (_, i) => {
+    const n = (seed * (i + 3) * 17) % 1000;
+    const isBuy = n % 2 === 0;
+    const volume = Number((0.1 + (n % 50) / 100).toFixed(2));
+    const openPrice = Number((basePrice * (1 + ((n % 40) - 20) / 10000)).toFixed(symbol.includes("JPY") || symbol.includes("XAU") || symbol.includes("BTC") ? 2 : 5));
+    const move = ((n % 30) - 10) / (symbol.includes("BTC") ? 200 : symbol.includes("XAU") ? 500 : 8000);
+    const closePrice = Number((openPrice * (1 + (isBuy ? move : -move))).toFixed(symbol.includes("JPY") || symbol.includes("XAU") || symbol.includes("BTC") ? 2 : 5));
+    const rawProfit = (isBuy ? closePrice - openPrice : openPrice - closePrice) * volume * (symbol.includes("BTC") ? 1 : symbol.includes("XAU") ? 10 : 100000) / (symbol.includes("BTC") ? 1 : 1);
+    const profit = Number((rawProfit / (symbol.includes("XAU") || symbol.includes("BTC") ? 10 : 100)).toFixed(2));
+    const day = 14 - i;
+    const status: "CLOSED" | "OPEN" = i === 0 ? "OPEN" : "CLOSED";
+
+    return {
+      id: `${bot.slug}-t${i + 1}`,
+      symbol,
+      type: isBuy ? "BUY" : "SELL",
+      volume,
+      openPrice,
+      closePrice: status === "OPEN" ? openPrice : closePrice,
+      profit: status === "OPEN" ? Number((profit * 0.4).toFixed(2)) : profit,
+      openTime: `2026-07-${String(Math.max(1, day)).padStart(2, "0")} ${String(8 + (n % 10)).padStart(2, "0")}:30`,
+      closeTime:
+        status === "OPEN"
+          ? "—"
+          : `2026-07-${String(Math.max(1, day)).padStart(2, "0")} ${String(12 + (n % 8)).padStart(2, "0")}:15`,
+      status,
+    };
+  });
+}
