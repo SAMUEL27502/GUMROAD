@@ -181,6 +181,16 @@ export const homepageFaq = [
   },
 ];
 
+export type Mt5Order = {
+  id: string;
+  symbol: string;
+  type: "BUY" | "SELL";
+  volume: number;
+  profit: number;
+  status: "OPEN" | "CLOSED";
+  time: string;
+};
+
 export const connectedAccounts = [
   {
     id: "acc1",
@@ -188,13 +198,43 @@ export const connectedAccounts = [
     broker: "IC Markets",
     brokerServer: "ICMarkets-Live03",
     accountNumber: "8742931",
-    accountType: "INVESTOR",
+    accountType: "INVESTOR" as const,
     balance: 24850.42,
     equity: 25120.18,
     freeMargin: 18440.55,
     marginLevel: 412.6,
     leverage: "1:500",
     connected: true,
+    openTrades: 3,
+    recentOrders: [
+      {
+        id: "o1",
+        symbol: "XAUUSD",
+        type: "BUY" as const,
+        volume: 0.15,
+        profit: 84.2,
+        status: "CLOSED" as const,
+        time: "2h ago",
+      },
+      {
+        id: "o2",
+        symbol: "USDJPY",
+        type: "BUY" as const,
+        volume: 0.4,
+        profit: 12.6,
+        status: "OPEN" as const,
+        time: "1h ago",
+      },
+      {
+        id: "o3",
+        symbol: "EURUSD",
+        type: "SELL" as const,
+        volume: 0.5,
+        profit: 32.1,
+        status: "CLOSED" as const,
+        time: "5h ago",
+      },
+    ] satisfies Mt5Order[],
   },
   {
     id: "acc2",
@@ -202,13 +242,34 @@ export const connectedAccounts = [
     broker: "Pepperstone",
     brokerServer: "Pepperstone-Demo",
     accountNumber: "5021844",
-    accountType: "DEMO",
+    accountType: "DEMO" as const,
     balance: 10000,
     equity: 10125.3,
     freeMargin: 9450.2,
     marginLevel: 680.1,
     leverage: "1:200",
     connected: true,
+    openTrades: 1,
+    recentOrders: [
+      {
+        id: "o4",
+        symbol: "GBPUSD",
+        type: "BUY" as const,
+        volume: 0.3,
+        profit: -18.4,
+        status: "CLOSED" as const,
+        time: "8h ago",
+      },
+      {
+        id: "o5",
+        symbol: "AUDUSD",
+        type: "SELL" as const,
+        volume: 0.2,
+        profit: 8.5,
+        status: "OPEN" as const,
+        time: "3h ago",
+      },
+    ] satisfies Mt5Order[],
   },
 ];
 

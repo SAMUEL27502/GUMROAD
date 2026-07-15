@@ -7,17 +7,14 @@ import { Controller, useForm } from "react-hook-form";
 import {
   ArrowDownRight,
   ArrowUpRight,
-  CheckCircle2,
   Link2,
-  RefreshCw,
   Server,
   Shield,
-  Trash2,
   TrendingUp,
-  Unplug,
   Wallet,
 } from "lucide-react";
 import { toast } from "sonner";
+import { Mt5AccountCard } from "@/components/mt5/mt5-account-card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -90,6 +87,8 @@ export default function MT5Page() {
       leverage: "1:500",
       connected: true,
       lastSyncAt: new Date().toISOString(),
+      openTrades: 0,
+      recentOrders: [],
     });
     toast.success(`Connected ${data.nickname} successfully`);
     reset();
@@ -329,120 +328,26 @@ export default function MT5Page() {
               ) : (
                 <div className="grid gap-4 sm:grid-cols-2">
                   {accounts.map((acc) => (
-                    <Card key={acc.id} className="border-border/70 bg-card/80">
-                      <CardContent className="p-5">
-                        <div className="flex items-start justify-between gap-2">
-                          <div>
-                            <p className="font-semibold">{acc.nickname}</p>
-                            <p className="text-xs text-muted-foreground">
-                              {acc.broker} · {acc.brokerServer} · #{acc.accountNumber}
-                            </p>
-                          </div>
-                          <Badge
-                            variant={
-                              !acc.connected
-                                ? "danger"
-                                : acc.accountType === "DEMO"
-                                  ? "warning"
-                                  : "success"
-                            }
-                          >
-                            {acc.connected && <CheckCircle2 className="mr-1 h-3 w-3" />}
-                            {acc.connected ? acc.accountType : "OFFLINE"}
-                          </Badge>
-                        </div>
-
-                        <div className="mt-4 grid grid-cols-2 gap-3">
-                          <div className="rounded-xl bg-muted/30 p-3">
-                            <p className="text-[10px] tracking-wide text-muted-foreground uppercase">
-                              Balance
-                            </p>
-                            <p className="text-lg font-bold">{formatCurrency(acc.balance)}</p>
-                          </div>
-                          <div className="rounded-xl bg-muted/30 p-3">
-                            <p className="text-[10px] tracking-wide text-muted-foreground uppercase">
-                              Equity
-                            </p>
-                            <p className="text-lg font-bold text-emerald-400">
-                              {formatCurrency(acc.equity)}
-                            </p>
-                          </div>
-                          <div className="rounded-xl bg-muted/30 p-3">
-                            <p className="text-[10px] tracking-wide text-muted-foreground uppercase">
-                              Free Margin
-                            </p>
-                            <p className="text-sm font-semibold">
-                              {formatCurrency(acc.freeMargin)}
-                            </p>
-                          </div>
-                          <div className="rounded-xl bg-muted/30 p-3">
-                            <p className="text-[10px] tracking-wide text-muted-foreground uppercase">
-                              Margin Level
-                            </p>
-                            <p className="text-sm font-semibold">{acc.marginLevel}%</p>
-                          </div>
-                        </div>
-
-                        <div className="mt-3 flex items-center gap-2 text-xs text-muted-foreground">
-                          <Server className="h-3.5 w-3.5" />
-                          {acc.leverage} leverage
-                          {acc.lastSyncAt && (
-                            <span>· synced {new Date(acc.lastSyncAt).toLocaleTimeString()}</span>
-                          )}
-                        </div>
-
-                        <div className="mt-4 flex flex-wrap gap-2">
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            onClick={() => {
-                              sync(acc.id);
-                              toast.success(`Synced ${acc.nickname}`);
-                            }}
-                          >
-                            <RefreshCw className="h-3.5 w-3.5" />
-                            Sync
-                          </Button>
-                          {acc.connected ? (
-                            <Button
-                              size="sm"
-                              variant="outline"
-                              onClick={() => {
-                                disconnect(acc.id);
-                                toast.message(`Disconnected ${acc.nickname}`);
-                              }}
-                            >
-                              <Unplug className="h-3.5 w-3.5" />
-                              Disconnect
-                            </Button>
-                          ) : (
-                            <Button
-                              size="sm"
-                              variant="outline"
-                              onClick={() => {
-                                reconnect(acc.id);
-                                toast.success(`Reconnected ${acc.nickname}`);
-                              }}
-                            >
-                              <Link2 className="h-3.5 w-3.5" />
-                              Reconnect
-                            </Button>
-                          )}
-                          <Button
-                            size="sm"
-                            variant="ghost"
-                            className="text-red-400"
-                            onClick={() => {
-                              remove(acc.id);
-                              toast.message(`Removed ${acc.nickname}`);
-                            }}
-                          >
-                            <Trash2 className="h-3.5 w-3.5" />
-                            Remove
-                          </Button>
-                        </div>
-                      </CardContent>
-                    </Card>
+                    <Mt5AccountCard
+                      key={acc.id}
+                      account={acc}
+                      onSync={(id) => {
+                        sync(id);
+                        toast.success(`Synced ${acc.nickname}`);
+                      }}
+                      onDisconnect={(id) => {
+                        disconnect(id);
+                        toast.message(`Disconnected ${acc.nickname}`);
+                      }}
+                      onReconnect={(id) => {
+                        reconnect(id);
+                        toast.success(`Reconnected ${acc.nickname}`);
+                      }}
+                      onRemove={(id) => {
+                        remove(id);
+                        toast.message(`Removed ${acc.nickname}`);
+                      }}
+                    />
                   ))}
                 </div>
               )}

@@ -1,9 +1,11 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import { connectedAccounts as seedAccounts } from "@/lib/data/platform";
+import { connectedAccounts as seedAccounts, type Mt5Order } from "@/lib/data/platform";
 
 export type Mt5Account = (typeof seedAccounts)[number] & {
   lastSyncAt?: string;
+  openTrades?: number;
+  recentOrders?: Mt5Order[];
 };
 
 interface Mt5AccountsState {
@@ -39,16 +41,20 @@ export const useMt5AccountsStore = create<Mt5AccountsState>()(
         })),
       sync: (id) =>
         set((state) => ({
-          accounts: state.accounts.map((a) =>
-            a.id === id
-              ? {
-                  ...a,
-                  lastSyncAt: new Date().toISOString(),
-                  equity: Number((a.equity * (1 + (Math.random() * 0.004 - 0.002))).toFixed(2)),
-                  balance: Number((a.balance * (1 + (Math.random() * 0.002 - 0.001))).toFixed(2)),
-                }
-              : a
-          ),
+          accounts: state.accounts.map((a) => {
+            if (a.id !== id) return a;
+            const equity = Number((a.equity * (1 + (Math.random() * 0.004 - 0.002))).toFixed(2));
+            const balance = Number((a.balance * (1 + (Math.random() * 0.002 - 0.001))).toFixed(2));
+            const freeMargin = Number((a.freeMargin * (1 + (Math.random() * 0.003 - 0.001))).toFixed(2));
+            return {
+              ...a,
+              lastSyncAt: new Date().toISOString(),
+              equity,
+              balance,
+              freeMargin,
+              openTrades: a.openTrades ?? 0,
+            };
+          }),
         })),
       remove: (id) =>
         set((state) => ({
