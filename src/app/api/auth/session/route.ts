@@ -14,6 +14,7 @@ export async function GET() {
     return NextResponse.json({
       user: user ? mapSupabaseUser(user) : null,
       mode: "supabase",
+      notifications: user?.user_metadata?.notification_prefs ?? null,
     });
   }
 
@@ -24,10 +25,16 @@ export async function GET() {
   }
 
   try {
-    const parsed = JSON.parse(raw) as { email: string; name?: string };
+    const parsed = JSON.parse(raw) as {
+      email: string;
+      name?: string;
+      avatarUrl?: string;
+      notifications?: Record<string, boolean>;
+    };
     return NextResponse.json({
-      user: mapDemoUser(parsed.email, parsed.name),
+      user: mapDemoUser(parsed.email, parsed.name, { avatarUrl: parsed.avatarUrl }),
       mode: "demo",
+      notifications: parsed.notifications ?? null,
     });
   } catch {
     return NextResponse.json({ user: null, mode: "demo" });

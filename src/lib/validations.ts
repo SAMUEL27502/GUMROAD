@@ -63,6 +63,34 @@ export const profileSchema = z.object({
   plan: z.enum(["STARTER", "PRO", "ELITE"]).optional(),
 });
 
+export const changePasswordSchema = z
+  .object({
+    currentPassword: z.string().min(8, "Current password is required"),
+    newPassword: z
+      .string()
+      .min(8, "Password must be at least 8 characters")
+      .regex(/[A-Z]/, "Include at least one uppercase letter")
+      .regex(/[0-9]/, "Include at least one number"),
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.newPassword === data.confirmPassword, {
+    message: "Passwords do not match",
+    path: ["confirmPassword"],
+  })
+  .refine((data) => data.currentPassword !== data.newPassword, {
+    message: "New password must be different from current password",
+    path: ["newPassword"],
+  });
+
+export const notificationPrefsSchema = z.object({
+  botPerformance: z.boolean(),
+  tradeAlerts: z.boolean(),
+  mt5Sync: z.boolean(),
+  weeklyDigest: z.boolean(),
+  subscriptionBilling: z.boolean(),
+  marketing: z.boolean(),
+});
+
 export type LoginInput = z.infer<typeof loginSchema>;
 export type RegisterInput = z.infer<typeof registerSchema>;
 export type ForgotPasswordInput = z.infer<typeof forgotPasswordSchema>;
@@ -70,3 +98,5 @@ export type ResetPasswordInput = z.infer<typeof resetPasswordSchema>;
 export type Mt5ConnectInput = z.infer<typeof mt5ConnectSchema>;
 export type ContactInput = z.infer<typeof contactSchema>;
 export type ProfileInput = z.infer<typeof profileSchema>;
+export type ChangePasswordInput = z.infer<typeof changePasswordSchema>;
+export type NotificationPrefs = z.infer<typeof notificationPrefsSchema>;

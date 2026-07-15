@@ -48,12 +48,17 @@ function demoIdFromEmail(email: string) {
   return `demo-${hash.toString(16)}`;
 }
 
-export function mapDemoUser(email: string, name?: string): AuthUser {
+export function mapDemoUser(
+  email: string,
+  name?: string,
+  extras?: { avatarUrl?: string; plan?: PlanTier }
+): AuthUser {
   return {
     id: demoIdFromEmail(email),
     name: name || email.split("@")[0] || "Trader",
     email,
-    plan: "PRO",
+    avatarUrl: extras?.avatarUrl,
+    plan: extras?.plan || "PRO",
     role: email.includes("admin") ? "ADMIN" : "USER",
     emailVerified: true,
     provider: "demo",
