@@ -96,6 +96,91 @@ export const pricingPlans = [
   },
 ];
 
+export const howItWorks = [
+  {
+    step: "01",
+    title: "Create your account",
+    description: "Sign up in seconds and choose a plan that matches your automation goals.",
+    icon: "UserPlus",
+  },
+  {
+    step: "02",
+    title: "Connect MetaTrader 5",
+    description: "Link your broker with a read-only investor password for secure live syncing.",
+    icon: "Plug",
+  },
+  {
+    step: "03",
+    title: "Subscribe to verified bots",
+    description: "Browse risk-graded Expert Advisors with transparent equity and drawdown data.",
+    icon: "Bot",
+  },
+  {
+    step: "04",
+    title: "Deploy and monitor",
+    description: "One-click deploy to MT5, then track performance from your TradeBib dashboard.",
+    icon: "Rocket",
+  },
+];
+
+export const testimonials = [
+  {
+    id: "t1",
+    name: "Marcus Chen",
+    role: "Prop trader · Singapore",
+    quote:
+      "TradeBib replaced three spreadsheets and a messy VPS setup. The verified badges actually mean something — equity curves match my live accounts.",
+    rating: 5,
+    avatar: "MC",
+  },
+  {
+    id: "t2",
+    name: "Elena Vargas",
+    role: "Retail forex · Madrid",
+    quote:
+      "I subscribed to EuroTrend AI and NightOwl Grid in one afternoon. Risk grading made it easy to size positions without guessing.",
+    rating: 5,
+    avatar: "EV",
+  },
+  {
+    id: "t3",
+    name: "James Okonkwo",
+    role: "Algo desk · London",
+    quote:
+      "The MT5 investor sync is clean. We monitor drawdowns and ROI in real time — feels like a proper SaaS, not another EA marketplace.",
+    rating: 5,
+    avatar: "JO",
+  },
+];
+
+export const homepageFaq = [
+  {
+    question: "What is TradeBib?",
+    answer:
+      "TradeBib is a Forex & MT5 automation platform where traders discover verified Expert Advisors, connect MetaTrader 5 accounts, monitor performance, and subscribe to trading bots.",
+  },
+  {
+    question: "Are the bots verified with real data?",
+    answer:
+      "Yes. Listed EAs go through performance validation against live trading metrics before receiving a Verified badge. You can review equity curves, drawdown, win rate, and profit factor on each bot page.",
+  },
+  {
+    question: "Is my MT5 password safe?",
+    answer:
+      "TradeBib connects using investor (read-only) access. We never require your master trading password for account syncing.",
+  },
+  {
+    question: "Can I cancel a bot subscription anytime?",
+    answer:
+      "Yes. Manage platform plans and individual bot subscriptions from your profile. Cancellations take effect at the end of the current billing period.",
+  },
+  {
+    question: "Does past performance guarantee future results?",
+    answer:
+      "No. Trading involves risk. Past performance does not guarantee future results. Always size positions according to your risk tolerance and capital.",
+  },
+];
+
 export const connectedAccounts = [
   {
     id: "acc1",
