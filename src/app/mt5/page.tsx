@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { motion } from "framer-motion";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -20,8 +19,9 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { connectedAccounts, mt5Steps, recentTrades } from "@/lib/data/platform";
+import { mt5Steps, recentTrades } from "@/lib/data/platform";
 import { cn, formatCurrency } from "@/lib/utils";
+import { useMt5AccountsStore } from "@/stores/mt5-accounts-store";
 
 const connectSchema = z.object({
   brokerServer: z.string().min(3, "Broker server is required"),
@@ -33,7 +33,7 @@ const connectSchema = z.object({
 type ConnectForm = z.infer<typeof connectSchema>;
 
 export default function MT5Page() {
-  const [accounts, setAccounts] = useState(connectedAccounts);
+  const { accounts, add } = useMt5AccountsStore();
 
   const {
     register,
@@ -64,8 +64,9 @@ export default function MT5Page() {
       marginLevel: 500,
       leverage: "1:500",
       connected: true,
+      lastSyncAt: new Date().toISOString(),
     };
-    setAccounts((prev) => [...prev, newAccount]);
+    add(newAccount);
     toast.success(`Connected ${data.nickname} successfully`);
     reset();
   }
