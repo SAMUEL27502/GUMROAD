@@ -29,6 +29,7 @@ const columns = [
       { href: "/calendar", label: "Economic Calendar" },
       { href: "/news", label: "Forex News" },
       { href: "/leaderboard", label: "Leaderboard" },
+      { href: "/design-system", label: "Design System" },
     ],
   },
   {
