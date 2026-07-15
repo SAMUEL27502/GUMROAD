@@ -88,6 +88,7 @@ export {
   AccordionContent,
 } from "@/components/ui/accordion";
 export { Loader, PageLoader } from "@/components/ui/loader";
+export { Pagination } from "@/components/ui/pagination";
 
 // Motion
 export {
