@@ -656,12 +656,26 @@ Too many women spend years hearing their symptoms are “just stress,” “anxi
         }
       }
 
+      function priceValue(price) {
+        var match = String(price == null ? "" : price).replace(/,/g, "").match(/(\d+(?:\.\d+)?)/);
+        return match ? parseFloat(match[1]) : Number.POSITIVE_INFINITY;
+      }
+
+      function sortProductsByPrice(products) {
+        return (products || []).slice().sort(function (a, b) {
+          var diff = priceValue(a.price) - priceValue(b.price);
+          if (diff !== 0) return diff;
+          return String(a.name || "").localeCompare(String(b.name || ""));
+        });
+      }
+
       function renderProducts(products) {
         var rootEl = document.getElementById("products-root");
         var emptyEl = document.getElementById("products-empty");
         if (!rootEl || !emptyEl) return;
 
         rootEl.innerHTML = "";
+        products = sortProductsByPrice(products);
         if (!products || !products.length) {
           emptyEl.classList.remove("hidden");
           return;
