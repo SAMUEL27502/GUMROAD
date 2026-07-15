@@ -80,6 +80,7 @@ export {
   DonutChart,
 } from "@/components/ui/charts";
 export { DashboardCharts } from "@/components/dashboard/dashboard-charts";
+export { TradingViewAdvancedChart } from "@/components/charts/tradingview-advanced-chart";
 export { notify, toast } from "@/components/ui/toast";
 export { Separator } from "@/components/ui/separator";
 export { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
