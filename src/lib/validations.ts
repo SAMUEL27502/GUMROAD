@@ -41,14 +41,20 @@ export const resetPasswordSchema = z
   });
 
 export const mt5ConnectSchema = z.object({
-  broker: z.string().min(2, "Broker name is required"),
-  server: z.string().min(2, "Server name is required"),
-  accountNumber: z
+  broker: z.string().min(2, "Broker is required"),
+  server: z.string().min(2, "Server is required"),
+  login: z
     .string()
-    .min(4, "Account number is required")
-    .regex(/^\d+$/, "Account number must be numeric"),
-  investorPassword: z.string().min(4, "Investor password is required"),
-  nickname: z.string().optional(),
+    .min(4, "Login is required")
+    .regex(/^\d+$/, "Login must be numeric"),
+  investorPassword: z
+    .string()
+    .min(4, "Investor password is required")
+    .max(64, "Password is too long"),
+  nickname: z
+    .string()
+    .min(2, "Nickname must be at least 2 characters")
+    .max(40, "Nickname is too long"),
 });
 
 export const contactSchema = z.object({

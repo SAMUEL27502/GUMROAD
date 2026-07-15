@@ -480,16 +480,25 @@ export const mt5Steps = [
   {
     step: 2,
     title: "Enter broker details",
-    description: "Provide broker server, account number, and investor password.",
+    description: "Provide broker, server, login, investor password, and a nickname.",
   },
   {
     step: 3,
     title: "Verify connection",
-    description: "TradeBib syncs balance, equity, and open trades securely.",
+    description: "TradeBib syncs balance, equity, margin, and open trades securely.",
   },
   {
     step: 4,
     title: "Deploy bots",
     description: "Subscribe and push verified EAs to your connected terminal.",
   },
+];
+
+export const mt5Brokers = [
+  { name: "IC Markets", servers: ["ICMarkets-Live01", "ICMarkets-Live03", "ICMarketsSC-Demo"] },
+  { name: "Pepperstone", servers: ["Pepperstone-Live", "Pepperstone-Demo"] },
+  { name: "Exness", servers: ["Exness-MT5Real", "Exness-MT5Trial"] },
+  { name: "FTMO", servers: ["FTMO-Server", "FTMO-Demo"] },
+  { name: "XM", servers: ["XMGlobal-MT5", "XMGlobal-Demo"] },
+  { name: "Other", servers: [] },
 ];

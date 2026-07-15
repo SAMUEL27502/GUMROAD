@@ -1,75 +1,109 @@
 "use client";
 
+import { useMemo } from "react";
 import { motion } from "framer-motion";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
+import { Controller, useForm } from "react-hook-form";
 import {
   ArrowDownRight,
   ArrowUpRight,
   CheckCircle2,
   Link2,
+  RefreshCw,
   Server,
   Shield,
+  Trash2,
   TrendingUp,
+  Unplug,
+  Wallet,
 } from "lucide-react";
 import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { EmptyState } from "@/components/ui/empty-state";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { mt5Steps, recentTrades } from "@/lib/data/platform";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { mt5Brokers, mt5Steps, recentTrades } from "@/lib/data/platform";
+import { mt5ConnectSchema, type Mt5ConnectInput } from "@/lib/validations";
 import { cn, formatCurrency } from "@/lib/utils";
 import { useMt5AccountsStore } from "@/stores/mt5-accounts-store";
 
-const connectSchema = z.object({
-  brokerServer: z.string().min(3, "Broker server is required"),
-  accountNumber: z.string().min(4, "Account number is required"),
-  investorPassword: z.string().min(4, "Investor password is required"),
-  nickname: z.string().min(2, "Nickname is required"),
-});
-
-type ConnectForm = z.infer<typeof connectSchema>;
-
 export default function MT5Page() {
-  const { accounts, add } = useMt5AccountsStore();
+  const { accounts, add, sync, disconnect, reconnect, remove } = useMt5AccountsStore();
 
   const {
     register,
     handleSubmit,
+    control,
+    watch,
+    setValue,
     reset,
     formState: { errors, isSubmitting },
-  } = useForm<ConnectForm>({
-    resolver: zodResolver(connectSchema),
+  } = useForm<Mt5ConnectInput>({
+    resolver: zodResolver(mt5ConnectSchema),
     defaultValues: {
-      brokerServer: "",
-      accountNumber: "",
+      broker: "",
+      server: "",
+      login: "",
       investorPassword: "",
       nickname: "",
     },
   });
 
-  function onSubmit(data: ConnectForm) {
-    const newAccount = {
+  const selectedBroker = watch("broker");
+  const brokerServers = useMemo(
+    () => mt5Brokers.find((b) => b.name === selectedBroker)?.servers ?? [],
+    [selectedBroker]
+  );
+
+  function onSubmit(data: Mt5ConnectInput) {
+    const balance = 10000 + Math.floor(Math.random() * 5000);
+    const equity = Number((balance * (1 + (Math.random() * 0.02 - 0.005))).toFixed(2));
+    const usedMargin = Number((equity * 0.12).toFixed(2));
+    add({
       id: `acc-${Date.now()}`,
       nickname: data.nickname,
-      broker: data.brokerServer.split("-")[0] || "Broker",
-      brokerServer: data.brokerServer,
-      accountNumber: data.accountNumber,
-      accountType: "INVESTOR" as const,
-      balance: 10000,
-      equity: 10000,
-      freeMargin: 9800,
-      marginLevel: 500,
+      broker: data.broker,
+      brokerServer: data.server,
+      accountNumber: data.login,
+      accountType: data.server.toLowerCase().includes("demo") ? "DEMO" : "INVESTOR",
+      balance,
+      equity,
+      freeMargin: Number((equity - usedMargin).toFixed(2)),
+      marginLevel: Number(((equity / usedMargin) * 100).toFixed(1)),
       leverage: "1:500",
       connected: true,
       lastSyncAt: new Date().toISOString(),
-    };
-    add(newAccount);
+    });
     toast.success(`Connected ${data.nickname} successfully`);
     reset();
   }
+
+  const totals = useMemo(() => {
+    const connected = accounts.filter((a) => a.connected);
+    return {
+      balance: connected.reduce((s, a) => s + a.balance, 0),
+      equity: connected.reduce((s, a) => s + a.equity, 0),
+      freeMargin: connected.reduce((s, a) => s + a.freeMargin, 0),
+      count: connected.length,
+    };
+  }, [accounts]);
 
   return (
     <div className="relative">
@@ -88,11 +122,38 @@ export default function MT5Page() {
           <h1 className="text-3xl font-bold tracking-tight">
             Connect Your <span className="gradient-text">MT5 Account</span>
           </h1>
-          <p className="text-muted-foreground mt-2 max-w-2xl">
-            Link your broker account with investor (read-only) access to sync balance, equity, and
+          <p className="mt-2 max-w-2xl text-muted-foreground">
+            Link your broker with investor (read-only) access to sync balance, equity, margin, and
             deploy bots securely.
           </p>
         </motion.div>
+
+        {/* Portfolio summary */}
+        <div className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {[
+            { label: "Connected", value: String(totals.count), icon: Link2 },
+            { label: "Balance", value: formatCurrency(totals.balance), icon: Wallet },
+            {
+              label: "Equity",
+              value: formatCurrency(totals.equity),
+              icon: TrendingUp,
+              accent: "text-emerald-400",
+            },
+            { label: "Free Margin", value: formatCurrency(totals.freeMargin), icon: Server },
+          ].map((m) => (
+            <Card key={m.label} className="border-border/70 bg-card/80">
+              <CardContent className="flex items-center gap-3 p-4">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-sky-500/15">
+                  <m.icon className="h-5 w-5 text-sky-400" />
+                </div>
+                <div>
+                  <p className="text-xs tracking-wide text-muted-foreground uppercase">{m.label}</p>
+                  <p className={cn("text-lg font-bold", m.accent)}>{m.value}</p>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
 
         <div className="grid gap-8 lg:grid-cols-5">
           {/* Connect form */}
@@ -108,55 +169,120 @@ export default function MT5Page() {
                   <Link2 className="h-5 w-5 text-sky-400" />
                   New Connection
                 </CardTitle>
+                <CardDescription>
+                  Broker · Server · Login · Investor Password · Nickname
+                </CardDescription>
               </CardHeader>
               <CardContent>
-                <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+                <form onSubmit={handleSubmit(onSubmit)} className="space-y-4" noValidate>
                   <div className="space-y-2">
-                    <Label htmlFor="brokerServer">Broker Server</Label>
-                    <Input
-                      id="brokerServer"
-                      placeholder="e.g. ICMarkets-Live03"
-                      {...register("brokerServer")}
+                    <Label htmlFor="broker">Broker</Label>
+                    <Controller
+                      name="broker"
+                      control={control}
+                      render={({ field }) => (
+                        <Select
+                          value={field.value}
+                          onValueChange={(v) => {
+                            field.onChange(v);
+                            setValue("server", "");
+                          }}
+                        >
+                          <SelectTrigger id="broker" aria-invalid={!!errors.broker}>
+                            <SelectValue placeholder="Select broker" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {mt5Brokers.map((b) => (
+                              <SelectItem key={b.name} value={b.name}>
+                                {b.name}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      )}
                     />
-                    {errors.brokerServer && (
-                      <p className="text-xs text-red-400">{errors.brokerServer.message}</p>
+                    {errors.broker && (
+                      <p className="text-xs text-red-400">{errors.broker.message}</p>
                     )}
                   </div>
+
                   <div className="space-y-2">
-                    <Label htmlFor="accountNumber">Account Number</Label>
+                    <Label htmlFor="server">Server</Label>
+                    {brokerServers.length > 0 ? (
+                      <Controller
+                        name="server"
+                        control={control}
+                        render={({ field }) => (
+                          <Select value={field.value} onValueChange={field.onChange}>
+                            <SelectTrigger id="server" aria-invalid={!!errors.server}>
+                              <SelectValue placeholder="Select server" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {brokerServers.map((s) => (
+                                <SelectItem key={s} value={s}>
+                                  {s}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        )}
+                      />
+                    ) : (
+                      <Input
+                        id="server"
+                        placeholder="e.g. MyBroker-Live01"
+                        {...register("server")}
+                      />
+                    )}
+                    {errors.server && (
+                      <p className="text-xs text-red-400">{errors.server.message}</p>
+                    )}
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="login">Login</Label>
                     <Input
-                      id="accountNumber"
+                      id="login"
+                      inputMode="numeric"
                       placeholder="8742931"
-                      {...register("accountNumber")}
+                      autoComplete="username"
+                      {...register("login")}
                     />
-                    {errors.accountNumber && (
-                      <p className="text-xs text-red-400">{errors.accountNumber.message}</p>
-                    )}
+                    {errors.login && <p className="text-xs text-red-400">{errors.login.message}</p>}
                   </div>
+
                   <div className="space-y-2">
                     <Label htmlFor="investorPassword">Investor Password</Label>
                     <Input
                       id="investorPassword"
                       type="password"
                       placeholder="••••••••"
+                      autoComplete="current-password"
                       {...register("investorPassword")}
                     />
                     {errors.investorPassword && (
                       <p className="text-xs text-red-400">{errors.investorPassword.message}</p>
                     )}
                   </div>
+
                   <div className="space-y-2">
-                    <Label htmlFor="nickname">Account Nickname</Label>
-                    <Input id="nickname" placeholder="My Live Account" {...register("nickname")} />
+                    <Label htmlFor="nickname">Nickname</Label>
+                    <Input
+                      id="nickname"
+                      placeholder="My Live Account"
+                      {...register("nickname")}
+                    />
                     {errors.nickname && (
                       <p className="text-xs text-red-400">{errors.nickname.message}</p>
                     )}
                   </div>
+
                   <div className="flex items-start gap-2 rounded-xl bg-sky-500/10 p-3 text-xs text-sky-300">
                     <Shield className="mt-0.5 h-4 w-4 shrink-0" />
-                    We only use investor (read-only) passwords. Your trading password is never
-                    stored.
+                    We only use investor (read-only) passwords. Your master trading password is
+                    never stored.
                   </div>
+
                   <Button type="submit" className="w-full" disabled={isSubmitting}>
                     Connect Account
                   </Button>
@@ -164,10 +290,11 @@ export default function MT5Page() {
               </CardContent>
             </Card>
 
-            {/* Steps */}
-            <Card className="border-border/70 bg-card/80 mt-6">
+            {/* Connection steps */}
+            <Card className="mt-6 border-border/70 bg-card/80">
               <CardHeader>
-                <CardTitle className="text-base">How it works</CardTitle>
+                <CardTitle className="text-base">Connection steps</CardTitle>
+                <CardDescription>How TradeBib links your MT5 terminal</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 {mt5Steps.map((step) => (
@@ -177,7 +304,7 @@ export default function MT5Page() {
                     </div>
                     <div>
                       <p className="text-sm font-semibold">{step.title}</p>
-                      <p className="text-muted-foreground text-xs">{step.description}</p>
+                      <p className="text-xs text-muted-foreground">{step.description}</p>
                     </div>
                   </div>
                 ))}
@@ -185,7 +312,7 @@ export default function MT5Page() {
             </Card>
           </motion.div>
 
-          {/* Connected accounts & trades */}
+          {/* Connection cards & trades */}
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
@@ -193,126 +320,200 @@ export default function MT5Page() {
             className="space-y-6 lg:col-span-3"
           >
             <div>
-              <h2 className="mb-4 text-lg font-bold">Connected Accounts</h2>
-              <div className="grid gap-4 sm:grid-cols-2">
-                {accounts.map((acc) => (
-                  <Card key={acc.id} className="border-border/70 bg-card/80">
-                    <CardContent className="p-5">
-                      <div className="flex items-start justify-between">
-                        <div>
-                          <p className="font-semibold">{acc.nickname}</p>
-                          <p className="text-muted-foreground text-xs">
-                            {acc.brokerServer} · #{acc.accountNumber}
-                          </p>
+              <h2 className="mb-4 text-lg font-bold">Connection cards</h2>
+              {accounts.length === 0 ? (
+                <EmptyState
+                  title="No accounts connected"
+                  description="Use the form to link your first MT5 investor account."
+                />
+              ) : (
+                <div className="grid gap-4 sm:grid-cols-2">
+                  {accounts.map((acc) => (
+                    <Card key={acc.id} className="border-border/70 bg-card/80">
+                      <CardContent className="p-5">
+                        <div className="flex items-start justify-between gap-2">
+                          <div>
+                            <p className="font-semibold">{acc.nickname}</p>
+                            <p className="text-xs text-muted-foreground">
+                              {acc.broker} · {acc.brokerServer} · #{acc.accountNumber}
+                            </p>
+                          </div>
+                          <Badge
+                            variant={
+                              !acc.connected
+                                ? "danger"
+                                : acc.accountType === "DEMO"
+                                  ? "warning"
+                                  : "success"
+                            }
+                          >
+                            {acc.connected && <CheckCircle2 className="mr-1 h-3 w-3" />}
+                            {acc.connected ? acc.accountType : "OFFLINE"}
+                          </Badge>
                         </div>
-                        <Badge variant={acc.accountType === "DEMO" ? "warning" : "success"}>
-                          {acc.connected && <CheckCircle2 className="mr-1 h-3 w-3" />}
-                          {acc.accountType}
-                        </Badge>
-                      </div>
-                      <div className="mt-4 grid grid-cols-2 gap-3">
-                        <div className="bg-muted/30 rounded-xl p-3">
-                          <p className="text-muted-foreground text-[10px] tracking-wide uppercase">
-                            Balance
-                          </p>
-                          <p className="text-lg font-bold">{formatCurrency(acc.balance)}</p>
+
+                        <div className="mt-4 grid grid-cols-2 gap-3">
+                          <div className="rounded-xl bg-muted/30 p-3">
+                            <p className="text-[10px] tracking-wide text-muted-foreground uppercase">
+                              Balance
+                            </p>
+                            <p className="text-lg font-bold">{formatCurrency(acc.balance)}</p>
+                          </div>
+                          <div className="rounded-xl bg-muted/30 p-3">
+                            <p className="text-[10px] tracking-wide text-muted-foreground uppercase">
+                              Equity
+                            </p>
+                            <p className="text-lg font-bold text-emerald-400">
+                              {formatCurrency(acc.equity)}
+                            </p>
+                          </div>
+                          <div className="rounded-xl bg-muted/30 p-3">
+                            <p className="text-[10px] tracking-wide text-muted-foreground uppercase">
+                              Free Margin
+                            </p>
+                            <p className="text-sm font-semibold">
+                              {formatCurrency(acc.freeMargin)}
+                            </p>
+                          </div>
+                          <div className="rounded-xl bg-muted/30 p-3">
+                            <p className="text-[10px] tracking-wide text-muted-foreground uppercase">
+                              Margin Level
+                            </p>
+                            <p className="text-sm font-semibold">{acc.marginLevel}%</p>
+                          </div>
                         </div>
-                        <div className="bg-muted/30 rounded-xl p-3">
-                          <p className="text-muted-foreground text-[10px] tracking-wide uppercase">
-                            Equity
-                          </p>
-                          <p className="text-lg font-bold text-emerald-400">
-                            {formatCurrency(acc.equity)}
-                          </p>
+
+                        <div className="mt-3 flex items-center gap-2 text-xs text-muted-foreground">
+                          <Server className="h-3.5 w-3.5" />
+                          {acc.leverage} leverage
+                          {acc.lastSyncAt && (
+                            <span>· synced {new Date(acc.lastSyncAt).toLocaleTimeString()}</span>
+                          )}
                         </div>
-                        <div className="bg-muted/30 rounded-xl p-3">
-                          <p className="text-muted-foreground text-[10px] tracking-wide uppercase">
-                            Free Margin
-                          </p>
-                          <p className="text-sm font-semibold">{formatCurrency(acc.freeMargin)}</p>
+
+                        <div className="mt-4 flex flex-wrap gap-2">
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => {
+                              sync(acc.id);
+                              toast.success(`Synced ${acc.nickname}`);
+                            }}
+                          >
+                            <RefreshCw className="h-3.5 w-3.5" />
+                            Sync
+                          </Button>
+                          {acc.connected ? (
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={() => {
+                                disconnect(acc.id);
+                                toast.message(`Disconnected ${acc.nickname}`);
+                              }}
+                            >
+                              <Unplug className="h-3.5 w-3.5" />
+                              Disconnect
+                            </Button>
+                          ) : (
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={() => {
+                                reconnect(acc.id);
+                                toast.success(`Reconnected ${acc.nickname}`);
+                              }}
+                            >
+                              <Link2 className="h-3.5 w-3.5" />
+                              Reconnect
+                            </Button>
+                          )}
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            className="text-red-400"
+                            onClick={() => {
+                              remove(acc.id);
+                              toast.message(`Removed ${acc.nickname}`);
+                            }}
+                          >
+                            <Trash2 className="h-3.5 w-3.5" />
+                            Remove
+                          </Button>
                         </div>
-                        <div className="bg-muted/30 rounded-xl p-3">
-                          <p className="text-muted-foreground text-[10px] tracking-wide uppercase">
-                            Margin Level
-                          </p>
-                          <p className="text-sm font-semibold">{acc.marginLevel}%</p>
-                        </div>
-                      </div>
-                      <div className="text-muted-foreground mt-3 flex items-center gap-2 text-xs">
-                        <Server className="h-3.5 w-3.5" />
-                        {acc.leverage} leverage
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              )}
             </div>
 
             {/* Recent trades */}
             <Card className="border-border/70 bg-card/80">
               <CardHeader className="flex flex-row items-center justify-between">
-                <CardTitle className="flex items-center gap-2 text-base">
-                  <TrendingUp className="h-4 w-4 text-sky-400" />
-                  Recent Trades
-                </CardTitle>
+                <div>
+                  <CardTitle className="flex items-center gap-2 text-base">
+                    <TrendingUp className="h-4 w-4 text-sky-400" />
+                    Recent Trades
+                  </CardTitle>
+                  <CardDescription>Synced from connected MT5 accounts</CardDescription>
+                </div>
                 <Badge variant="outline">{recentTrades.length} trades</Badge>
               </CardHeader>
               <CardContent>
-                <div className="overflow-x-auto">
-                  <table className="w-full text-sm">
-                    <thead>
-                      <tr className="border-border/50 text-muted-foreground border-b text-left text-xs tracking-wide uppercase">
-                        <th className="pr-4 pb-3">Symbol</th>
-                        <th className="pr-4 pb-3">Type</th>
-                        <th className="pr-4 pb-3">Volume</th>
-                        <th className="pr-4 pb-3">Profit</th>
-                        <th className="pr-4 pb-3">Bot</th>
-                        <th className="pb-3">Status</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {recentTrades.map((trade) => (
-                        <tr key={trade.id} className="border-border/30 border-b">
-                          <td className="py-3 pr-4 font-semibold">{trade.symbol}</td>
-                          <td className="py-3 pr-4">
-                            <span
-                              className={cn(
-                                "inline-flex items-center gap-1 text-xs font-medium",
-                                trade.type === "BUY" ? "text-emerald-400" : "text-red-400"
-                              )}
-                            >
-                              {trade.type === "BUY" ? (
-                                <ArrowUpRight className="h-3 w-3" />
-                              ) : (
-                                <ArrowDownRight className="h-3 w-3" />
-                              )}
-                              {trade.type}
-                            </span>
-                          </td>
-                          <td className="text-muted-foreground py-3 pr-4">{trade.volume}</td>
-                          <td
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Symbol</TableHead>
+                      <TableHead>Type</TableHead>
+                      <TableHead>Volume</TableHead>
+                      <TableHead>Profit</TableHead>
+                      <TableHead>Bot</TableHead>
+                      <TableHead>Status</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {recentTrades.map((trade) => (
+                      <TableRow key={trade.id}>
+                        <TableCell className="font-semibold">{trade.symbol}</TableCell>
+                        <TableCell>
+                          <span
                             className={cn(
-                              "py-3 pr-4 font-semibold",
-                              trade.profit >= 0 ? "text-emerald-400" : "text-red-400"
+                              "inline-flex items-center gap-1 text-xs font-medium",
+                              trade.type === "BUY" ? "text-emerald-400" : "text-red-400"
                             )}
                           >
-                            {trade.profit >= 0 ? "+" : ""}
-                            {formatCurrency(trade.profit)}
-                          </td>
-                          <td className="text-muted-foreground py-3 pr-4 text-xs">{trade.bot}</td>
-                          <td className="py-3">
-                            <Badge
-                              variant={trade.status === "OPEN" ? "secondary" : "outline"}
-                              className="text-[10px]"
-                            >
-                              {trade.status}
-                            </Badge>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
+                            {trade.type === "BUY" ? (
+                              <ArrowUpRight className="h-3 w-3" />
+                            ) : (
+                              <ArrowDownRight className="h-3 w-3" />
+                            )}
+                            {trade.type}
+                          </span>
+                        </TableCell>
+                        <TableCell className="text-muted-foreground">{trade.volume}</TableCell>
+                        <TableCell
+                          className={cn(
+                            "font-semibold",
+                            trade.profit >= 0 ? "text-emerald-400" : "text-red-400"
+                          )}
+                        >
+                          {trade.profit >= 0 ? "+" : ""}
+                          {formatCurrency(trade.profit)}
+                        </TableCell>
+                        <TableCell className="text-xs text-muted-foreground">{trade.bot}</TableCell>
+                        <TableCell>
+                          <Badge
+                            variant={trade.status === "OPEN" ? "secondary" : "outline"}
+                            className="text-[10px]"
+                          >
+                            {trade.status}
+                          </Badge>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
               </CardContent>
             </Card>
           </motion.div>
