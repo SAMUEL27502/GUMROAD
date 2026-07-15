@@ -55,6 +55,7 @@ export const pricingPlans = [
     id: "starter",
     name: "Starter",
     price: 0,
+    yearlyPrice: 0,
     period: "forever",
     description: "Get started with verified bots and core analytics.",
     features: ["1 Bot subscription", "Basic analytics", "MT5 connection", "Email support"],
@@ -65,6 +66,7 @@ export const pricingPlans = [
     id: "pro",
     name: "Pro",
     price: 29,
+    yearlyPrice: 290,
     period: "month",
     description: "For active traders running a focused bot portfolio.",
     features: [
@@ -81,6 +83,7 @@ export const pricingPlans = [
     id: "elite",
     name: "Elite",
     price: 79,
+    yearlyPrice: 790,
     period: "month",
     description: "Unlimited automation with dedicated infrastructure.",
     features: [
@@ -94,6 +97,21 @@ export const pricingPlans = [
     cta: "Go Elite",
     popular: false,
   },
+];
+
+/** Feature comparison matrix for Starter / Pro / Elite. */
+export const pricingComparison = [
+  { feature: "Bot subscriptions", starter: "1", pro: "10", elite: "Unlimited" },
+  { feature: "MT5 connections", starter: "1", pro: "3", elite: "Unlimited" },
+  { feature: "Marketplace access", starter: true, pro: true, elite: true },
+  { feature: "Basic analytics", starter: true, pro: true, elite: true },
+  { feature: "Advanced analytics", starter: false, pro: true, elite: true },
+  { feature: "Performance alerts", starter: false, pro: true, elite: true },
+  { feature: "AI recommendations", starter: false, pro: true, elite: true },
+  { feature: "Dedicated VPS", starter: false, pro: false, elite: true },
+  { feature: "Affiliate dashboard", starter: false, pro: false, elite: true },
+  { feature: "Custom risk rules", starter: false, pro: false, elite: true },
+  { feature: "Priority support", starter: "Email", pro: "Priority", elite: "Dedicated" },
 ];
 
 export const howItWorks = [
