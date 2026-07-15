@@ -16,6 +16,8 @@ export interface Bot {
   price: number;
   rating: number;
   imageGradient: string;
+  /** Optional photo URL; falls back to gradient artwork when omitted */
+  imageUrl?: string;
   verified: boolean;
   category: string;
   tags: string[];

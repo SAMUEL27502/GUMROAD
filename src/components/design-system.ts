@@ -89,6 +89,7 @@ export {
 } from "@/components/ui/accordion";
 export { Loader, PageLoader } from "@/components/ui/loader";
 export { Pagination } from "@/components/ui/pagination";
+export { BotCard, BotCardSkeleton, type BotCardProps } from "@/components/bots/bot-card";
 
 // Motion
 export {
