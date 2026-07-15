@@ -26,12 +26,14 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { connectedAccounts, pricingPlans } from "@/lib/data/platform";
 import { cn, formatCurrency } from "@/lib/utils";
 import { useAuthStore } from "@/stores/auth-store";
+import { logoutAction, updateProfileAction } from "@/app/actions/auth";
 
 export default function ProfilePage() {
   const router = useRouter();
-  const { isAuthenticated, user, updateProfile, logout } = useAuthStore();
+  const { isAuthenticated, isLoading, user, updateProfile, clear } = useAuthStore();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [saving, setSaving] = useState(false);
   const [notifications, setNotifications] = useState({
     botPerformance: true,
     tradeAlerts: true,
@@ -43,7 +45,7 @@ export default function ProfilePage() {
   ]);
 
   useEffect(() => {
-    if (!isAuthenticated) {
+    if (!isLoading && !isAuthenticated) {
       router.replace("/login");
       return;
     }
@@ -51,23 +53,39 @@ export default function ProfilePage() {
       setName(user.name);
       setEmail(user.email);
     }
-  }, [isAuthenticated, user, router]);
+  }, [isAuthenticated, isLoading, user, router]);
 
-  if (!isAuthenticated || !user) {
+  if (isLoading || !isAuthenticated || !user) {
     return <PageLoader />;
   }
 
   const currentPlan = pricingPlans.find((p) => p.id === user.plan.toLowerCase()) ?? pricingPlans[1];
 
-  function handleSaveProfile() {
-    updateProfile({ name, email });
-    toast.success("Profile updated");
+  async function handleSaveProfile() {
+    if (!user) return;
+    setSaving(true);
+    const formData = new FormData();
+    formData.set("name", name);
+    formData.set("plan", user.plan);
+    const result = await updateProfileAction(formData);
+    setSaving(false);
+    if (!result.success) {
+      toast.error(result.error || "Update failed");
+      return;
+    }
+    updateProfile({ name });
+    toast.success(result.message || "Profile updated");
   }
 
-  function handleDeleteAccount() {
-    logout();
-    toast.success("Account deleted");
-    router.push("/");
+  async function handleDeleteAccount() {
+    clear();
+    toast.success("Signed out — contact support to permanently delete data");
+    try {
+      await logoutAction();
+    } catch {
+      router.push("/");
+      router.refresh();
+    }
   }
 
   function generateApiKey() {
@@ -98,9 +116,13 @@ export default function ProfilePage() {
           <div>
             <h1 className="text-2xl font-bold">{user.name}</h1>
             <p className="text-muted-foreground">{user.email}</p>
-            <Badge variant="secondary" className="mt-1">
-              {user.plan} Plan
-            </Badge>
+            <div className="mt-1 flex flex-wrap gap-2">
+              <Badge variant="secondary">{user.plan} Plan</Badge>
+              <Badge variant={user.emailVerified ? "success" : "warning"}>
+                {user.emailVerified ? "Email verified" : "Email unverified"}
+              </Badge>
+              {user.provider && <Badge variant="outline">{user.provider}</Badge>}
+            </div>
           </div>
         </motion.div>
 
@@ -156,7 +178,9 @@ export default function ProfilePage() {
                     onChange={(e) => setEmail(e.target.value)}
                   />
                 </div>
-                <Button onClick={handleSaveProfile}>Save Changes</Button>
+                <Button onClick={handleSaveProfile} disabled={saving}>
+                  {saving ? "Saving..." : "Save Changes"}
+                </Button>
               </CardContent>
             </Card>
           </TabsContent>
@@ -424,11 +448,7 @@ export default function ProfilePage() {
                 <Button
                   variant="outline"
                   className={cn("w-full sm:w-auto")}
-                  onClick={() => {
-                    logout();
-                    toast.success("Logged out");
-                    router.push("/login");
-                  }}
+                  onClick={handleDeleteAccount}
                 >
                   Log Out
                 </Button>

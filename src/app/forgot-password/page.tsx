@@ -4,34 +4,41 @@ import { useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowLeft, CheckCircle2, Mail } from "lucide-react";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { forgotPasswordAction } from "@/app/actions/auth";
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!email) return;
     setLoading(true);
-    setTimeout(() => {
-      setSubmitted(true);
-      setLoading(false);
-    }, 800);
+    const formData = new FormData();
+    formData.set("email", email);
+    const result = await forgotPasswordAction(formData);
+    setLoading(false);
+
+    if (!result.success) {
+      toast.error(result.error || "Request failed");
+      return;
+    }
+
+    setSubmitted(true);
+    toast.success(result.message || "Check your email");
   }
 
   return (
     <div className="relative flex min-h-[calc(100vh-4rem)] items-center justify-center px-4 py-12">
       <div className="grid-bg pointer-events-none absolute inset-0 opacity-30" />
-
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
         className="relative w-full max-w-md"
       >
         <Button variant="ghost" size="sm" className="mb-4" asChild>
@@ -44,30 +51,21 @@ export default function ForgotPasswordPage() {
         <Card className="glass border-border/70">
           {submitted ? (
             <CardContent className="py-12 text-center">
-              <motion.div
-                initial={{ scale: 0.8, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                transition={{ duration: 0.4 }}
-              >
-                <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-emerald-500/15">
-                  <CheckCircle2 className="h-8 w-8 text-emerald-400" />
-                </div>
-                <h2 className="text-xl font-bold">Check your inbox</h2>
-                <p className="text-muted-foreground mt-2 text-sm">
-                  We sent a password reset link to{" "}
-                  <span className="text-foreground font-semibold">{email}</span>
-                </p>
-                <Button variant="outline" className="mt-6" asChild>
-                  <Link href="/login">Return to login</Link>
-                </Button>
-              </motion.div>
+              <CheckCircle2 className="mx-auto h-12 w-12 text-emerald-400" />
+              <h2 className="mt-4 text-xl font-bold">Check your email</h2>
+              <p className="text-muted-foreground mt-2 text-sm">
+                If an account exists for <strong>{email}</strong>, we sent a password reset link.
+              </p>
+              <Button className="mt-6" asChild>
+                <Link href="/login">Return to sign in</Link>
+              </Button>
             </CardContent>
           ) : (
             <>
-              <CardHeader className="text-center">
-                <CardTitle className="text-2xl">Reset your password</CardTitle>
+              <CardHeader>
+                <CardTitle>Forgot password</CardTitle>
                 <CardDescription>
-                  Enter your email and we&apos;ll send you a reset link
+                  Enter your email and we&apos;ll send a secure reset link.
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -79,7 +77,6 @@ export default function ForgotPasswordPage() {
                       <Input
                         id="email"
                         type="email"
-                        placeholder="you@example.com"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         className="pl-10"
@@ -88,7 +85,7 @@ export default function ForgotPasswordPage() {
                     </div>
                   </div>
                   <Button type="submit" className="w-full" disabled={loading}>
-                    {loading ? "Sending..." : "Send Reset Link"}
+                    {loading ? "Sending..." : "Send reset link"}
                   </Button>
                 </form>
               </CardContent>

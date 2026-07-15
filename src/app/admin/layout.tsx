@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { AdminNav, AdminNavMobile } from "@/components/layout/admin-nav";
 import { Loader } from "@/components/ui/loader";
@@ -8,27 +8,20 @@ import { useAuthStore } from "@/stores/auth-store";
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
-  const { user, isAuthenticated } = useAuthStore();
-  const [hydrated, setHydrated] = useState(false);
-
-  useEffect(() => setHydrated(true), []);
+  const { user, isAuthenticated, isLoading } = useAuthStore();
 
   useEffect(() => {
-    if (!hydrated) return;
-    if (!isAuthenticated || user?.role !== "ADMIN") {
+    if (isLoading) return;
+    if (!isAuthenticated) {
       router.replace("/login");
+      return;
     }
-  }, [hydrated, isAuthenticated, user, router]);
+    if (user?.role !== "ADMIN") {
+      router.replace("/dashboard");
+    }
+  }, [isLoading, isAuthenticated, user, router]);
 
-  if (!hydrated) {
-    return (
-      <div className="flex min-h-[60vh] items-center justify-center">
-        <Loader />
-      </div>
-    );
-  }
-
-  if (!isAuthenticated || user?.role !== "ADMIN") {
+  if (isLoading || !isAuthenticated || user?.role !== "ADMIN") {
     return (
       <div className="flex min-h-[60vh] items-center justify-center">
         <Loader />

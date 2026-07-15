@@ -1,0 +1,35 @@
+import { NextResponse } from "next/server";
+import { cookies } from "next/headers";
+import { createClient } from "@/lib/supabase/server";
+import { DEMO_SESSION_COOKIE, isSupabaseConfigured } from "@/lib/supabase/config";
+import { mapDemoUser, mapSupabaseUser } from "@/lib/auth/user";
+
+export async function GET() {
+  if (isSupabaseConfigured()) {
+    const supabase = await createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    return NextResponse.json({
+      user: user ? mapSupabaseUser(user) : null,
+      mode: "supabase",
+    });
+  }
+
+  const cookieStore = await cookies();
+  const raw = cookieStore.get(DEMO_SESSION_COOKIE)?.value;
+  if (!raw) {
+    return NextResponse.json({ user: null, mode: "demo" });
+  }
+
+  try {
+    const parsed = JSON.parse(raw) as { email: string; name?: string };
+    return NextResponse.json({
+      user: mapDemoUser(parsed.email, parsed.name),
+      mode: "demo",
+    });
+  } catch {
+    return NextResponse.json({ user: null, mode: "demo" });
+  }
+}

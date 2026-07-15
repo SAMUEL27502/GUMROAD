@@ -27,8 +27,10 @@ Open [http://localhost:3000](http://localhost:3000).
 
 ## Demo auth
 
-- Register or sign in with any email — session is stored locally (Zustand) for demo mode.
-- Use an email containing `admin` (e.g. `admin@tradebib.com`) to access `/admin`.
+- Without Supabase keys the app runs in **demo mode** (httpOnly session cookie).
+- With real keys: full Supabase JWT auth, email verification, Google/GitHub OAuth.
+- Use an email containing `admin` (e.g. `admin@tradebib.com`) for `/admin`.
+- See [`docs/AUTH.md`](docs/AUTH.md).
 
 ## Scripts
 

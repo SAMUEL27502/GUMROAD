@@ -32,6 +32,7 @@ import {
 import { useAuthStore } from "@/stores/auth-store";
 import { notifications } from "@/lib/data/platform";
 import { cn } from "@/lib/utils";
+import { logoutAction } from "@/app/actions/auth";
 
 const links = [
   { href: "/marketplace", label: "Marketplace" },
@@ -45,12 +46,22 @@ export function Navbar() {
   const pathname = usePathname();
   const router = useRouter();
   const { theme, setTheme } = useTheme();
-  const { user, isAuthenticated, logout } = useAuthStore();
+  const { user, isAuthenticated, isLoading, clear } = useAuthStore();
   const [mounted, setMounted] = useState(false);
   const [open, setOpen] = useState(false);
   const unread = notifications.filter((n) => !n.read).length;
 
   useEffect(() => setMounted(true), []);
+
+  async function handleSignOut() {
+    clear();
+    try {
+      await logoutAction();
+    } catch {
+      router.push("/");
+      router.refresh();
+    }
+  }
 
   return (
     <header className="border-border/60 bg-background/70 sticky top-0 z-40 border-b backdrop-blur-xl">
@@ -157,17 +168,14 @@ export function Navbar() {
                     </DropdownMenuItem>
                   )}
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem
-                    onClick={() => {
-                      logout();
-                      router.push("/");
-                    }}
-                  >
+                  <DropdownMenuItem onClick={handleSignOut}>
                     <LogOut className="h-4 w-4" /> Sign Out
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             </>
+          ) : isLoading ? (
+            <div className="bg-muted/50 hidden h-9 w-24 animate-pulse rounded-xl sm:block" />
           ) : (
             <div className="hidden items-center gap-2 sm:flex">
               <Button variant="ghost" asChild>

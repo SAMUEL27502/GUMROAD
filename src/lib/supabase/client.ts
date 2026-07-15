@@ -1,10 +1,16 @@
-import { createBrowserClient as createSupabaseBrowserClient } from "@supabase/ssr";
-
-const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL ?? "https://placeholder.supabase.co";
-const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? "placeholder-anon-key";
+import { createBrowserClient } from "@supabase/ssr";
+import { getSupabaseEnv, isSupabaseConfigured } from "./config";
 
 export function createClient() {
-  return createSupabaseBrowserClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  const { url, anonKey } = getSupabaseEnv();
+  return createBrowserClient(
+    url || "https://placeholder.supabase.co",
+    anonKey || "placeholder-anon-key"
+  );
+}
+
+export function canUseSupabaseAuth() {
+  return isSupabaseConfigured();
 }
 
 export { createClient as createBrowserClient };
