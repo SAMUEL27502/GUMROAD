@@ -206,71 +206,164 @@
 
     .theme-toggle,
     .nav-cta,
-    .product-link,
+    .product-card,
     .ghost-btn {
       transition: transform 180ms ease, background-color 180ms ease, border-color 180ms ease, color 180ms ease, box-shadow 180ms ease;
     }
 
     .theme-toggle:hover,
     .nav-cta:hover,
-    .ghost-btn:hover,
-    .product-link:hover {
+    .ghost-btn:hover {
       transform: translateY(-1px);
     }
 
     .theme-toggle:focus-visible,
     .nav-cta:focus-visible,
     .ghost-btn:focus-visible,
-    .product-link:focus-visible,
+    .product-card:focus-visible,
     a:focus-visible,
     button:focus-visible {
       outline: 2px solid var(--accent);
       outline-offset: 3px;
     }
 
-    .product-link {
+    .products-grid {
       display: grid;
-      gap: 1rem;
-      align-items: center;
-      text-decoration: none;
-      color: inherit;
-      padding: 1.15rem 0;
-      border-bottom: 1px solid var(--line);
+      gap: 1.25rem;
+      grid-template-columns: 1fr;
     }
 
-    @media (min-width: 768px) {
-      .product-link {
-        grid-template-columns: 5.5rem 1fr auto;
-        gap: 1.35rem;
+    @media (min-width: 640px) {
+      .products-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1.5rem;
       }
     }
 
-    .product-thumb {
-      width: 5.5rem;
-      height: 5.5rem;
-      border-radius: 1.1rem;
-      overflow: hidden;
-      background:
-        linear-gradient(145deg, rgba(20, 184, 166, 0.4), rgba(33, 111, 102, 0.28)),
-        var(--bg);
-      display: grid;
-      place-items: center;
-      flex-shrink: 0;
+    @media (min-width: 1024px) {
+      .products-grid {
+        grid-template-columns: repeat(12, minmax(0, 1fr));
+        gap: 1.6rem;
+      }
+
+      .products-grid .product-card:nth-child(1) {
+        grid-column: span 7;
+      }
+
+      .products-grid .product-card:nth-child(2) {
+        grid-column: span 5;
+      }
+
+      .products-grid .product-card:nth-child(n + 3) {
+        grid-column: span 4;
+      }
     }
 
-    .product-thumb img {
+    .product-card {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      text-decoration: none;
+      color: inherit;
+      border-radius: 1.35rem;
+      overflow: hidden;
+      background: var(--bg-elevated);
+      border: 1px solid var(--line);
+      box-shadow: 0 18px 40px -28px rgba(10, 31, 29, 0.45);
+      transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease;
+    }
+
+    .product-card:hover,
+    .product-card:focus-visible {
+      transform: translateY(-4px);
+      border-color: rgba(15, 148, 136, 0.45);
+      box-shadow: 0 28px 55px -28px rgba(10, 31, 29, 0.55);
+    }
+
+    .product-media {
+      position: relative;
+      aspect-ratio: 4 / 3;
+      overflow: hidden;
+      background:
+        linear-gradient(145deg, rgba(20, 184, 166, 0.35), rgba(33, 111, 102, 0.22)),
+        var(--bg);
+    }
+
+    .products-grid .product-card:nth-child(1) .product-media {
+      aspect-ratio: 16 / 10;
+    }
+
+    .product-media img {
       width: 100%;
       height: 100%;
       object-fit: cover;
       display: block;
+      transform: scale(1.01);
+      transition: transform 420ms ease;
     }
 
-    .product-thumb-fallback {
-      width: 2.2rem;
-      height: 2.2rem;
+    .product-card:hover .product-media img,
+    .product-card:focus-visible .product-media img {
+      transform: scale(1.06);
+    }
+
+    .product-media-fallback {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+    }
+
+    .product-media-fallback::before {
+      content: "";
+      width: 3.25rem;
+      height: 3.25rem;
       border-radius: 999px;
       border: 2px solid rgba(255, 255, 255, 0.55);
-      box-shadow: inset 0 0 0 6px rgba(33, 53, 50, 0.08);
+      box-shadow: inset 0 0 0 8px rgba(33, 53, 50, 0.08);
+      background: radial-gradient(circle at 35% 35%, rgba(126, 224, 210, 0.9), rgba(15, 148, 136, 0.55));
+    }
+
+    .product-media-shade {
+      position: absolute;
+      inset: auto 0 0 0;
+      height: 42%;
+      background: linear-gradient(to top, rgba(10, 31, 29, 0.55), transparent);
+      pointer-events: none;
+    }
+
+    .product-price-chip {
+      position: absolute;
+      top: 0.9rem;
+      right: 0.9rem;
+      z-index: 2;
+      padding: 0.4rem 0.75rem;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      color: #0a1f1d;
+      background: rgba(238, 248, 246, 0.92);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.55);
+    }
+
+    .product-body {
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+      padding: 1.15rem 1.2rem 1.3rem;
+      flex: 1;
+    }
+
+    .product-cta {
+      margin-top: auto;
+      padding-top: 0.55rem;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
     }
 
     .glass {
@@ -330,36 +423,44 @@
     {
       "products": [
         {
-          "name": "The Hormone Symptom Tracker & Doctor Prep Kit",
-          "url": "https://hormonedecoder7.gumroad.com/l/snkphr",
+          "name": "Hormone Health Starter Kit",
+          "url": "https://hormonedecoder7.gumroad.com/l/xyqbk",
+          "price": "$0+",
+          "native_type": "digital",
+          "thumbnail_url": "https://public-files.gumroad.com/mo0moyxhgrjmrmbadb2bgy2exyen",
+          "description": "Free starter kit with symptom checklist, 7-day tracker, scored hormone quiz, and appointment checklist."
+        },
+        {
+          "name": "PCOS Blueprint",
+          "url": "https://hormonedecoder7.gumroad.com/l/npsdn",
           "price": "$15+",
           "native_type": "digital",
-          "thumbnail_url": null,
-          "description": "A 4-week tracking system that turns your symptoms into clinical data your doctor can't dismiss."
+          "thumbnail_url": "https://public-files.gumroad.com/j0wakdwqzcbwcyaob21k3khy5ldq",
+          "description": "41-page guide covering four PCOS presentations with fillable worksheets."
         },
         {
-          "name": "THE HORMONAL WEIGHT LOSS GUIDE",
-          "url": "https://hormonedecoder7.gumroad.com/l/kcpuz",
-          "price": "$19+",
-          "native_type": "digital",
-          "thumbnail_url": null,
-          "description": "The 4-Driver Method and a 12-week protocol for weight changes driven by hormones, not willpower."
-        },
-        {
-          "name": "THE HORMONE RESET MEAL PLAN",
+          "name": "Hormone Reset Guide",
           "url": "https://hormonedecoder7.gumroad.com/l/ddhxxr",
           "price": "$17+",
           "native_type": "digital",
-          "thumbnail_url": null,
-          "description": "A 4-week structured meal plan focused on blood sugar stability and estrogen metabolism."
+          "thumbnail_url": "https://public-files.gumroad.com/8qpkvgtdm1hi7dus5phbe6dc0zos",
+          "description": "90-page reset covering eight hormones, a 4-week meal plan, sleep reset, and appointment prep."
         },
         {
-          "name": "THE COMPLETE HORMONE PLAYBOOK",
+          "name": "Hormone Appointment Toolkit",
+          "url": "https://hormonedecoder7.gumroad.com/l/kwuma",
+          "price": "$19+",
+          "native_type": "digital",
+          "thumbnail_url": "https://public-files.gumroad.com/crd9poigu7gowm4kf0rcf6coys4h",
+          "description": "49-page doctor-prep toolkit with symptom tracker, lab decoder, and fillable workbook."
+        },
+        {
+          "name": "The Complete Hormone Playbook",
           "url": "https://hormonedecoder7.gumroad.com/l/jeqiio",
           "price": "$27+",
           "native_type": "digital",
-          "thumbnail_url": null,
-          "description": "A complete education guide for PCOS, perimenopause, and menopause."
+          "thumbnail_url": "https://public-files.gumroad.com/ejoqpdwp235nxv4gg7hy7xu17p6l",
+          "description": "Complete education guide for every hormone across PCOS, perimenopause, and menopause."
         }
       ],
       "posts": [],
@@ -467,7 +568,7 @@ Too many women spend years hearing their symptoms are “just stress,” “anxi
           </p>
         </div>
 
-        <div id="products-root" class="reveal" role="list" aria-live="polite"></div>
+        <div id="products-root" class="products-grid reveal" role="list" aria-live="polite"></div>
         <p id="products-empty" class="hidden text-[var(--muted)]">New guides are on the way. Check back soon.</p>
       </div>
     </section>
@@ -569,39 +670,59 @@ Too many women spend years hearing their symptoms are “just stress,” “anxi
         }
 
         emptyEl.classList.add("hidden");
-        products.forEach(function (product) {
+        products.forEach(function (product, index) {
           var item = document.createElement("a");
-          item.className = "product-link";
+          item.className = "product-card";
           item.href = product.url || "#";
           item.setAttribute("role", "listitem");
+          item.style.transitionDelay = Math.min(index * 60, 240) + "ms";
 
-          // Sandbox blocks external image hosts — use CSS marks only.
-          var thumb = document.createElement("div");
-          thumb.className = "product-thumb";
-          thumb.setAttribute("aria-hidden", "true");
-          thumb.innerHTML = '<div class="product-thumb-fallback"></div>';
+          var media = document.createElement("div");
+          media.className = "product-media";
+          media.setAttribute("aria-hidden", "true");
 
-          var copy = document.createElement("div");
-          copy.innerHTML =
+          if (product.thumbnail_url) {
+            var img = document.createElement("img");
+            img.src = product.thumbnail_url;
+            img.alt = "";
+            img.loading = "lazy";
+            img.decoding = "async";
+            img.addEventListener("error", function () {
+              media.innerHTML =
+                '<div class="product-media-fallback"></div><div class="product-media-shade"></div>';
+            });
+            media.appendChild(img);
+            var shade = document.createElement("div");
+            shade.className = "product-media-shade";
+            media.appendChild(shade);
+          } else {
+            media.innerHTML =
+              '<div class="product-media-fallback"></div><div class="product-media-shade"></div>';
+          }
+
+          var priceChip = document.createElement("span");
+          priceChip.className = "product-price-chip";
+          priceChip.textContent = product.price || "View";
+          media.appendChild(priceChip);
+
+          var body = document.createElement("div");
+          body.className = "product-body";
+          body.innerHTML =
+            '<p class="text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-ink-500 dark:text-ink-300">' +
+            escapeHtml(product.native_type || "digital") +
+            "</p>" +
             '<h3 class="font-display text-xl font-semibold tracking-tight text-[var(--ink)] sm:text-2xl">' +
             escapeHtml(product.name || "Untitled guide") +
             "</h3>" +
             (product.description
-              ? '<p class="mt-2 max-w-2xl text-sm leading-relaxed text-[var(--muted)] sm:text-base">' +
+              ? '<p class="text-sm leading-relaxed text-[var(--muted)]">' +
                 escapeHtml(product.description) +
                 "</p>"
               : "") +
-            '<p class="mt-3 text-xs font-semibold uppercase tracking-[0.18em] text-ink-500 dark:text-ink-300">' +
-            escapeHtml(product.native_type || "digital") +
-            "</p>";
+            '<span class="product-cta">Open guide →</span>';
 
-          var price = document.createElement("div");
-          price.className = "text-base font-semibold text-[var(--ink)] md:text-right";
-          price.textContent = product.price || "";
-
-          item.appendChild(thumb);
-          item.appendChild(copy);
-          item.appendChild(price);
+          item.appendChild(media);
+          item.appendChild(body);
           rootEl.appendChild(item);
         });
       }
@@ -619,7 +740,7 @@ Too many women spend years hearing their symptoms are “just stress,” “anxi
         posts.forEach(function (post) {
           var link = document.createElement("a");
           link.href = post.url || "#";
-          link.className = "product-link";
+          link.className = "product-card";
           link.setAttribute("role", "listitem");
           var dateLabel = "";
           if (post.published_at) {
@@ -634,13 +755,15 @@ Too many women spend years hearing their symptoms are “just stress,” “anxi
             }
           }
           link.innerHTML =
-            '<div class="product-thumb" aria-hidden="true"><div class="product-thumb-fallback"></div></div>' +
-            '<div><h3 class="font-display text-xl font-semibold tracking-tight">' +
+            '<div class="product-media" aria-hidden="true"><div class="product-media-fallback"></div><div class="product-media-shade"></div></div>' +
+            '<div class="product-body">' +
+            '<h3 class="font-display text-xl font-semibold tracking-tight">' +
             escapeHtml(post.name || "Update") +
-            '</h3></div>' +
-            '<div class="text-sm text-[var(--muted)] md:text-right">' +
+            "</h3>" +
+            '<p class="text-sm text-[var(--muted)]">' +
             escapeHtml(dateLabel) +
-            "</div>";
+            "</p>" +
+            '<span class="product-cta">Read note →</span></div>';
           rootEl.appendChild(link);
         });
       }
