@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,650;9..144,700&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          fontFamily: {
+            display: ['"Fraunces"', "Georgia", "serif"],
+            sans: ['"Sora"', "ui-sans-serif", "system-ui", "sans-serif"],
+          },
+          colors: {
+            ink: {
+              50: "#eef8f6",
+              100: "#d5efe9",
+              200: "#a9ddd3",
+              300: "#74c4b7",
+              400: "#45a799",
+              500: "#2b8b7e",
+              600: "#216f66",
+              700: "#1e5953",
+              800: "#1c4844",
+              900: "#1a3c39",
+              950: "#0a1f1d",
+            },
+            bloom: {
+              300: "#7ee0d2",
+              400: "#3fcfbc",
+              500: "#14b8a6",
+              600: "#0f9488",
+            },
+            mist: {
+              50: "#eef5f3",
+              100: "#dceae6",
+              200: "#bfd6d0",
+            },
+          },
+          boxShadow: {
+            soft: "0 18px 50px -28px rgba(15, 29, 27, 0.45)",
+          },
+        },
+      },
+    };
+  </script>
+  <style>
+    :root {
+      --bg: #eef5f3;
+      --bg-elevated: rgba(255, 255, 255, 0.7);
+      --ink: #0a1f1d;
+      --muted: #3d5c57;
+      --line: rgba(10, 31, 29, 0.12);
+      --accent: #0f9488;
+      --accent-soft: #14b8a6;
+      --glow-a: rgba(20, 184, 166, 0.28);
+      --glow-b: rgba(45, 139, 126, 0.22);
+      --hero-veil: linear-gradient(160deg, rgba(238, 245, 243, 0.12) 0%, rgba(238, 245, 243, 0.72) 55%, #eef5f3 100%);
+    }
+
+    html.dark {
+      --bg: #0a1f1d;
+      --bg-elevated: rgba(28, 72, 68, 0.5);
+      --ink: #eef8f6;
+      --muted: #a9ddd3;
+      --line: rgba(238, 248, 246, 0.12);
+      --accent: #3fcfbc;
+      --accent-soft: #7ee0d2;
+      --glow-a: rgba(63, 207, 188, 0.22);
+      --glow-b: rgba(20, 184, 166, 0.18);
+      --hero-veil: linear-gradient(160deg, rgba(10, 31, 29, 0.15) 0%, rgba(10, 31, 29, 0.72) 55%, #0a1f1d 100%);
+    }
+
+    * { box-sizing: border-box; }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Sora", ui-sans-serif, system-ui, sans-serif;
+      color: var(--ink);
+      background: var(--bg);
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    .skip-link {
+      position: absolute;
+      left: 1rem;
+      top: -3rem;
+      z-index: 50;
+      padding: 0.6rem 0.9rem;
+      border-radius: 999px;
+      background: var(--ink);
+      color: var(--bg);
+      text-decoration: none;
+      font-size: 0.875rem;
+      font-weight: 600;
+    }
+
+    .skip-link:focus {
+      top: 1rem;
+      outline: 2px solid var(--accent);
+      outline-offset: 3px;
+    }
+
+    .atmosphere {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .atmosphere::before,
+    .atmosphere::after {
+      content: "";
+      position: absolute;
+      border-radius: 999px;
+      filter: blur(40px);
+      animation: drift 18s ease-in-out infinite alternate;
+    }
+
+    .atmosphere::before {
+      width: 55vw;
+      height: 55vw;
+      top: -18%;
+      left: -10%;
+      background: radial-gradient(circle, var(--glow-a), transparent 68%);
+    }
+
+    .atmosphere::after {
+      width: 42vw;
+      height: 42vw;
+      right: -8%;
+      top: 18%;
+      background: radial-gradient(circle, var(--glow-b), transparent 70%);
+      animation-delay: -6s;
+    }
+
+    .hero-plane {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 55% at 70% 35%, rgba(20, 184, 166, 0.22), transparent 60%),
+        radial-gradient(ellipse 60% 50% at 18% 72%, rgba(33, 111, 102, 0.16), transparent 55%),
+        linear-gradient(135deg, #cfe8e3 0%, #d9ebe7 45%, #e7f3f0 100%);
+    }
+
+    html.dark .hero-plane {
+      background:
+        radial-gradient(ellipse 80% 55% at 72% 30%, rgba(63, 207, 188, 0.2), transparent 60%),
+        radial-gradient(ellipse 55% 45% at 18% 75%, rgba(15, 148, 136, 0.16), transparent 55%),
+        linear-gradient(145deg, #071716 0%, #0f2a27 48%, #123330 100%);
+    }
+
+    .hero-veil {
+      position: absolute;
+      inset: 0;
+      background: var(--hero-veil);
+    }
+
+    .signal-grid {
+      position: absolute;
+      inset: 0;
+      opacity: 0.35;
+      background-image:
+        linear-gradient(rgba(33, 53, 50, 0.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(33, 53, 50, 0.08) 1px, transparent 1px);
+      background-size: 48px 48px;
+      mask-image: radial-gradient(ellipse 70% 60% at 65% 40%, #000 20%, transparent 75%);
+    }
+
+    html.dark .signal-grid {
+      background-image:
+        linear-gradient(rgba(243, 247, 246, 0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(243, 247, 246, 0.06) 1px, transparent 1px);
+    }
+
+    .brand-mark {
+      font-family: "Fraunces", Georgia, serif;
+      font-optical-sizing: auto;
+      font-weight: 650;
+      letter-spacing: -0.03em;
+      line-height: 0.95;
+    }
+
+    .bio-copy {
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity 700ms ease, transform 700ms ease;
+    }
+
+    .reveal.is-visible {
+      opacity: 1;
+      transform: none;
+    }
+
+    .theme-toggle,
+    .nav-cta,
+    .product-card,
+    .ghost-btn {
+      transition: transform 180ms ease, background-color 180ms ease, border-color 180ms ease, color 180ms ease, box-shadow 180ms ease;
+    }
+
+    .theme-toggle:hover,
+    .nav-cta:hover,
+    .ghost-btn:hover {
+      transform: translateY(-1px);
+    }
+
+    .theme-toggle:focus-visible,
+    .nav-cta:focus-visible,
+    .ghost-btn:focus-visible,
+    .product-card:focus-visible,
+    a:focus-visible,
+    button:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 3px;
+    }
+
+    .products-grid {
+      display: grid;
+      gap: 1rem;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    @media (min-width: 768px) {
+      .products-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 1.15rem;
+      }
+    }
+
+    @media (min-width: 1100px) {
+      .products-grid {
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        gap: 1rem;
+      }
+    }
+
+    .product-card {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      text-decoration: none;
+      color: inherit;
+      border-radius: 1rem;
+      overflow: hidden;
+      background: var(--bg-elevated);
+      border: 1px solid var(--line);
+      box-shadow: 0 14px 32px -24px rgba(10, 31, 29, 0.4);
+      transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease;
+    }
+
+    .product-card:hover,
+    .product-card:focus-visible {
+      transform: translateY(-3px);
+      border-color: rgba(15, 148, 136, 0.45);
+      box-shadow: 0 22px 40px -24px rgba(10, 31, 29, 0.5);
+    }
+
+    .product-media {
+      position: relative;
+      aspect-ratio: 1;
+      overflow: hidden;
+      background:
+        linear-gradient(145deg, rgba(20, 184, 166, 0.35), rgba(33, 111, 102, 0.22)),
+        var(--bg);
+    }
+
+    .product-media img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transform: scale(1.01);
+      transition: transform 420ms ease;
+    }
+
+    .product-card:hover .product-media img,
+    .product-card:focus-visible .product-media img {
+      transform: scale(1.05);
+    }
+
+    .product-media-fallback {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+    }
+
+    .product-media-fallback::before {
+      content: "";
+      width: 2.4rem;
+      height: 2.4rem;
+      border-radius: 999px;
+      border: 2px solid rgba(255, 255, 255, 0.55);
+      box-shadow: inset 0 0 0 6px rgba(33, 53, 50, 0.08);
+      background: radial-gradient(circle at 35% 35%, rgba(126, 224, 210, 0.9), rgba(15, 148, 136, 0.55));
+    }
+
+    .product-media-shade {
+      position: absolute;
+      inset: auto 0 0 0;
+      height: 36%;
+      background: linear-gradient(to top, rgba(10, 31, 29, 0.5), transparent);
+      pointer-events: none;
+    }
+
+    .product-price-chip {
+      position: absolute;
+      top: 0.55rem;
+      right: 0.55rem;
+      z-index: 2;
+      padding: 0.28rem 0.55rem;
+      border-radius: 999px;
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      color: #0a1f1d;
+      background: rgba(238, 248, 246, 0.92);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.55);
+    }
+
+    .product-body {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      padding: 0.8rem 0.85rem 0.95rem;
+      flex: 1;
+    }
+
+    .product-body h3 {
+      font-size: 0.98rem !important;
+      line-height: 1.25;
+    }
+
+    .product-body p {
+      font-size: 0.78rem !important;
+      line-height: 1.4;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .product-cta {
+      margin-top: auto;
+      padding-top: 0.35rem;
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    .glass {
+      background: var(--bg-elevated);
+      backdrop-filter: blur(14px);
+      border: 1px solid var(--line);
+    }
+
+    .orbit {
+      position: absolute;
+      right: 6%;
+      top: 18%;
+      width: min(42vw, 420px);
+      aspect-ratio: 1;
+      opacity: 0.9;
+      animation: floaty 10s ease-in-out infinite;
+    }
+
+    .orbit svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    @keyframes drift {
+      from { transform: translate3d(0, 0, 0) scale(1); }
+      to { transform: translate3d(3%, 4%, 0) scale(1.08); }
+    }
+
+    @keyframes floaty {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-12px) rotate(2deg); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .atmosphere::before,
+      .atmosphere::after,
+      .orbit,
+      .reveal {
+        animation: none !important;
+        transition: none !important;
+        opacity: 1;
+        transform: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#guides">Skip to guides</a>
+
+  <!--
+    Live catalog is injected by Gumroad as <script id="gumroad-data">.
+    This local sample keeps the file previewable and is ignored when a
+    server-injected node already exists earlier in the document.
+  -->
+  <script id="gumroad-data" type="application/json">
+    {
+      "products": [
+        {
+          "name": "Hormone Health Starter Kit",
+          "url": "https://hormonedecoder7.gumroad.com/l/xyqbk",
+          "price": "$0+",
+          "native_type": "digital",
+          "thumbnail_url": "https://public-files.gumroad.com/mo0moyxhgrjmrmbadb2bgy2exyen",
+          "description": "Free starter kit with symptom checklist, 7-day tracker, scored hormone quiz, and appointment checklist."
+        },
+        {
+          "name": "PCOS Blueprint",
+          "url": "https://hormonedecoder7.gumroad.com/l/npsdn",
+          "price": "$15+",
+          "native_type": "digital",
+          "thumbnail_url": "https://public-files.gumroad.com/j0wakdwqzcbwcyaob21k3khy5ldq",
+          "description": "41-page guide covering four PCOS presentations with fillable worksheets."
+        },
+        {
+          "name": "Hormone Reset Guide",
+          "url": "https://hormonedecoder7.gumroad.com/l/ddhxxr",
+          "price": "$17+",
+          "native_type": "digital",
+          "thumbnail_url": "https://public-files.gumroad.com/8qpkvgtdm1hi7dus5phbe6dc0zos",
+          "description": "90-page reset covering eight hormones, a 4-week meal plan, sleep reset, and appointment prep."
+        },
+        {
+          "name": "Hormone Appointment Toolkit",
+          "url": "https://hormonedecoder7.gumroad.com/l/kwuma",
+          "price": "$19+",
+          "native_type": "digital",
+          "thumbnail_url": "https://public-files.gumroad.com/crd9poigu7gowm4kf0rcf6coys4h",
+          "description": "49-page doctor-prep toolkit with symptom tracker, lab decoder, and fillable workbook."
+        },
+        {
+          "name": "The Complete Hormone Playbook",
+          "url": "https://hormonedecoder7.gumroad.com/l/jeqiio",
+          "price": "$27+",
+          "native_type": "digital",
+          "thumbnail_url": "https://public-files.gumroad.com/ejoqpdwp235nxv4gg7hy7xu17p6l",
+          "description": "Complete education guide for every hormone across PCOS, perimenopause, and menopause."
+        }
+      ],
+      "posts": [],
+      "pages": []
+    }
+  </script>
+
+  <header class="sticky top-0 z-40">
+    <div class="mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-4 sm:px-8">
+      <a href="#top" class="brand-mark text-lg text-[var(--ink)] no-underline sm:text-xl" aria-label="Hormone Decoded home">
+        <span data-gumroad-field="name">Hormone Decoded</span>
+      </a>
+      <div class="flex items-center gap-2 sm:gap-3">
+        <button
+          type="button"
+          id="theme-toggle"
+          class="theme-toggle glass inline-flex h-10 w-10 items-center justify-center rounded-full"
+          aria-label="Toggle color theme"
+        >
+          <svg id="icon-moon" class="h-4 w-4" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M19 13.5A7.5 7.5 0 1 1 10.5 5 6 6 0 0 0 19 13.5Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <svg id="icon-sun" class="hidden h-4 w-4" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.8"/>
+            <path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.05 5.05l1.56 1.56M17.39 17.39l1.56 1.56M18.95 5.05l-1.56 1.56M6.61 17.39l-1.56 1.56" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+          </svg>
+        </button>
+        <a href="#guides" class="nav-cta hidden rounded-full bg-ink-900 px-4 py-2 text-sm font-semibold text-mist-50 no-underline dark:bg-mist-50 dark:text-ink-950 sm:inline-flex">
+          Shop guides
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="relative isolate min-h-[100svh] overflow-hidden" aria-label="Introduction">
+      <div class="atmosphere" aria-hidden="true">
+        <div class="hero-plane"></div>
+        <div class="signal-grid"></div>
+        <div class="hero-veil"></div>
+        <div class="orbit" aria-hidden="true">
+          <svg viewBox="0 0 420 420" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="">
+            <circle cx="210" cy="210" r="150" stroke="currentColor" class="text-ink-700/25 dark:text-ink-100/20" stroke-width="1.5" />
+            <circle cx="210" cy="210" r="104" stroke="currentColor" class="text-bloom-500/45" stroke-width="1.5" />
+            <circle cx="210" cy="210" r="58" fill="currentColor" class="text-ink-700/10 dark:text-ink-100/10" />
+            <circle cx="210" cy="210" r="18" fill="currentColor" class="text-bloom-500" />
+            <circle cx="318" cy="132" r="10" fill="currentColor" class="text-ink-600 dark:text-ink-200" />
+            <circle cx="112" cy="286" r="8" fill="currentColor" class="text-bloom-400" />
+            <path d="M210 56c42 38 64 84 64 154s-22 116-64 154" stroke="currentColor" class="text-ink-600/40 dark:text-ink-200/35" stroke-width="2" stroke-linecap="round" />
+            <path d="M148 118c28 18 46 48 46 92s-18 74-46 92" stroke="currentColor" class="text-bloom-500/55" stroke-width="2" stroke-linecap="round" />
+          </svg>
+        </div>
+      </div>
+
+      <div class="relative mx-auto flex min-h-[100svh] max-w-6xl flex-col justify-end px-5 pb-16 pt-28 sm:px-8 sm:pb-20 lg:justify-center lg:pb-24">
+        <div class="max-w-3xl">
+          <h1 class="brand-mark mb-6 text-[clamp(3rem,9vw,6.5rem)] text-[var(--ink)]">
+            <span data-gumroad-field="name">Hormone Decoded</span>
+          </h1>
+          <p class="mb-8 max-w-xl text-lg leading-relaxed text-[var(--muted)] sm:text-xl">
+            Decode PCOS, perimenopause, and menopause with guides that turn dismissed symptoms into a plan you can act on—starting today.
+          </p>
+          <div class="flex flex-wrap items-center gap-3">
+            <a href="#guides" class="nav-cta inline-flex items-center rounded-full bg-ink-900 px-5 py-3 text-sm font-semibold text-mist-50 no-underline shadow-soft dark:bg-mist-50 dark:text-ink-950">
+              Shop the guides
+            </a>
+            <a href="#about" class="ghost-btn inline-flex items-center rounded-full border border-[var(--line)] bg-transparent px-5 py-3 text-sm font-semibold text-[var(--ink)] no-underline">
+              Why this works
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="about" class="relative mx-auto max-w-6xl px-5 py-20 sm:px-8 sm:py-28" aria-labelledby="about-heading">
+      <div class="reveal grid gap-10 lg:grid-cols-[0.95fr_1.05fr] lg:gap-16">
+        <div>
+          <p class="mb-3 text-xs font-semibold uppercase tracking-[0.22em] text-ink-500 dark:text-ink-300">About</p>
+          <h2 id="about-heading" class="font-display text-4xl font-semibold tracking-tight text-[var(--ink)] sm:text-5xl">
+            Stop managing symptoms. Start decoding them.
+          </h2>
+          <p class="mt-5 max-w-md text-base leading-relaxed text-[var(--muted)]">
+            Built for women who are done being told they’re fine when they feel anything but.
+          </p>
+          <a href="#guides" class="nav-cta mt-8 inline-flex items-center rounded-full bg-ink-900 px-5 py-3 text-sm font-semibold text-mist-50 no-underline shadow-soft dark:bg-mist-50 dark:text-ink-950">
+            Choose your guide
+          </a>
+        </div>
+        <div>
+          <div
+            class="bio-copy text-base leading-8 text-[var(--muted)] sm:text-lg"
+            data-gumroad-field="bio"
+          >Stop calling it “just stress.”
+
+I’m Morgan Ellis—hormone health educator for PCOS, perimenopause, and menopause.
+
+If you’ve been cycling through fatigue, weight that won’t move, brain fog, wrecked sleep, mood swings, or irregular cycles—and walking out of appointments with “your labs look normal”—you don’t need another vague wellness tip. You need a clearer map.
+
+I create blunt, evidence-informed digital guides that turn foggy symptoms into patterns you can track, name, and take into the room with your provider. Symptom trackers. Meal plans. Appointment scripts. Education that actually prepares you.
+
+No hustle culture. No “eat less / try harder.” Biology first—so you buy the right tool, ask better questions, and stop wasting months guessing.</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="guides" class="relative border-t border-[var(--line)]" aria-labelledby="guides-heading">
+      <div class="mx-auto max-w-6xl px-5 py-20 sm:px-8 sm:py-28">
+        <div class="reveal mb-12 max-w-2xl">
+          <p class="mb-3 text-xs font-semibold uppercase tracking-[0.22em] text-ink-500 dark:text-ink-300">Guides</p>
+          <h2 id="guides-heading" class="font-display text-4xl font-semibold tracking-tight text-[var(--ink)] sm:text-5xl">
+            Pick the guide that matches the fight you’re in.
+          </h2>
+          <p class="mt-4 text-base leading-relaxed text-[var(--muted)] sm:text-lg">
+            Start free if you’re just mapping symptoms. Go deeper when you’re ready for PCOS clarity, a full reset, appointment ammo, or the complete playbook. Instant download on every product page.
+          </p>
+        </div>
+
+        <div id="products-root" class="products-grid reveal" role="list" aria-live="polite"></div>
+        <p id="products-empty" class="hidden text-[var(--muted)]">New guides are on the way. Check back soon.</p>
+      </div>
+    </section>
+
+    <section id="posts" class="relative hidden border-t border-[var(--line)]" aria-labelledby="posts-heading">
+      <div class="mx-auto max-w-6xl px-5 py-20 sm:px-8 sm:py-28">
+        <div class="mb-10 max-w-2xl">
+          <p class="mb-3 text-xs font-semibold uppercase tracking-[0.22em] text-ink-500 dark:text-ink-300">Notes</p>
+          <h2 id="posts-heading" class="font-display text-4xl font-semibold tracking-tight text-[var(--ink)] sm:text-5xl">
+            Latest from the studio.
+          </h2>
+        </div>
+        <div id="posts-root" class="space-y-0" role="list"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="border-t border-[var(--line)]">
+    <div class="mx-auto flex max-w-6xl flex-col gap-4 px-5 py-10 sm:flex-row sm:items-center sm:justify-between sm:px-8">
+      <p class="font-display text-xl font-semibold tracking-tight text-[var(--ink)]">
+        <span data-gumroad-field="name">Hormone Decoded</span>
+      </p>
+      <p class="text-sm text-[var(--muted)]">
+        Biology-first hormone guides. Buy once. Download instantly. Use immediately.
+      </p>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      var root = document.documentElement;
+      var storageKey = "hd-theme";
+
+      function systemPrefersDark() {
+        return window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+      }
+
+      function applyTheme(mode) {
+        var dark = mode === "dark";
+        root.classList.toggle("dark", dark);
+        var moon = document.getElementById("icon-moon");
+        var sun = document.getElementById("icon-sun");
+        if (moon) moon.classList.toggle("hidden", dark);
+        if (sun) sun.classList.toggle("hidden", !dark);
+        var toggle = document.getElementById("theme-toggle");
+        if (toggle) toggle.setAttribute("aria-pressed", dark ? "true" : "false");
+      }
+
+      function currentMode() {
+        try {
+          var saved = localStorage.getItem(storageKey);
+          if (saved === "light" || saved === "dark") return saved;
+        } catch (e) {}
+        return systemPrefersDark() ? "dark" : "light";
+      }
+
+      applyTheme(currentMode());
+
+      var toggleBtn = document.getElementById("theme-toggle");
+      if (toggleBtn) {
+        toggleBtn.addEventListener("click", function () {
+          var next = root.classList.contains("dark") ? "light" : "dark";
+          try { localStorage.setItem(storageKey, next); } catch (e) {}
+          applyTheme(next);
+        });
+      }
+
+      function escapeHtml(value) {
+        return String(value == null ? "" : value)
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#39;");
+      }
+
+      function readCatalog() {
+        var el = document.getElementById("gumroad-data");
+        if (!el) return { products: [], posts: [], pages: [] };
+        try {
+          var parsed = JSON.parse(el.textContent || "{}");
+          return parsed && typeof parsed === "object"
+            ? parsed
+            : { products: [], posts: [], pages: [] };
+        } catch (err) {
+          return { products: [], posts: [], pages: [] };
+        }
+      }
+
+      function priceValue(price) {
+        var match = String(price == null ? "" : price).replace(/,/g, "").match(/(\d+(?:\.\d+)?)/);
+        return match ? parseFloat(match[1]) : Number.POSITIVE_INFINITY;
+      }
+
+      function sortProductsByPrice(products) {
+        return (products || []).slice().sort(function (a, b) {
+          var diff = priceValue(a.price) - priceValue(b.price);
+          if (diff !== 0) return diff;
+          return String(a.name || "").localeCompare(String(b.name || ""));
+        });
+      }
+
+      function renderProducts(products) {
+        var rootEl = document.getElementById("products-root");
+        var emptyEl = document.getElementById("products-empty");
+        if (!rootEl || !emptyEl) return;
+
+        rootEl.innerHTML = "";
+        products = sortProductsByPrice(products);
+        if (!products || !products.length) {
+          emptyEl.classList.remove("hidden");
+          return;
+        }
+
+        emptyEl.classList.add("hidden");
+        products.forEach(function (product, index) {
+          var item = document.createElement("a");
+          item.className = "product-card";
+          item.href = product.url || "#";
+          item.setAttribute("role", "listitem");
+          item.style.transitionDelay = Math.min(index * 60, 240) + "ms";
+
+          var media = document.createElement("div");
+          media.className = "product-media";
+          media.setAttribute("aria-hidden", "true");
+
+          if (product.thumbnail_url) {
+            var img = document.createElement("img");
+            img.src = product.thumbnail_url;
+            img.alt = "";
+            img.loading = "lazy";
+            img.decoding = "async";
+            img.addEventListener("error", function () {
+              media.innerHTML =
+                '<div class="product-media-fallback"></div><div class="product-media-shade"></div>';
+            });
+            media.appendChild(img);
+            var shade = document.createElement("div");
+            shade.className = "product-media-shade";
+            media.appendChild(shade);
+          } else {
+            media.innerHTML =
+              '<div class="product-media-fallback"></div><div class="product-media-shade"></div>';
+          }
+
+          var priceChip = document.createElement("span");
+          priceChip.className = "product-price-chip";
+          priceChip.textContent = product.price || "View";
+          media.appendChild(priceChip);
+
+          var body = document.createElement("div");
+          body.className = "product-body";
+          body.innerHTML =
+            '<p class="text-[0.62rem] font-semibold uppercase tracking-[0.16em] text-ink-500 dark:text-ink-300">' +
+            escapeHtml(product.native_type || "digital") +
+            "</p>" +
+            '<h3 class="font-display font-semibold tracking-tight text-[var(--ink)]">' +
+            escapeHtml(product.name || "Untitled guide") +
+            "</h3>" +
+            (product.description
+              ? '<p class="text-[var(--muted)]">' +
+                escapeHtml(product.description) +
+                "</p>"
+              : "") +
+            '<span class="product-cta">Get this guide →</span>';
+
+          item.appendChild(media);
+          item.appendChild(body);
+          rootEl.appendChild(item);
+        });
+      }
+
+      function renderPosts(posts) {
+        var section = document.getElementById("posts");
+        var rootEl = document.getElementById("posts-root");
+        if (!section || !rootEl) return;
+        if (!posts || !posts.length) {
+          section.classList.add("hidden");
+          return;
+        }
+        section.classList.remove("hidden");
+        rootEl.innerHTML = "";
+        posts.forEach(function (post) {
+          var link = document.createElement("a");
+          link.href = post.url || "#";
+          link.className = "product-card";
+          link.setAttribute("role", "listitem");
+          var dateLabel = "";
+          if (post.published_at) {
+            try {
+              dateLabel = new Date(post.published_at).toLocaleDateString(undefined, {
+                year: "numeric",
+                month: "short",
+                day: "numeric",
+              });
+            } catch (e) {
+              dateLabel = String(post.published_at);
+            }
+          }
+          link.innerHTML =
+            '<div class="product-media" aria-hidden="true"><div class="product-media-fallback"></div><div class="product-media-shade"></div></div>' +
+            '<div class="product-body">' +
+            '<h3 class="font-display text-xl font-semibold tracking-tight">' +
+            escapeHtml(post.name || "Update") +
+            "</h3>" +
+            '<p class="text-sm text-[var(--muted)]">' +
+            escapeHtml(dateLabel) +
+            "</p>" +
+            '<span class="product-cta">Read note →</span></div>';
+          rootEl.appendChild(link);
+        });
+      }
+
+      var data = readCatalog();
+      renderProducts(data.products || []);
+      renderPosts(data.posts || []);
+
+      if (!window.matchMedia || !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        var observer = new IntersectionObserver(
+          function (entries) {
+            entries.forEach(function (entry) {
+              if (entry.isIntersecting) {
+                entry.target.classList.add("is-visible");
+                observer.unobserve(entry.target);
+              }
+            });
+          },
+          { threshold: 0.16, rootMargin: "0px 0px -8% 0px" }
+        );
+        document.querySelectorAll(".reveal").forEach(function (el) {
+          observer.observe(el);
+        });
+      } else {
+        document.querySelectorAll(".reveal").forEach(function (el) {
+          el.classList.add("is-visible");
+        });
+      }
+    })();
+  </script>
+</body>
+</html>
