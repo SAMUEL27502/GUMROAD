@@ -315,6 +315,44 @@ export const portfolioPerformance = [
   { month: "Jul", value: 24850 },
 ];
 
+/** Monthly net profit derived for dashboard bar chart. */
+export const monthlyProfitSeries = portfolioPerformance.slice(1).map((point, i) => ({
+  month: point.month,
+  profit: point.value - portfolioPerformance[i].value,
+}));
+
+/** Cumulative ROI % vs January starting equity. */
+export const roiSeries = portfolioPerformance.map((point) => ({
+  month: point.month,
+  roi: Number(
+    (((point.value - portfolioPerformance[0].value) / portfolioPerformance[0].value) * 100).toFixed(
+      2
+    )
+  ),
+}));
+
+/** Account balance vs equity for balance chart. */
+export const balanceSeries = [
+  { month: "Jan", balance: 21000, equity: 21120 },
+  { month: "Feb", balance: 21840, equity: 21910 },
+  { month: "Mar", balance: 22410, equity: 22340 },
+  { month: "Apr", balance: 23120, equity: 23280 },
+  { month: "May", balance: 23890, equity: 23750 },
+  { month: "Jun", balance: 24200, equity: 24340 },
+  { month: "Jul", balance: 24850, equity: 25120 },
+];
+
+/** Portfolio drawdown % over time. */
+export const drawdownSeries = [
+  { month: "Jan", drawdown: 2.1 },
+  { month: "Feb", drawdown: 3.4 },
+  { month: "Mar", drawdown: 5.8 },
+  { month: "Apr", drawdown: 4.2 },
+  { month: "May", drawdown: 7.1 },
+  { month: "Jun", drawdown: 6.4 },
+  { month: "Jul", drawdown: 4.9 },
+];
+
 export const riskDistribution = [
   { name: "Low", value: 25, color: "#22C55E" },
   { name: "Medium", value: 45, color: "#0EA5E9" },

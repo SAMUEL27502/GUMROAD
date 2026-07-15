@@ -16,22 +16,9 @@ import {
   Plus,
   Rocket,
   Star,
-  TrendingDown,
   TrendingUp,
   Wallet,
 } from "lucide-react";
-import {
-  Area,
-  AreaChart,
-  CartesianGrid,
-  Cell,
-  Pie,
-  PieChart,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
-} from "recharts";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -46,15 +33,15 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { DashboardCharts } from "@/components/dashboard/dashboard-charts";
 import { bots } from "@/lib/data/bots";
 import {
   activities,
   botAllocation,
   dashboardMetrics,
+  monthlyProfitSeries,
   notifications,
-  portfolioPerformance,
   recentTrades,
-  riskDistribution,
   watchlistSymbols,
 } from "@/lib/data/platform";
 import { cn, formatCurrency, formatPercent } from "@/lib/utils";
@@ -62,24 +49,12 @@ import { useAuthStore } from "@/stores/auth-store";
 import { useSubscriptionsStore } from "@/stores/subscriptions-store";
 import { useWatchlistStore } from "@/stores/watchlist-store";
 
-const chartTooltipStyle = {
-  backgroundColor: "#111827",
-  border: "1px solid #1e293b",
-  borderRadius: "12px",
-  fontSize: "12px",
-};
-
 const fallbackActiveSlugs = [
   "goldscalper-pro",
   "eurotrend-ai",
   "nightowl-grid",
   "breakouthunter",
 ];
-
-const monthlyProfits = portfolioPerformance.slice(1).map((point, i) => ({
-  month: point.month,
-  profit: point.value - portfolioPerformance[i].value,
-}));
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -217,110 +192,15 @@ export default function DashboardPage() {
           ))}
         </div>
 
-        <div className="mt-8 grid gap-6 lg:grid-cols-3">
-          {/* Portfolio performance */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="lg:col-span-2"
-          >
-            <Card className="border-border/70 bg-card/80">
-              <CardHeader className="flex flex-row items-center justify-between">
-                <CardTitle className="flex items-center gap-2">
-                  <LineChart className="h-5 w-5 text-sky-400" />
-                  Portfolio Performance
-                </CardTitle>
-                <Badge variant="secondary">{formatPercent(dashboardMetrics.monthlyRoi)} MTD</Badge>
-              </CardHeader>
-              <CardContent>
-                <div className="h-64">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <AreaChart data={portfolioPerformance}>
-                      <defs>
-                        <linearGradient id="portfolioGrad" x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="0%" stopColor="#0EA5E9" stopOpacity={0.35} />
-                          <stop offset="100%" stopColor="#0EA5E9" stopOpacity={0} />
-                        </linearGradient>
-                      </defs>
-                      <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />
-                      <XAxis dataKey="month" stroke="#64748b" fontSize={12} />
-                      <YAxis
-                        stroke="#64748b"
-                        fontSize={12}
-                        tickFormatter={(v) => `$${(v / 1000).toFixed(0)}k`}
-                      />
-                      <Tooltip
-                        contentStyle={chartTooltipStyle}
-                        formatter={(value) => [formatCurrency(Number(value)), "Value"]}
-                      />
-                      <Area
-                        type="monotone"
-                        dataKey="value"
-                        stroke="#0EA5E9"
-                        strokeWidth={2}
-                        fill="url(#portfolioGrad)"
-                      />
-                    </AreaChart>
-                  </ResponsiveContainer>
-                </div>
-              </CardContent>
-            </Card>
-          </motion.div>
-
-          {/* Risk allocation */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.25 }}
-          >
-            <Card className="h-full border-border/70 bg-card/80">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-base">
-                  <TrendingDown className="h-4 w-4 text-amber-400" />
-                  Risk Allocation
-                </CardTitle>
-                <CardDescription>Capital by strategy risk grade</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="h-44">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <PieChart>
-                      <Pie
-                        data={riskDistribution}
-                        cx="50%"
-                        cy="50%"
-                        innerRadius={50}
-                        outerRadius={70}
-                        paddingAngle={4}
-                        dataKey="value"
-                      >
-                        {riskDistribution.map((entry) => (
-                          <Cell key={entry.name} fill={entry.color} />
-                        ))}
-                      </Pie>
-                      <Tooltip contentStyle={chartTooltipStyle} />
-                    </PieChart>
-                  </ResponsiveContainer>
-                </div>
-                <div className="mt-2 space-y-2">
-                  {riskDistribution.map((r) => (
-                    <div key={r.name} className="flex items-center justify-between text-sm">
-                      <span className="flex items-center gap-2">
-                        <span
-                          className="h-2.5 w-2.5 rounded-full"
-                          style={{ backgroundColor: r.color }}
-                        />
-                        {r.name}
-                      </span>
-                      <span className="font-semibold">{r.value}%</span>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          </motion.div>
-        </div>
+        {/* Recharts: Portfolio, Monthly Profit, ROI, Risk, Balance, Drawdown */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+          className="mt-8"
+        >
+          <DashboardCharts />
+        </motion.div>
 
         <div className="mt-6 grid gap-6 lg:grid-cols-3">
           {/* Active bots */}
@@ -488,7 +368,7 @@ export default function DashboardPage() {
               <CardDescription>Net P/L by month</CardDescription>
             </CardHeader>
             <CardContent className="space-y-3">
-              {monthlyProfits.map((m) => (
+              {monthlyProfitSeries.map((m) => (
                 <div
                   key={m.month}
                   className="flex items-center justify-between rounded-xl bg-muted/20 px-4 py-3"

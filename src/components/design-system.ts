@@ -71,11 +71,15 @@ export { Skeleton, SkeletonCard, SkeletonTable, SkeletonStat } from "@/component
 export { EmptyState } from "@/components/ui/empty-state";
 export {
   ChartContainer,
+  InteractiveTooltip,
   AreaPerformanceChart,
   LinePerformanceChart,
   BarPerformanceChart,
+  BalanceChart,
+  DrawdownChart,
   DonutChart,
 } from "@/components/ui/charts";
+export { DashboardCharts } from "@/components/dashboard/dashboard-charts";
 export { notify, toast } from "@/components/ui/toast";
 export { Separator } from "@/components/ui/separator";
 export { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";

@@ -8,8 +8,8 @@ Protected by auth middleware + client auth store redirect.
 | Section                | Status                                                              |
 | ---------------------- | ------------------------------------------------------------------- |
 | Overview cards         | ✅ Balance, Monthly ROI, Total Profit, Active Bots                  |
-| Portfolio performance  | ✅ Area chart (YTD equity)                                          |
-| Risk allocation        | ✅ Donut by LOW/MEDIUM/HIGH + bot allocation bars                   |
+| Portfolio performance  | ✅ Tabbed Recharts (see `docs/DASHBOARD_CHARTS.md`)                 |
+| Risk allocation        | ✅ Donut in charts + bot allocation bars                            |
 | Recent trades          | ✅ Table from `recentTrades`                                        |
 | Active bots            | ✅ From subscriptions store (fallback seeded slugs)                 |
 | Notifications          | ✅ Unread badges + links                                            |
@@ -17,7 +17,8 @@ Protected by auth middleware + client auth store redirect.
 | Watchlist              | ✅ Persisted via `useWatchlistStore`                                |
 | Market overview        | ✅ Movers from `watchlistSymbols` with star toggle                  |
 | Recent activity        | ✅ Timeline                                                         |
-| Monthly profits        | ✅ Derived from portfolio series                                    |
+| Monthly profits        | ✅ Recharts bar + list                                              |
+| ROI / Balance / DD     | ✅ Dedicated chart tabs                                             |
 
 ## Data
 
