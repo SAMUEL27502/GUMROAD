@@ -781,6 +781,14 @@
           apply(theme === "dark" ? "light" : "dark");
         });
       }
+
+      if (window.matchMedia) {
+        window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", function (event) {
+          var locked = null;
+          try { locked = localStorage.getItem("hd-theme"); } catch (e) {}
+          if (!locked) apply(event.matches ? "dark" : "light");
+        });
+      }
     })();
   </script>
 </body>
