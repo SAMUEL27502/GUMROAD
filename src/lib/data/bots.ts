@@ -97,8 +97,7 @@ export const bots: Bot[] = [
         author: "Elena K.",
         rating: 4,
         title: "Strong but needs low spreads",
-        content:
-          "Works best with ECN brokers. Avoid high-spread sessions around news.",
+        content: "Works best with ECN brokers. Avoid high-spread sessions around news.",
         date: "2026-04-28",
       },
     ],

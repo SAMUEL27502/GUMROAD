@@ -48,7 +48,7 @@ export default function ReferralsPage() {
         <h1 className="text-4xl font-bold tracking-tight">
           <span className="gradient-text">Referral Program</span>
         </h1>
-        <p className="mx-auto mt-3 max-w-2xl text-muted-foreground">
+        <p className="text-muted-foreground mx-auto mt-3 max-w-2xl">
           Share TradeBib with fellow traders and earn recurring commissions on their subscriptions.
         </p>
       </motion.div>
@@ -71,7 +71,7 @@ export default function ReferralsPage() {
               <Card className="glass border-border/60">
                 <CardContent className="flex items-center justify-between p-5">
                   <div>
-                    <p className="text-sm text-muted-foreground">{stat.label}</p>
+                    <p className="text-muted-foreground text-sm">{stat.label}</p>
                     <p className="mt-1 text-2xl font-bold">{stat.value}</p>
                   </div>
                   <div className="rounded-xl bg-sky-500/10 p-3 text-sky-400">
@@ -98,8 +98,8 @@ export default function ReferralsPage() {
               </Button>
             </div>
             {copied && <p className="text-xs text-emerald-400">Copied to clipboard!</p>}
-            <div className="rounded-xl bg-muted/40 p-4">
-              <p className="text-sm text-muted-foreground">Referral code</p>
+            <div className="bg-muted/40 rounded-xl p-4">
+              <p className="text-muted-foreground text-sm">Referral code</p>
               <p className="font-mono text-lg font-bold text-sky-400">{referralCode}</p>
             </div>
             <div className="flex gap-2">
@@ -115,7 +115,8 @@ export default function ReferralsPage() {
           <CardHeader>
             <CardTitle>Affiliate Tier Progress</CardTitle>
             <CardDescription>
-              {stats.totalReferrals} of {stats.nextTierAt} referrals to Elite Partner (25% commission)
+              {stats.totalReferrals} of {stats.nextTierAt} referrals to Elite Partner (25%
+              commission)
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
@@ -129,14 +130,12 @@ export default function ReferralsPage() {
                 <div
                   key={tier.tier}
                   className={`flex items-center justify-between rounded-xl border px-4 py-3 ${
-                    tier.active
-                      ? "border-sky-500/30 bg-sky-500/10"
-                      : "border-border/60 bg-muted/20"
+                    tier.active ? "border-sky-500/30 bg-sky-500/10" : "border-border/60 bg-muted/20"
                   }`}
                 >
                   <div>
                     <p className="font-medium">{tier.tier}</p>
-                    <p className="text-xs text-muted-foreground">{tier.min}+ referrals</p>
+                    <p className="text-muted-foreground text-xs">{tier.min}+ referrals</p>
                   </div>
                   <span className="font-bold text-sky-400">{tier.rate}</span>
                 </div>
@@ -146,16 +145,28 @@ export default function ReferralsPage() {
         </Card>
       </div>
 
-      <Card className="mt-8 glass border-border/60">
+      <Card className="glass border-border/60 mt-8">
         <CardHeader>
           <CardTitle>How It Works</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="grid gap-6 sm:grid-cols-3">
             {[
-              { step: "1", title: "Share your link", desc: "Send your unique referral URL to traders in your network." },
-              { step: "2", title: "They subscribe", desc: "When they sign up and subscribe to a paid plan, you earn commission." },
-              { step: "3", title: "Get paid monthly", desc: "Recurring payouts for as long as your referrals stay subscribed." },
+              {
+                step: "1",
+                title: "Share your link",
+                desc: "Send your unique referral URL to traders in your network.",
+              },
+              {
+                step: "2",
+                title: "They subscribe",
+                desc: "When they sign up and subscribe to a paid plan, you earn commission.",
+              },
+              {
+                step: "3",
+                title: "Get paid monthly",
+                desc: "Recurring payouts for as long as your referrals stay subscribed.",
+              },
             ].map((item, i) => (
               <motion.div
                 key={item.step}
@@ -168,7 +179,7 @@ export default function ReferralsPage() {
                   {item.step}
                 </div>
                 <h3 className="mt-3 font-semibold">{item.title}</h3>
-                <p className="mt-1 text-sm text-muted-foreground">{item.desc}</p>
+                <p className="text-muted-foreground mt-1 text-sm">{item.desc}</p>
               </motion.div>
             ))}
           </div>

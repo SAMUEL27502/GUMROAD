@@ -21,9 +21,7 @@ export default function AdminSubscriptionsPage() {
     <div className="space-y-6">
       <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}>
         <h1 className="text-3xl font-bold tracking-tight">Subscriptions</h1>
-        <p className="mt-1 text-muted-foreground">
-          Active plans, renewals, and billing status.
-        </p>
+        <p className="text-muted-foreground mt-1">Active plans, renewals, and billing status.</p>
       </motion.div>
 
       <div className="grid gap-4 sm:grid-cols-3">
@@ -43,7 +41,7 @@ export default function AdminSubscriptionsPage() {
           >
             <Card className="glass border-border/60">
               <CardContent className="p-6">
-                <p className="text-sm text-muted-foreground">{stat.label}</p>
+                <p className="text-muted-foreground text-sm">{stat.label}</p>
                 <p className="mt-1 text-2xl font-bold">{stat.value}</p>
               </CardContent>
             </Card>
@@ -60,12 +58,12 @@ export default function AdminSubscriptionsPage() {
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b border-border/60 text-left text-muted-foreground">
-                  <th className="pb-3 pr-4 font-medium">User</th>
-                  <th className="pb-3 pr-4 font-medium">Plan</th>
-                  <th className="pb-3 pr-4 font-medium">Amount</th>
-                  <th className="pb-3 pr-4 font-medium">Bots</th>
-                  <th className="pb-3 pr-4 font-medium">Renews</th>
+                <tr className="border-border/60 text-muted-foreground border-b text-left">
+                  <th className="pr-4 pb-3 font-medium">User</th>
+                  <th className="pr-4 pb-3 font-medium">Plan</th>
+                  <th className="pr-4 pb-3 font-medium">Amount</th>
+                  <th className="pr-4 pb-3 font-medium">Bots</th>
+                  <th className="pr-4 pb-3 font-medium">Renews</th>
                   <th className="pb-3 font-medium">Status</th>
                 </tr>
               </thead>
@@ -76,11 +74,11 @@ export default function AdminSubscriptionsPage() {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: i * 0.03 }}
-                    className="border-b border-border/40 last:border-0"
+                    className="border-border/40 border-b last:border-0"
                   >
                     <td className="py-4 pr-4">
                       <p className="font-medium">{sub.user}</p>
-                      <p className="text-xs text-muted-foreground">{sub.email}</p>
+                      <p className="text-muted-foreground text-xs">{sub.email}</p>
                     </td>
                     <td className="py-4 pr-4">
                       <Badge variant="secondary">{sub.plan}</Badge>
@@ -88,8 +86,8 @@ export default function AdminSubscriptionsPage() {
                     <td className="py-4 pr-4 font-medium">
                       {sub.amount === 0 ? "Free" : `${formatCurrency(sub.amount)}/mo`}
                     </td>
-                    <td className="py-4 pr-4 text-muted-foreground">{sub.bots}</td>
-                    <td className="py-4 pr-4 text-muted-foreground">{sub.renews}</td>
+                    <td className="text-muted-foreground py-4 pr-4">{sub.bots}</td>
+                    <td className="text-muted-foreground py-4 pr-4">{sub.renews}</td>
                     <td className="py-4">
                       <Badge variant={statusVariant[sub.status as keyof typeof statusVariant]}>
                         {sub.status.replace("_", " ")}

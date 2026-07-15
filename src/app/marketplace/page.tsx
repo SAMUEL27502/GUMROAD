@@ -128,7 +128,7 @@ export default function MarketplacePage() {
 
   return (
     <div className="relative">
-      <div className="pointer-events-none absolute inset-0 grid-bg opacity-30" />
+      <div className="grid-bg pointer-events-none absolute inset-0 opacity-30" />
 
       <div className="relative mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
         <motion.div
@@ -143,7 +143,7 @@ export default function MarketplacePage() {
           <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
             Browse <span className="gradient-text">Verified MT5 Bots</span>
           </h1>
-          <p className="mt-3 max-w-2xl text-muted-foreground">
+          <p className="text-muted-foreground mt-3 max-w-2xl">
             Filter by strategy, risk, and performance. Subscribe to verified Expert Advisors with
             transparent equity curves and live stats.
           </p>
@@ -153,7 +153,7 @@ export default function MarketplacePage() {
         <div className="glass mb-6 rounded-2xl p-4 sm:p-5">
           <div className="flex flex-col gap-4 lg:flex-row lg:items-center">
             <div className="relative flex-1">
-              <Search className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+              <Search className="text-muted-foreground absolute top-1/2 left-3.5 h-4 w-4 -translate-y-1/2" />
               <Input
                 placeholder="Search bots, pairs, tags..."
                 value={search}
@@ -192,8 +192,8 @@ export default function MarketplacePage() {
           </div>
 
           {/* Filters */}
-          <div className="mt-4 flex flex-wrap items-center gap-3 border-t border-border/50 pt-4">
-            <span className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+          <div className="border-border/50 mt-4 flex flex-wrap items-center gap-3 border-t pt-4">
+            <span className="text-muted-foreground flex items-center gap-1.5 text-xs font-semibold tracking-wider uppercase">
               <SlidersHorizontal className="h-3.5 w-3.5" />
               Filters
             </span>
@@ -205,7 +205,7 @@ export default function MarketplacePage() {
                 setPage(1);
               }}
             >
-              <SelectTrigger className="w-[130px] h-9">
+              <SelectTrigger className="h-9 w-[130px]">
                 <SelectValue placeholder="Category" />
               </SelectTrigger>
               <SelectContent>
@@ -224,7 +224,7 @@ export default function MarketplacePage() {
                 setPage(1);
               }}
             >
-              <SelectTrigger className="w-[130px] h-9">
+              <SelectTrigger className="h-9 w-[130px]">
                 <SelectValue placeholder="Risk" />
               </SelectTrigger>
               <SelectContent>
@@ -243,7 +243,7 @@ export default function MarketplacePage() {
                 setPage(1);
               }}
             >
-              <SelectTrigger className="w-[160px] h-9">
+              <SelectTrigger className="h-9 w-[160px]">
                 <SelectValue placeholder="Strategy" />
               </SelectTrigger>
               <SelectContent>
@@ -262,7 +262,7 @@ export default function MarketplacePage() {
                 setPage(1);
               }}
             >
-              <SelectTrigger className="w-[140px] h-9">
+              <SelectTrigger className="h-9 w-[140px]">
                 <SelectValue placeholder="Price" />
               </SelectTrigger>
               <SelectContent>
@@ -285,13 +285,13 @@ export default function MarketplacePage() {
 
         {/* Results count */}
         <div className="mb-6 flex items-center justify-between">
-          <p className="text-sm text-muted-foreground">
+          <p className="text-muted-foreground text-sm">
             Showing{" "}
-            <span className="font-semibold text-foreground">
+            <span className="text-foreground font-semibold">
               {paginated.length > 0 ? (currentPage - 1) * PAGE_SIZE + 1 : 0}–
               {Math.min(currentPage * PAGE_SIZE, filtered.length)}
             </span>{" "}
-            of <span className="font-semibold text-foreground">{filtered.length}</span> bots
+            of <span className="text-foreground font-semibold">{filtered.length}</span> bots
           </p>
         </div>
 
@@ -308,9 +308,9 @@ export default function MarketplacePage() {
             animate={{ opacity: 1 }}
             className="glass flex flex-col items-center justify-center rounded-2xl py-20 text-center"
           >
-            <Heart className="mb-4 h-12 w-12 text-muted-foreground/40" />
+            <Heart className="text-muted-foreground/40 mb-4 h-12 w-12" />
             <h3 className="text-lg font-semibold">No bots found</h3>
-            <p className="mt-2 max-w-sm text-sm text-muted-foreground">
+            <p className="text-muted-foreground mt-2 max-w-sm text-sm">
               Try adjusting your filters or search query to find matching Expert Advisors.
             </p>
             <Button variant="outline" className="mt-6" onClick={clearFilters}>

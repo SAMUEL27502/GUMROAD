@@ -109,7 +109,7 @@ export default function DashboardPage() {
 
   return (
     <div className="relative">
-      <div className="pointer-events-none absolute inset-0 grid-bg opacity-20" />
+      <div className="grid-bg pointer-events-none absolute inset-0 opacity-20" />
 
       <div className="relative mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         <motion.div
@@ -122,7 +122,7 @@ export default function DashboardPage() {
             <h1 className="text-2xl font-bold sm:text-3xl">
               Welcome back, <span className="gradient-text">{user?.name}</span>
             </h1>
-            <p className="mt-1 text-muted-foreground">
+            <p className="text-muted-foreground mt-1">
               Here&apos;s your portfolio overview and bot performance.
             </p>
           </div>
@@ -166,11 +166,11 @@ export default function DashboardPage() {
                       Live
                     </Badge>
                   </div>
-                  <p className="mt-4 text-xs uppercase tracking-wide text-muted-foreground">
+                  <p className="text-muted-foreground mt-4 text-xs tracking-wide uppercase">
                     {m.label}
                   </p>
                   <p className="mt-1 text-2xl font-bold">{m.value}</p>
-                  <p className="mt-1 text-xs text-muted-foreground">{m.change}</p>
+                  <p className="text-muted-foreground mt-1 text-xs">{m.change}</p>
                 </CardContent>
               </Card>
             </motion.div>
@@ -296,7 +296,7 @@ export default function DashboardPage() {
               {subscribedBots.map((bot) => (
                 <div
                   key={bot.id}
-                  className="flex items-center justify-between rounded-xl border border-border/50 bg-muted/20 p-4"
+                  className="border-border/50 bg-muted/20 flex items-center justify-between rounded-xl border p-4"
                 >
                   <div className="flex items-center gap-3">
                     <div
@@ -309,12 +309,12 @@ export default function DashboardPage() {
                     </div>
                     <div>
                       <p className="font-semibold">{bot.name}</p>
-                      <p className="text-xs text-muted-foreground">{bot.tradingPair}</p>
+                      <p className="text-muted-foreground text-xs">{bot.tradingPair}</p>
                     </div>
                   </div>
                   <div className="text-right">
                     <p className="text-sm font-bold text-emerald-400">{formatPercent(bot.roi)}</p>
-                    <p className="text-xs text-muted-foreground">DD {bot.drawdown.toFixed(1)}%</p>
+                    <p className="text-muted-foreground text-xs">DD {bot.drawdown.toFixed(1)}%</p>
                   </div>
                 </div>
               ))}
@@ -335,18 +335,16 @@ export default function DashboardPage() {
                   key={n.id}
                   href={n.href}
                   className={cn(
-                    "block rounded-xl border p-3 transition-colors hover:bg-muted/30",
+                    "hover:bg-muted/30 block rounded-xl border p-3 transition-colors",
                     !n.read ? "border-sky-500/30 bg-sky-500/5" : "border-border/50"
                   )}
                 >
                   <div className="flex items-start justify-between gap-2">
                     <p className="text-sm font-semibold">{n.title}</p>
-                    {!n.read && (
-                      <span className="mt-1 h-2 w-2 shrink-0 rounded-full bg-sky-500" />
-                    )}
+                    {!n.read && <span className="mt-1 h-2 w-2 shrink-0 rounded-full bg-sky-500" />}
                   </div>
-                  <p className="mt-1 text-xs text-muted-foreground">{n.message}</p>
-                  <p className="mt-1 text-[10px] text-muted-foreground/70">{n.time}</p>
+                  <p className="text-muted-foreground mt-1 text-xs">{n.message}</p>
+                  <p className="text-muted-foreground/70 mt-1 text-[10px]">{n.time}</p>
                 </Link>
               ))}
             </CardContent>
@@ -381,7 +379,7 @@ export default function DashboardPage() {
               {monthlyProfits.map((m) => (
                 <div
                   key={m.month}
-                  className="flex items-center justify-between rounded-xl bg-muted/20 px-4 py-3"
+                  className="bg-muted/20 flex items-center justify-between rounded-xl px-4 py-3"
                 >
                   <span className="text-sm font-medium">{m.month}</span>
                   <span
@@ -414,7 +412,7 @@ export default function DashboardPage() {
                   <div key={a.id} className="flex items-center gap-3">
                     <div className="h-2 w-2 rounded-full bg-sky-500" />
                     <p className="flex-1 text-sm">{a.text}</p>
-                    <span className="text-xs text-muted-foreground">{a.time}</span>
+                    <span className="text-muted-foreground text-xs">{a.time}</span>
                   </div>
                 ))}
               </div>

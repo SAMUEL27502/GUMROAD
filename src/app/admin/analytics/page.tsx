@@ -29,9 +29,7 @@ export default function AdminAnalyticsPage() {
     <div className="space-y-6">
       <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}>
         <h1 className="text-3xl font-bold tracking-tight">Analytics</h1>
-        <p className="mt-1 text-muted-foreground">
-          Revenue growth and user acquisition trends.
-        </p>
+        <p className="text-muted-foreground mt-1">Revenue growth and user acquisition trends.</p>
       </motion.div>
 
       <div className="grid gap-6 lg:grid-cols-2">
@@ -116,7 +114,12 @@ export default function AdminAnalyticsPage() {
                 </defs>
                 <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />
                 <XAxis dataKey="month" stroke="#64748b" fontSize={12} />
-                <YAxis yAxisId="left" stroke="#0EA5E9" fontSize={12} tickFormatter={(v) => `$${(v / 1000).toFixed(0)}k`} />
+                <YAxis
+                  yAxisId="left"
+                  stroke="#0EA5E9"
+                  fontSize={12}
+                  tickFormatter={(v) => `$${(v / 1000).toFixed(0)}k`}
+                />
                 <YAxis yAxisId="right" orientation="right" stroke="#2563EB" fontSize={12} />
                 <Tooltip contentStyle={tooltipStyle} />
                 <Legend />

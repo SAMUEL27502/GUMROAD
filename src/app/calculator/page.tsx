@@ -62,7 +62,7 @@ export default function CalculatorPage() {
         <h1 className="text-4xl font-bold tracking-tight">
           <span className="gradient-text">Profit Calculator</span>
         </h1>
-        <p className="mx-auto mt-3 max-w-2xl text-muted-foreground">
+        <p className="text-muted-foreground mx-auto mt-3 max-w-2xl">
           Project compound growth based on starting capital, monthly ROI, and time horizon.
         </p>
       </motion.div>
@@ -108,7 +108,7 @@ export default function CalculatorPage() {
               />
             </div>
 
-            <div className="space-y-3 rounded-xl bg-muted/40 p-4">
+            <div className="bg-muted/40 space-y-3 rounded-xl p-4">
               <div className="flex justify-between text-sm">
                 <span className="text-muted-foreground">Final Balance</span>
                 <span className="font-bold text-emerald-400">{formatCurrency(finalBalance)}</span>
@@ -167,8 +167,9 @@ export default function CalculatorPage() {
         </Card>
       </div>
 
-      <p className="mt-8 text-center text-xs text-muted-foreground">
-        Projections are hypothetical and do not account for drawdowns, fees, or slippage. Past performance does not guarantee future results.
+      <p className="text-muted-foreground mt-8 text-center text-xs">
+        Projections are hypothetical and do not account for drawdowns, fees, or slippage. Past
+        performance does not guarantee future results.
       </p>
     </div>
   );

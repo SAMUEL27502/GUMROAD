@@ -55,7 +55,7 @@ export default function ContactPage() {
         <h1 className="text-4xl font-bold tracking-tight">
           <span className="gradient-text">Contact Us</span>
         </h1>
-        <p className="mx-auto mt-3 max-w-2xl text-muted-foreground">
+        <p className="text-muted-foreground mx-auto mt-3 max-w-2xl">
           Questions about bots, billing, or MT5 integration? We&apos;re here to help.
         </p>
       </motion.div>
@@ -81,7 +81,7 @@ export default function ContactPage() {
                       <Icon className="h-5 w-5" />
                     </div>
                     <div>
-                      <p className="text-sm text-muted-foreground">{item.title}</p>
+                      <p className="text-muted-foreground text-sm">{item.title}</p>
                       <p className="font-medium">{item.value}</p>
                     </div>
                   </CardContent>
@@ -122,7 +122,7 @@ export default function ContactPage() {
                   name="message"
                   rows={5}
                   placeholder="Tell us more..."
-                  className="flex w-full rounded-xl border border-border bg-muted/40 px-4 py-2 text-sm text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  className="border-border bg-muted/40 text-foreground placeholder:text-muted-foreground focus-visible:ring-ring flex w-full rounded-xl border px-4 py-2 text-sm focus-visible:ring-2 focus-visible:outline-none"
                 />
                 {errors.message && <p className="text-xs text-red-400">{errors.message}</p>}
               </div>

@@ -26,7 +26,7 @@ export default function ForgotPasswordPage() {
 
   return (
     <div className="relative flex min-h-[calc(100vh-4rem)] items-center justify-center px-4 py-12">
-      <div className="pointer-events-none absolute inset-0 grid-bg opacity-30" />
+      <div className="grid-bg pointer-events-none absolute inset-0 opacity-30" />
 
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -53,9 +53,9 @@ export default function ForgotPasswordPage() {
                   <CheckCircle2 className="h-8 w-8 text-emerald-400" />
                 </div>
                 <h2 className="text-xl font-bold">Check your inbox</h2>
-                <p className="mt-2 text-sm text-muted-foreground">
+                <p className="text-muted-foreground mt-2 text-sm">
                   We sent a password reset link to{" "}
-                  <span className="font-semibold text-foreground">{email}</span>
+                  <span className="text-foreground font-semibold">{email}</span>
                 </p>
                 <Button variant="outline" className="mt-6" asChild>
                   <Link href="/login">Return to login</Link>
@@ -75,7 +75,7 @@ export default function ForgotPasswordPage() {
                   <div className="space-y-2">
                     <Label htmlFor="email">Email</Label>
                     <div className="relative">
-                      <Mail className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                      <Mail className="text-muted-foreground absolute top-1/2 left-3.5 h-4 w-4 -translate-y-1/2" />
                       <Input
                         id="email"
                         type="email"

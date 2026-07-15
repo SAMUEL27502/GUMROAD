@@ -72,7 +72,7 @@ export default function MT5Page() {
 
   return (
     <div className="relative">
-      <div className="pointer-events-none absolute inset-0 grid-bg opacity-20" />
+      <div className="grid-bg pointer-events-none absolute inset-0 opacity-20" />
 
       <div className="relative mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         <motion.div
@@ -87,7 +87,7 @@ export default function MT5Page() {
           <h1 className="text-3xl font-bold tracking-tight">
             Connect Your <span className="gradient-text">MT5 Account</span>
           </h1>
-          <p className="mt-2 max-w-2xl text-muted-foreground">
+          <p className="text-muted-foreground mt-2 max-w-2xl">
             Link your broker account with investor (read-only) access to sync balance, equity, and
             deploy bots securely.
           </p>
@@ -146,11 +146,7 @@ export default function MT5Page() {
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="nickname">Account Nickname</Label>
-                    <Input
-                      id="nickname"
-                      placeholder="My Live Account"
-                      {...register("nickname")}
-                    />
+                    <Input id="nickname" placeholder="My Live Account" {...register("nickname")} />
                     {errors.nickname && (
                       <p className="text-xs text-red-400">{errors.nickname.message}</p>
                     )}
@@ -168,7 +164,7 @@ export default function MT5Page() {
             </Card>
 
             {/* Steps */}
-            <Card className="mt-6 border-border/70 bg-card/80">
+            <Card className="border-border/70 bg-card/80 mt-6">
               <CardHeader>
                 <CardTitle className="text-base">How it works</CardTitle>
               </CardHeader>
@@ -180,7 +176,7 @@ export default function MT5Page() {
                     </div>
                     <div>
                       <p className="text-sm font-semibold">{step.title}</p>
-                      <p className="text-xs text-muted-foreground">{step.description}</p>
+                      <p className="text-muted-foreground text-xs">{step.description}</p>
                     </div>
                   </div>
                 ))}
@@ -193,7 +189,7 @@ export default function MT5Page() {
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5, delay: 0.15 }}
-            className="lg:col-span-3 space-y-6"
+            className="space-y-6 lg:col-span-3"
           >
             <div>
               <h2 className="mb-4 text-lg font-bold">Connected Accounts</h2>
@@ -204,48 +200,44 @@ export default function MT5Page() {
                       <div className="flex items-start justify-between">
                         <div>
                           <p className="font-semibold">{acc.nickname}</p>
-                          <p className="text-xs text-muted-foreground">
+                          <p className="text-muted-foreground text-xs">
                             {acc.brokerServer} · #{acc.accountNumber}
                           </p>
                         </div>
                         <Badge variant={acc.accountType === "DEMO" ? "warning" : "success"}>
-                          {acc.connected && (
-                            <CheckCircle2 className="mr-1 h-3 w-3" />
-                          )}
+                          {acc.connected && <CheckCircle2 className="mr-1 h-3 w-3" />}
                           {acc.accountType}
                         </Badge>
                       </div>
                       <div className="mt-4 grid grid-cols-2 gap-3">
-                        <div className="rounded-xl bg-muted/30 p-3">
-                          <p className="text-[10px] uppercase tracking-wide text-muted-foreground">
+                        <div className="bg-muted/30 rounded-xl p-3">
+                          <p className="text-muted-foreground text-[10px] tracking-wide uppercase">
                             Balance
                           </p>
                           <p className="text-lg font-bold">{formatCurrency(acc.balance)}</p>
                         </div>
-                        <div className="rounded-xl bg-muted/30 p-3">
-                          <p className="text-[10px] uppercase tracking-wide text-muted-foreground">
+                        <div className="bg-muted/30 rounded-xl p-3">
+                          <p className="text-muted-foreground text-[10px] tracking-wide uppercase">
                             Equity
                           </p>
                           <p className="text-lg font-bold text-emerald-400">
                             {formatCurrency(acc.equity)}
                           </p>
                         </div>
-                        <div className="rounded-xl bg-muted/30 p-3">
-                          <p className="text-[10px] uppercase tracking-wide text-muted-foreground">
+                        <div className="bg-muted/30 rounded-xl p-3">
+                          <p className="text-muted-foreground text-[10px] tracking-wide uppercase">
                             Free Margin
                           </p>
-                          <p className="text-sm font-semibold">
-                            {formatCurrency(acc.freeMargin)}
-                          </p>
+                          <p className="text-sm font-semibold">{formatCurrency(acc.freeMargin)}</p>
                         </div>
-                        <div className="rounded-xl bg-muted/30 p-3">
-                          <p className="text-[10px] uppercase tracking-wide text-muted-foreground">
+                        <div className="bg-muted/30 rounded-xl p-3">
+                          <p className="text-muted-foreground text-[10px] tracking-wide uppercase">
                             Margin Level
                           </p>
                           <p className="text-sm font-semibold">{acc.marginLevel}%</p>
                         </div>
                       </div>
-                      <div className="mt-3 flex items-center gap-2 text-xs text-muted-foreground">
+                      <div className="text-muted-foreground mt-3 flex items-center gap-2 text-xs">
                         <Server className="h-3.5 w-3.5" />
                         {acc.leverage} leverage
                       </div>
@@ -268,18 +260,18 @@ export default function MT5Page() {
                 <div className="overflow-x-auto">
                   <table className="w-full text-sm">
                     <thead>
-                      <tr className="border-b border-border/50 text-left text-xs uppercase tracking-wide text-muted-foreground">
-                        <th className="pb-3 pr-4">Symbol</th>
-                        <th className="pb-3 pr-4">Type</th>
-                        <th className="pb-3 pr-4">Volume</th>
-                        <th className="pb-3 pr-4">Profit</th>
-                        <th className="pb-3 pr-4">Bot</th>
+                      <tr className="border-border/50 text-muted-foreground border-b text-left text-xs tracking-wide uppercase">
+                        <th className="pr-4 pb-3">Symbol</th>
+                        <th className="pr-4 pb-3">Type</th>
+                        <th className="pr-4 pb-3">Volume</th>
+                        <th className="pr-4 pb-3">Profit</th>
+                        <th className="pr-4 pb-3">Bot</th>
                         <th className="pb-3">Status</th>
                       </tr>
                     </thead>
                     <tbody>
                       {recentTrades.map((trade) => (
-                        <tr key={trade.id} className="border-b border-border/30">
+                        <tr key={trade.id} className="border-border/30 border-b">
                           <td className="py-3 pr-4 font-semibold">{trade.symbol}</td>
                           <td className="py-3 pr-4">
                             <span
@@ -296,7 +288,7 @@ export default function MT5Page() {
                               {trade.type}
                             </span>
                           </td>
-                          <td className="py-3 pr-4 text-muted-foreground">{trade.volume}</td>
+                          <td className="text-muted-foreground py-3 pr-4">{trade.volume}</td>
                           <td
                             className={cn(
                               "py-3 pr-4 font-semibold",
@@ -306,7 +298,7 @@ export default function MT5Page() {
                             {trade.profit >= 0 ? "+" : ""}
                             {formatCurrency(trade.profit)}
                           </td>
-                          <td className="py-3 pr-4 text-xs text-muted-foreground">{trade.bot}</td>
+                          <td className="text-muted-foreground py-3 pr-4 text-xs">{trade.bot}</td>
                           <td className="py-3">
                             <Badge
                               variant={trade.status === "OPEN" ? "secondary" : "outline"}

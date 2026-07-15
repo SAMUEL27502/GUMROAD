@@ -53,7 +53,7 @@ export function Navbar() {
   useEffect(() => setMounted(true), []);
 
   return (
-    <header className="sticky top-0 z-40 border-b border-border/60 bg-background/70 backdrop-blur-xl">
+    <header className="border-border/60 bg-background/70 sticky top-0 z-40 border-b backdrop-blur-xl">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
         <div className="flex items-center gap-8">
           <Logo />
@@ -94,7 +94,7 @@ export function Navbar() {
                   <Button variant="ghost" size="icon" className="relative">
                     <Bell className="h-4 w-4" />
                     {unread > 0 && (
-                      <span className="absolute right-1.5 top-1.5 h-2 w-2 rounded-full bg-sky-400" />
+                      <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-sky-400" />
                     )}
                   </Button>
                 </DropdownMenuTrigger>
@@ -111,8 +111,8 @@ export function Navbar() {
                         <span className="font-medium">{n.title}</span>
                         {!n.read && <Badge variant="default">New</Badge>}
                       </div>
-                      <span className="text-xs text-muted-foreground">{n.message}</span>
-                      <span className="text-[10px] text-muted-foreground">{n.time}</span>
+                      <span className="text-muted-foreground text-xs">{n.message}</span>
+                      <span className="text-muted-foreground text-[10px]">{n.time}</span>
                     </DropdownMenuItem>
                   ))}
                 </DropdownMenuContent>
@@ -133,7 +133,9 @@ export function Navbar() {
                   <DropdownMenuLabel>
                     <div className="flex flex-col">
                       <span>{user?.name}</span>
-                      <span className="text-xs font-normal text-muted-foreground">{user?.email}</span>
+                      <span className="text-muted-foreground text-xs font-normal">
+                        {user?.email}
+                      </span>
                     </div>
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator />
@@ -190,7 +192,7 @@ export function Navbar() {
       </div>
 
       {open && (
-        <div className="border-t border-border/60 bg-background/95 px-4 py-4 lg:hidden">
+        <div className="border-border/60 bg-background/95 border-t px-4 py-4 lg:hidden">
           <nav className="flex flex-col gap-1">
             {links.map((link) => (
               <Link
@@ -208,10 +210,14 @@ export function Navbar() {
             {!isAuthenticated && (
               <div className="mt-3 flex flex-col gap-2">
                 <Button variant="outline" asChild>
-                  <Link href="/login" onClick={() => setOpen(false)}>Sign In</Link>
+                  <Link href="/login" onClick={() => setOpen(false)}>
+                    Sign In
+                  </Link>
                 </Button>
                 <Button asChild>
-                  <Link href="/register" onClick={() => setOpen(false)}>Get Started</Link>
+                  <Link href="/register" onClick={() => setOpen(false)}>
+                    Get Started
+                  </Link>
                 </Button>
               </div>
             )}

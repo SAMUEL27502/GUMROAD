@@ -2,14 +2,7 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
-import {
-  ArrowRight,
-  Bot,
-  CreditCard,
-  DollarSign,
-  TrendingUp,
-  Users,
-} from "lucide-react";
+import { ArrowRight, Bot, CreditCard, DollarSign, TrendingUp, Users } from "lucide-react";
 import { bots } from "@/lib/data/bots";
 import { adminStats, adminUsers } from "@/lib/data/admin";
 import { Badge } from "@/components/ui/badge";
@@ -64,7 +57,7 @@ export default function AdminDashboardPage() {
         transition={{ duration: 0.4 }}
       >
         <h1 className="text-3xl font-bold tracking-tight">Admin Dashboard</h1>
-        <p className="mt-1 text-muted-foreground">
+        <p className="text-muted-foreground mt-1">
           Platform overview, user activity, and quick actions.
         </p>
       </motion.div>
@@ -83,14 +76,14 @@ export default function AdminDashboardPage() {
                 <Card className="glass border-border/60 transition-colors hover:border-sky-500/30">
                   <CardContent className="flex items-start justify-between p-6">
                     <div>
-                      <p className="text-sm text-muted-foreground">{stat.label}</p>
+                      <p className="text-muted-foreground text-sm">{stat.label}</p>
                       <p className="mt-1 text-2xl font-bold">{stat.value}</p>
                       <p className="mt-1 flex items-center gap-1 text-xs text-emerald-400">
                         <TrendingUp className="h-3 w-3" />
                         {stat.change}
                       </p>
                     </div>
-                    <div className={`rounded-xl bg-muted/50 p-3 ${stat.color}`}>
+                    <div className={`bg-muted/50 rounded-xl p-3 ${stat.color}`}>
                       <Icon className="h-5 w-5" />
                     </div>
                   </CardContent>
@@ -118,7 +111,7 @@ export default function AdminDashboardPage() {
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="border-b border-border/60 text-left text-muted-foreground">
+                  <tr className="border-border/60 text-muted-foreground border-b text-left">
                     <th className="pb-3 font-medium">Name</th>
                     <th className="pb-3 font-medium">Plan</th>
                     <th className="pb-3 font-medium">Status</th>
@@ -126,10 +119,10 @@ export default function AdminDashboardPage() {
                 </thead>
                 <tbody>
                   {recentUsers.map((user) => (
-                    <tr key={user.id} className="border-b border-border/40 last:border-0">
+                    <tr key={user.id} className="border-border/40 border-b last:border-0">
                       <td className="py-3">
                         <p className="font-medium">{user.name}</p>
-                        <p className="text-xs text-muted-foreground">{user.email}</p>
+                        <p className="text-muted-foreground text-xs">{user.email}</p>
                       </td>
                       <td className="py-3">
                         <Badge variant="secondary">{user.plan}</Badge>
@@ -163,7 +156,7 @@ export default function AdminDashboardPage() {
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="border-b border-border/60 text-left text-muted-foreground">
+                  <tr className="border-border/60 text-muted-foreground border-b text-left">
                     <th className="pb-3 font-medium">Bot</th>
                     <th className="pb-3 font-medium">ROI</th>
                     <th className="pb-3 font-medium">Verified</th>
@@ -171,10 +164,10 @@ export default function AdminDashboardPage() {
                 </thead>
                 <tbody>
                   {recentBots.map((bot) => (
-                    <tr key={bot.id} className="border-b border-border/40 last:border-0">
+                    <tr key={bot.id} className="border-border/40 border-b last:border-0">
                       <td className="py-3">
                         <p className="font-medium">{bot.name}</p>
-                        <p className="text-xs text-muted-foreground">{bot.tradingPair}</p>
+                        <p className="text-muted-foreground text-xs">{bot.tradingPair}</p>
                       </td>
                       <td className="py-3 font-medium text-emerald-400">
                         {formatPercent(bot.roi)}

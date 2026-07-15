@@ -64,7 +64,7 @@ export function BotDetails({ bot }: { bot: Bot }) {
 
   return (
     <div className="relative">
-      <div className="pointer-events-none absolute inset-0 grid-bg opacity-20" />
+      <div className="grid-bg pointer-events-none absolute inset-0 opacity-20" />
 
       <div className="relative mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         <Button variant="ghost" size="sm" className="mb-6" asChild>
@@ -81,8 +81,13 @@ export function BotDetails({ bot }: { bot: Bot }) {
           transition={{ duration: 0.5 }}
           className="glass overflow-hidden rounded-2xl"
         >
-          <div className={cn("relative px-6 py-10 sm:px-10 sm:py-14 bg-gradient-to-br", bot.imageGradient)}>
-            <div className="absolute inset-0 grid-bg opacity-30" />
+          <div
+            className={cn(
+              "relative bg-gradient-to-br px-6 py-10 sm:px-10 sm:py-14",
+              bot.imageGradient
+            )}
+          >
+            <div className="grid-bg absolute inset-0 opacity-30" />
             <div className="relative">
               <div className="flex flex-wrap gap-2">
                 {bot.verified && (
@@ -113,16 +118,16 @@ export function BotDetails({ bot }: { bot: Bot }) {
             </div>
           </div>
 
-          <div className="flex flex-col gap-4 border-t border-border/50 p-6 sm:flex-row sm:items-center sm:justify-between">
+          <div className="border-border/50 flex flex-col gap-4 border-t p-6 sm:flex-row sm:items-center sm:justify-between">
             <div>
-              <p className="text-sm text-muted-foreground">Monthly subscription</p>
-              <p className="text-3xl font-bold">{formatCurrency(bot.price)}<span className="text-base font-normal text-muted-foreground">/mo</span></p>
+              <p className="text-muted-foreground text-sm">Monthly subscription</p>
+              <p className="text-3xl font-bold">
+                {formatCurrency(bot.price)}
+                <span className="text-muted-foreground text-base font-normal">/mo</span>
+              </p>
             </div>
             <div className="flex gap-3">
-              <Button
-                size="lg"
-                onClick={() => toast.success(`Subscribed to ${bot.name}`)}
-              >
+              <Button size="lg" onClick={() => toast.success(`Subscribed to ${bot.name}`)}>
                 Subscribe Now
               </Button>
               <Button
@@ -145,18 +150,38 @@ export function BotDetails({ bot }: { bot: Bot }) {
           className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4"
         >
           {[
-            { label: "ROI (12M)", value: formatPercent(bot.roi), icon: TrendingUp, color: "text-emerald-400" },
-            { label: "Max Drawdown", value: `${bot.drawdown.toFixed(1)}%`, icon: TrendingDown, color: "text-amber-400" },
-            { label: "Win Rate", value: `${bot.winRate.toFixed(1)}%`, icon: BarChart3, color: "text-sky-400" },
-            { label: "Profit Factor", value: bot.profitFactor.toFixed(2), icon: CheckCircle2, color: "text-blue-400" },
+            {
+              label: "ROI (12M)",
+              value: formatPercent(bot.roi),
+              icon: TrendingUp,
+              color: "text-emerald-400",
+            },
+            {
+              label: "Max Drawdown",
+              value: `${bot.drawdown.toFixed(1)}%`,
+              icon: TrendingDown,
+              color: "text-amber-400",
+            },
+            {
+              label: "Win Rate",
+              value: `${bot.winRate.toFixed(1)}%`,
+              icon: BarChart3,
+              color: "text-sky-400",
+            },
+            {
+              label: "Profit Factor",
+              value: bot.profitFactor.toFixed(2),
+              icon: CheckCircle2,
+              color: "text-blue-400",
+            },
           ].map((m) => (
             <Card key={m.label} className="border-border/70 bg-card/80">
               <CardContent className="flex items-center gap-4 p-5">
-                <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-muted/50">
+                <div className="bg-muted/50 flex h-11 w-11 items-center justify-center rounded-xl">
                   <m.icon className={cn("h-5 w-5", m.color)} />
                 </div>
                 <div>
-                  <p className="text-xs uppercase tracking-wide text-muted-foreground">{m.label}</p>
+                  <p className="text-muted-foreground text-xs tracking-wide uppercase">{m.label}</p>
                   <p className={cn("text-xl font-bold", m.color)}>{m.value}</p>
                 </div>
               </CardContent>
@@ -196,7 +221,11 @@ export function BotDetails({ bot }: { bot: Bot }) {
                         </defs>
                         <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />
                         <XAxis dataKey="date" stroke="#64748b" fontSize={12} />
-                        <YAxis stroke="#64748b" fontSize={12} tickFormatter={(v) => `$${(v / 1000).toFixed(0)}k`} />
+                        <YAxis
+                          stroke="#64748b"
+                          fontSize={12}
+                          tickFormatter={(v) => `$${(v / 1000).toFixed(0)}k`}
+                        />
                         <Tooltip
                           contentStyle={chartTooltipStyle}
                           formatter={(value) => [formatCurrency(Number(value)), "Equity"]}
@@ -219,7 +248,11 @@ export function BotDetails({ bot }: { bot: Bot }) {
                       <LineChart data={roiData}>
                         <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />
                         <XAxis dataKey="date" stroke="#64748b" fontSize={12} />
-                        <YAxis stroke="#64748b" fontSize={12} tickFormatter={(v) => `${v.toFixed(0)}%`} />
+                        <YAxis
+                          stroke="#64748b"
+                          fontSize={12}
+                          tickFormatter={(v) => `${v.toFixed(0)}%`}
+                        />
                         <Tooltip
                           contentStyle={chartTooltipStyle}
                           formatter={(value) => [`${Number(value).toFixed(2)}%`, "ROI"]}
@@ -276,11 +309,7 @@ export function BotDetails({ bot }: { bot: Bot }) {
                           contentStyle={chartTooltipStyle}
                           formatter={(value) => [`${Number(value).toFixed(1)}%`, "Return"]}
                         />
-                        <Bar
-                          dataKey="return"
-                          radius={[6, 6, 0, 0]}
-                          fill="#2563EB"
-                        />
+                        <Bar dataKey="return" radius={[6, 6, 0, 0]} fill="#2563EB" />
                       </BarChart>
                     </ResponsiveContainer>
                   </div>
@@ -307,7 +336,7 @@ export function BotDetails({ bot }: { bot: Bot }) {
                   bot.reviews.map((review) => (
                     <div
                       key={review.id}
-                      className="rounded-xl border border-border/50 bg-muted/20 p-4"
+                      className="border-border/50 bg-muted/20 rounded-xl border p-4"
                     >
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2">
@@ -316,7 +345,7 @@ export function BotDetails({ bot }: { bot: Bot }) {
                           </div>
                           <div>
                             <p className="text-sm font-semibold">{review.author}</p>
-                            <p className="text-xs text-muted-foreground">{review.date}</p>
+                            <p className="text-muted-foreground text-xs">{review.date}</p>
                           </div>
                         </div>
                         <div className="flex items-center gap-0.5">
@@ -334,11 +363,11 @@ export function BotDetails({ bot }: { bot: Bot }) {
                         </div>
                       </div>
                       <p className="mt-3 text-sm font-medium">{review.title}</p>
-                      <p className="mt-1 text-sm text-muted-foreground">{review.content}</p>
+                      <p className="text-muted-foreground mt-1 text-sm">{review.content}</p>
                     </div>
                   ))
                 ) : (
-                  <p className="py-8 text-center text-sm text-muted-foreground">
+                  <p className="text-muted-foreground py-8 text-center text-sm">
                     No reviews yet. Be the first to subscribe and share feedback.
                   </p>
                 )}
@@ -376,7 +405,7 @@ export function BotDetails({ bot }: { bot: Bot }) {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="mt-8 glass rounded-2xl p-8 text-center"
+          className="glass mt-8 rounded-2xl p-8 text-center"
         >
           <div className="mb-4 flex flex-wrap justify-center gap-2">
             {bot.tags.map((tag) => (
@@ -386,7 +415,7 @@ export function BotDetails({ bot }: { bot: Bot }) {
             ))}
           </div>
           <h3 className="text-xl font-bold">Ready to automate with {bot.name}?</h3>
-          <p className="mx-auto mt-2 max-w-md text-sm text-muted-foreground">
+          <p className="text-muted-foreground mx-auto mt-2 max-w-md text-sm">
             Subscribe and deploy to your connected MT5 account in one click.
           </p>
           <div className="mt-6 flex flex-col items-center justify-center gap-3 sm:flex-row">

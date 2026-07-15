@@ -39,10 +39,10 @@ export default function AboutPage() {
         <h1 className="text-4xl font-bold tracking-tight md:text-5xl">
           About <span className="gradient-text">TradeBib</span>
         </h1>
-        <p className="mx-auto mt-6 max-w-3xl text-lg text-muted-foreground">
-          We built TradeBib to bring transparency and trust to automated forex trading.
-          Our marketplace connects traders with verified MetaTrader 5 Expert Advisors,
-          backed by real performance data — not marketing hype.
+        <p className="text-muted-foreground mx-auto mt-6 max-w-3xl text-lg">
+          We built TradeBib to bring transparency and trust to automated forex trading. Our
+          marketplace connects traders with verified MetaTrader 5 Expert Advisors, backed by real
+          performance data — not marketing hype.
         </p>
       </motion.div>
 
@@ -56,8 +56,8 @@ export default function AboutPage() {
           >
             <Card className="glass border-border/60 text-center">
               <CardContent className="p-6">
-                <p className="text-3xl font-bold gradient-text">{stat.display}</p>
-                <p className="mt-1 text-sm text-muted-foreground">{stat.label}</p>
+                <p className="gradient-text text-3xl font-bold">{stat.display}</p>
+                <p className="text-muted-foreground mt-1 text-sm">{stat.label}</p>
               </CardContent>
             </Card>
           </motion.div>
@@ -76,13 +76,13 @@ export default function AboutPage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 + i * 0.1 }}
               >
-                <Card className="glass h-full border-border/60">
+                <Card className="glass border-border/60 h-full">
                   <CardContent className="p-6">
                     <div className="mb-4 inline-flex rounded-xl bg-sky-500/10 p-3 text-sky-400">
                       <Icon className="h-6 w-6" />
                     </div>
                     <h3 className="text-lg font-bold">{value.title}</h3>
-                    <p className="mt-2 text-sm text-muted-foreground">{value.description}</p>
+                    <p className="text-muted-foreground mt-2 text-sm">{value.description}</p>
                   </CardContent>
                 </Card>
               </motion.div>
@@ -95,11 +95,12 @@ export default function AboutPage() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.5 }}
-        className="rounded-2xl glass border border-sky-500/20 p-8 text-center md:p-12"
+        className="glass rounded-2xl border border-sky-500/20 p-8 text-center md:p-12"
       >
         <h2 className="text-2xl font-bold">Ready to automate with confidence?</h2>
-        <p className="mx-auto mt-3 max-w-xl text-muted-foreground">
-          Browse verified bots, connect your MT5 account, and start building your automated portfolio today.
+        <p className="text-muted-foreground mx-auto mt-3 max-w-xl">
+          Browse verified bots, connect your MT5 account, and start building your automated
+          portfolio today.
         </p>
         <div className="mt-6 flex flex-wrap justify-center gap-4">
           <Button asChild size="lg">

@@ -41,8 +41,8 @@ export default function RegisterPage() {
 
   return (
     <div className="relative flex min-h-[calc(100vh-4rem)] items-center justify-center px-4 py-12">
-      <div className="pointer-events-none absolute inset-0 grid-bg opacity-30" />
-      <div className="pointer-events-none absolute right-1/4 top-1/3 h-64 w-64 rounded-full bg-blue-600/15 blur-[100px]" />
+      <div className="grid-bg pointer-events-none absolute inset-0 opacity-30" />
+      <div className="pointer-events-none absolute top-1/3 right-1/4 h-64 w-64 rounded-full bg-blue-600/15 blur-[100px]" />
 
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -55,16 +55,14 @@ export default function RegisterPage() {
             <CardTitle className="text-2xl">
               Create your <span className="gradient-text">TradeBib</span> account
             </CardTitle>
-            <CardDescription>
-              Start browsing verified MT5 bots for free
-            </CardDescription>
+            <CardDescription>Start browsing verified MT5 bots for free</CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="name">Full Name</Label>
                 <div className="relative">
-                  <User className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                  <User className="text-muted-foreground absolute top-1/2 left-3.5 h-4 w-4 -translate-y-1/2" />
                   <Input
                     id="name"
                     placeholder="John Doe"
@@ -77,7 +75,7 @@ export default function RegisterPage() {
               <div className="space-y-2">
                 <Label htmlFor="email">Email</Label>
                 <div className="relative">
-                  <Mail className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                  <Mail className="text-muted-foreground absolute top-1/2 left-3.5 h-4 w-4 -translate-y-1/2" />
                   <Input
                     id="email"
                     type="email"
@@ -91,7 +89,7 @@ export default function RegisterPage() {
               <div className="space-y-2">
                 <Label htmlFor="password">Password</Label>
                 <div className="relative">
-                  <Lock className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                  <Lock className="text-muted-foreground absolute top-1/2 left-3.5 h-4 w-4 -translate-y-1/2" />
                   <Input
                     id="password"
                     type="password"
@@ -107,7 +105,7 @@ export default function RegisterPage() {
               </Button>
             </form>
 
-            <p className="mt-6 text-center text-sm text-muted-foreground">
+            <p className="text-muted-foreground mt-6 text-center text-sm">
               Already have an account?{" "}
               <Link href="/login" className="font-semibold text-sky-400 hover:underline">
                 Sign in

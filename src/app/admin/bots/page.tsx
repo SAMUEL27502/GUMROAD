@@ -43,7 +43,7 @@ export default function AdminBotsPage() {
     <div className="space-y-6">
       <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}>
         <h1 className="text-3xl font-bold tracking-tight">Bots</h1>
-        <p className="mt-1 text-muted-foreground">
+        <p className="text-muted-foreground mt-1">
           Approve listings and toggle verification status.
         </p>
       </motion.div>
@@ -57,13 +57,13 @@ export default function AdminBotsPage() {
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b border-border/60 text-left text-muted-foreground">
-                  <th className="pb-3 pr-4 font-medium">Bot</th>
-                  <th className="pb-3 pr-4 font-medium">Strategy</th>
-                  <th className="pb-3 pr-4 font-medium">ROI</th>
-                  <th className="pb-3 pr-4 font-medium">Price</th>
-                  <th className="pb-3 pr-4 font-medium">Risk</th>
-                  <th className="pb-3 pr-4 text-center font-medium">Verified</th>
+                <tr className="border-border/60 text-muted-foreground border-b text-left">
+                  <th className="pr-4 pb-3 font-medium">Bot</th>
+                  <th className="pr-4 pb-3 font-medium">Strategy</th>
+                  <th className="pr-4 pb-3 font-medium">ROI</th>
+                  <th className="pr-4 pb-3 font-medium">Price</th>
+                  <th className="pr-4 pb-3 font-medium">Risk</th>
+                  <th className="pr-4 pb-3 text-center font-medium">Verified</th>
                   <th className="pb-3 text-center font-medium">Approved</th>
                 </tr>
               </thead>
@@ -74,13 +74,13 @@ export default function AdminBotsPage() {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: i * 0.03 }}
-                    className="border-b border-border/40 last:border-0"
+                    className="border-border/40 border-b last:border-0"
                   >
                     <td className="py-4 pr-4">
                       <p className="font-medium">{bot.name}</p>
-                      <p className="text-xs text-muted-foreground">{bot.tradingPair}</p>
+                      <p className="text-muted-foreground text-xs">{bot.tradingPair}</p>
                     </td>
-                    <td className="py-4 pr-4 text-muted-foreground">{bot.strategy}</td>
+                    <td className="text-muted-foreground py-4 pr-4">{bot.strategy}</td>
                     <td className="py-4 pr-4 font-medium text-emerald-400">
                       {formatPercent(bot.roi)}
                     </td>

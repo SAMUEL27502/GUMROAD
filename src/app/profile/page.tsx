@@ -4,16 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import {
-  AlertTriangle,
-  Bell,
-  CreditCard,
-  Key,
-  Link2,
-  Shield,
-  Trash2,
-  User,
-} from "lucide-react";
+import { AlertTriangle, Bell, CreditCard, Key, Link2, Shield, Trash2, User } from "lucide-react";
 import { toast } from "sonner";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
@@ -66,9 +57,7 @@ export default function ProfilePage() {
     return <PageLoader />;
   }
 
-  const currentPlan = pricingPlans.find(
-    (p) => p.id === user.plan.toLowerCase()
-  ) ?? pricingPlans[1];
+  const currentPlan = pricingPlans.find((p) => p.id === user.plan.toLowerCase()) ?? pricingPlans[1];
 
   function handleSaveProfile() {
     updateProfile({ name, email });
@@ -94,7 +83,7 @@ export default function ProfilePage() {
 
   return (
     <div className="relative">
-      <div className="pointer-events-none absolute inset-0 grid-bg opacity-20" />
+      <div className="grid-bg pointer-events-none absolute inset-0 opacity-20" />
 
       <div className="relative mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
         <motion.div
@@ -104,9 +93,7 @@ export default function ProfilePage() {
           className="mb-8 flex items-center gap-4"
         >
           <Avatar className="h-16 w-16">
-            <AvatarFallback className="text-lg">
-              {user.name.charAt(0).toUpperCase()}
-            </AvatarFallback>
+            <AvatarFallback className="text-lg">{user.name.charAt(0).toUpperCase()}</AvatarFallback>
           </Avatar>
           <div>
             <h1 className="text-2xl font-bold">{user.name}</h1>
@@ -158,11 +145,7 @@ export default function ProfilePage() {
               <CardContent className="space-y-4">
                 <div className="space-y-2">
                   <Label htmlFor="profile-name">Full Name</Label>
-                  <Input
-                    id="profile-name"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                  />
+                  <Input id="profile-name" value={name} onChange={(e) => setName(e.target.value)} />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="profile-email">Email</Label>
@@ -197,12 +180,10 @@ export default function ProfilePage() {
                   <Label htmlFor="confirm-password">Confirm Password</Label>
                   <Input id="confirm-password" type="password" placeholder="••••••••" />
                 </div>
-                <Button onClick={() => toast.success("Password updated")}>
-                  Update Password
-                </Button>
-                <div className="mt-6 rounded-xl border border-border/50 bg-muted/20 p-4">
+                <Button onClick={() => toast.success("Password updated")}>Update Password</Button>
+                <div className="border-border/50 bg-muted/20 mt-6 rounded-xl border p-4">
                   <p className="text-sm font-semibold">Two-Factor Authentication</p>
-                  <p className="mt-1 text-xs text-muted-foreground">
+                  <p className="text-muted-foreground mt-1 text-xs">
                     Add an extra layer of security to your account
                   </p>
                   <Button
@@ -249,11 +230,11 @@ export default function ProfilePage() {
                 ].map((item) => (
                   <div
                     key={item.key}
-                    className="flex items-center justify-between rounded-xl border border-border/50 p-4"
+                    className="border-border/50 flex items-center justify-between rounded-xl border p-4"
                   >
                     <div>
                       <p className="text-sm font-semibold">{item.label}</p>
-                      <p className="text-xs text-muted-foreground">{item.desc}</p>
+                      <p className="text-muted-foreground text-xs">{item.desc}</p>
                     </div>
                     <Switch
                       checked={notifications[item.key]}
@@ -285,12 +266,12 @@ export default function ProfilePage() {
                 {apiKeys.map((key) => (
                   <div
                     key={key.id}
-                    className="flex items-center justify-between rounded-xl border border-border/50 bg-muted/20 p-4"
+                    className="border-border/50 bg-muted/20 flex items-center justify-between rounded-xl border p-4"
                   >
                     <div>
                       <p className="text-sm font-semibold">{key.name}</p>
-                      <p className="font-mono text-xs text-muted-foreground">{key.key}</p>
-                      <p className="mt-1 text-[10px] text-muted-foreground">
+                      <p className="text-muted-foreground font-mono text-xs">{key.key}</p>
+                      <p className="text-muted-foreground mt-1 text-[10px]">
                         Created {key.created}
                       </p>
                     </div>
@@ -322,20 +303,18 @@ export default function ProfilePage() {
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-lg font-bold">{currentPlan.name} Plan</p>
-                      <p className="text-sm text-muted-foreground">{currentPlan.description}</p>
+                      <p className="text-muted-foreground text-sm">{currentPlan.description}</p>
                     </div>
                     <p className="text-2xl font-bold">
-                      {currentPlan.price === 0
-                        ? "Free"
-                        : formatCurrency(currentPlan.price)}
+                      {currentPlan.price === 0 ? "Free" : formatCurrency(currentPlan.price)}
                       {currentPlan.price > 0 && (
-                        <span className="text-sm font-normal text-muted-foreground">/mo</span>
+                        <span className="text-muted-foreground text-sm font-normal">/mo</span>
                       )}
                     </p>
                   </div>
                   <ul className="mt-4 space-y-1.5">
                     {currentPlan.features.map((f) => (
-                      <li key={f} className="text-sm text-muted-foreground">
+                      <li key={f} className="text-muted-foreground text-sm">
                         • {f}
                       </li>
                     ))}
@@ -344,9 +323,9 @@ export default function ProfilePage() {
                     <Link href="/pricing">Change Plan</Link>
                   </Button>
                 </div>
-                <div className="rounded-xl border border-border/50 p-4">
+                <div className="border-border/50 rounded-xl border p-4">
                   <p className="text-sm font-semibold">Payment Method</p>
-                  <p className="mt-1 text-sm text-muted-foreground">
+                  <p className="text-muted-foreground mt-1 text-sm">
                     Visa ending in 4242 · Expires 08/2027
                   </p>
                   <Button
@@ -377,11 +356,11 @@ export default function ProfilePage() {
                 {connectedAccounts.map((acc) => (
                   <div
                     key={acc.id}
-                    className="flex items-center justify-between rounded-xl border border-border/50 p-4"
+                    className="border-border/50 flex items-center justify-between rounded-xl border p-4"
                   >
                     <div>
                       <p className="font-semibold">{acc.nickname}</p>
-                      <p className="text-xs text-muted-foreground">
+                      <p className="text-muted-foreground text-xs">
                         {acc.brokerServer} · #{acc.accountNumber}
                       </p>
                     </div>
@@ -401,7 +380,7 @@ export default function ProfilePage() {
           </TabsContent>
 
           <TabsContent value="danger">
-            <Card className="border-red-500/30 bg-card/80">
+            <Card className="bg-card/80 border-red-500/30">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2 text-red-400">
                   <AlertTriangle className="h-5 w-5" />
@@ -414,9 +393,9 @@ export default function ProfilePage() {
               <CardContent className="space-y-4">
                 <div className="rounded-xl border border-red-500/20 bg-red-500/5 p-4">
                   <p className="text-sm font-semibold">Delete Account</p>
-                  <p className="mt-1 text-xs text-muted-foreground">
-                    Permanently delete your account, subscriptions, and all associated data.
-                    This action cannot be undone.
+                  <p className="text-muted-foreground mt-1 text-xs">
+                    Permanently delete your account, subscriptions, and all associated data. This
+                    action cannot be undone.
                   </p>
                   <Dialog>
                     <DialogTrigger asChild>
@@ -429,9 +408,8 @@ export default function ProfilePage() {
                       <DialogHeader>
                         <DialogTitle>Are you absolutely sure?</DialogTitle>
                         <DialogDescription>
-                          This will permanently delete your TradeBib account and remove all
-                          your data from our servers. Active bot subscriptions will be
-                          cancelled.
+                          This will permanently delete your TradeBib account and remove all your
+                          data from our servers. Active bot subscriptions will be cancelled.
                         </DialogDescription>
                       </DialogHeader>
                       <div className="flex justify-end gap-2">

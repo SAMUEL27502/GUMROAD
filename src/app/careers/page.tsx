@@ -19,18 +19,18 @@ export default function CareersPage() {
         <h1 className="text-4xl font-bold tracking-tight">
           <span className="gradient-text">Careers at TradeBib</span>
         </h1>
-        <p className="mx-auto mt-3 max-w-2xl text-muted-foreground">
+        <p className="text-muted-foreground mx-auto mt-3 max-w-2xl">
           Join us in building the future of transparent, automated trading infrastructure.
         </p>
       </motion.div>
 
-      <Card className="mb-10 glass border-border/60">
+      <Card className="glass border-border/60 mb-10">
         <CardContent className="p-8 text-center">
           <Briefcase className="mx-auto h-10 w-10 text-sky-400" />
           <h2 className="mt-4 text-xl font-bold">Why TradeBib?</h2>
-          <p className="mx-auto mt-2 max-w-2xl text-sm text-muted-foreground">
-            Remote-first culture, competitive compensation, equity for early team members,
-            and the chance to work on products used by thousands of active traders worldwide.
+          <p className="text-muted-foreground mx-auto mt-2 max-w-2xl text-sm">
+            Remote-first culture, competitive compensation, equity for early team members, and the
+            chance to work on products used by thousands of active traders worldwide.
           </p>
         </CardContent>
       </Card>
@@ -59,9 +59,7 @@ export default function CareersPage() {
                     </span>
                   </CardDescription>
                 </div>
-                <Button
-                  onClick={() => toast.success("Application portal opening soon!")}
-                >
+                <Button onClick={() => toast.success("Application portal opening soon!")}>
                   Apply
                 </Button>
               </CardHeader>
@@ -70,7 +68,7 @@ export default function CareersPage() {
         ))}
       </div>
 
-      <p className="mt-10 text-center text-sm text-muted-foreground">
+      <p className="text-muted-foreground mt-10 text-center text-sm">
         Don&apos;t see a fit? Email{" "}
         <a href="mailto:careers@tradebib.com" className="text-sky-400 hover:underline">
           careers@tradebib.com

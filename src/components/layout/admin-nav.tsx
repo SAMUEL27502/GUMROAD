@@ -3,13 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
-import {
-  BarChart3,
-  Bot,
-  CreditCard,
-  LayoutDashboard,
-  Users,
-} from "lucide-react";
+import { BarChart3, Bot, CreditCard, LayoutDashboard, Users } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const links = [
@@ -26,14 +20,12 @@ export function AdminNav() {
   return (
     <nav className="hidden w-56 shrink-0 lg:block">
       <div className="glass sticky top-24 rounded-2xl p-3">
-        <p className="mb-3 px-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+        <p className="text-muted-foreground mb-3 px-3 text-xs font-semibold tracking-wider uppercase">
           Admin Panel
         </p>
         <ul className="space-y-1">
           {links.map((link) => {
-            const active = link.exact
-              ? pathname === link.href
-              : pathname.startsWith(link.href);
+            const active = link.exact ? pathname === link.href : pathname.startsWith(link.href);
             const Icon = link.icon;
 
             return (
@@ -50,7 +42,7 @@ export function AdminNav() {
                   {active && (
                     <motion.div
                       layoutId="admin-nav-active"
-                      className="absolute inset-0 rounded-xl bg-sky-500/10 border border-sky-500/20"
+                      className="absolute inset-0 rounded-xl border border-sky-500/20 bg-sky-500/10"
                       transition={{ type: "spring", bounce: 0.2, duration: 0.4 }}
                     />
                   )}
@@ -72,9 +64,7 @@ export function AdminNavMobile() {
   return (
     <div className="mb-6 flex gap-2 overflow-x-auto pb-2 lg:hidden">
       {links.map((link) => {
-        const active = link.exact
-          ? pathname === link.href
-          : pathname.startsWith(link.href);
+        const active = link.exact ? pathname === link.href : pathname.startsWith(link.href);
 
         return (
           <Link
@@ -83,7 +73,7 @@ export function AdminNavMobile() {
             className={cn(
               "shrink-0 rounded-xl px-4 py-2 text-sm font-medium transition-colors",
               active
-                ? "bg-sky-500/15 text-sky-400 border border-sky-500/30"
+                ? "border border-sky-500/30 bg-sky-500/15 text-sky-400"
                 : "glass text-muted-foreground hover:text-foreground"
             )}
           >

@@ -68,7 +68,7 @@ export default function ComparePage() {
         <h1 className="text-4xl font-bold tracking-tight">
           <span className="gradient-text">Bot Comparison</span>
         </h1>
-        <p className="mx-auto mt-3 max-w-2xl text-muted-foreground">
+        <p className="text-muted-foreground mx-auto mt-3 max-w-2xl">
           Select 2–3 Expert Advisors and compare performance metrics side by side.
         </p>
       </motion.div>
@@ -77,12 +77,12 @@ export default function ComparePage() {
         {selected.map((slug, i) => (
           <div key={i} className="w-full max-w-xs space-y-2">
             <div className="flex items-center justify-between">
-              <span className="text-sm font-medium text-muted-foreground">Bot {i + 1}</span>
+              <span className="text-muted-foreground text-sm font-medium">Bot {i + 1}</span>
               {selected.length > 2 && (
                 <button
                   type="button"
                   onClick={() => removeSlot(i)}
-                  className="text-muted-foreground hover:text-red-400 cursor-pointer"
+                  className="text-muted-foreground cursor-pointer hover:text-red-400"
                   aria-label="Remove bot"
                 >
                   <X className="h-4 w-4" />
@@ -95,7 +95,11 @@ export default function ComparePage() {
               </SelectTrigger>
               <SelectContent>
                 {bots.map((b) => (
-                  <SelectItem key={b.slug} value={b.slug} disabled={selected.includes(b.slug) && b.slug !== slug}>
+                  <SelectItem
+                    key={b.slug}
+                    value={b.slug}
+                    disabled={selected.includes(b.slug) && b.slug !== slug}
+                  >
                     {b.name}
                   </SelectItem>
                 ))}
@@ -110,7 +114,7 @@ export default function ComparePage() {
         )}
       </div>
 
-      <Card className="glass overflow-hidden border-border/60">
+      <Card className="glass border-border/60 overflow-hidden">
         <CardHeader>
           <CardTitle>Metrics Comparison</CardTitle>
           <CardDescription>Side-by-side performance data</CardDescription>
@@ -118,13 +122,15 @@ export default function ComparePage() {
         <CardContent className="overflow-x-auto">
           <table className="w-full min-w-[600px] text-sm">
             <thead>
-              <tr className="border-b border-border/60">
-                <th className="pb-4 pr-6 text-left font-medium text-muted-foreground">Metric</th>
+              <tr className="border-border/60 border-b">
+                <th className="text-muted-foreground pr-6 pb-4 text-left font-medium">Metric</th>
                 {selectedBots.map((bot) => (
-                  <th key={bot.id} className="pb-4 pr-6 text-left">
-                    <div className={`mb-2 h-2 w-full rounded-full bg-gradient-to-r ${bot.imageGradient}`} />
+                  <th key={bot.id} className="pr-6 pb-4 text-left">
+                    <div
+                      className={`mb-2 h-2 w-full rounded-full bg-gradient-to-r ${bot.imageGradient}`}
+                    />
                     <p className="font-bold">{bot.name}</p>
-                    <p className="text-xs text-muted-foreground">{bot.tradingPair}</p>
+                    <p className="text-muted-foreground text-xs">{bot.tradingPair}</p>
                   </th>
                 ))}
               </tr>
@@ -136,15 +142,19 @@ export default function ComparePage() {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: i * 0.04 }}
-                  className="border-b border-border/40"
+                  className="border-border/40 border-b"
                 >
-                  <td className="py-4 pr-6 font-medium text-muted-foreground">{metric.label}</td>
+                  <td className="text-muted-foreground py-4 pr-6 font-medium">{metric.label}</td>
                   {selectedBots.map((bot) => (
                     <td key={bot.id} className="py-4 pr-6">
                       {metric.key === "riskLevel" ? (
                         <Badge
                           variant={
-                            bot.riskLevel === "LOW" ? "low" : bot.riskLevel === "MEDIUM" ? "medium" : "high"
+                            bot.riskLevel === "LOW"
+                              ? "low"
+                              : bot.riskLevel === "MEDIUM"
+                                ? "medium"
+                                : "high"
                           }
                         >
                           {bot.riskLevel}
@@ -153,7 +163,7 @@ export default function ComparePage() {
                         bot.verified ? (
                           <Check className="h-5 w-5 text-emerald-400" />
                         ) : (
-                          <X className="h-5 w-5 text-muted-foreground" />
+                          <X className="text-muted-foreground h-5 w-5" />
                         )
                       ) : (
                         <span className={metric.key === "roi" ? "font-bold text-emerald-400" : ""}>

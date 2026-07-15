@@ -13,8 +13,8 @@ import { cn, formatCurrency } from "@/lib/utils";
 export default function PricingPage() {
   return (
     <div className="relative">
-      <div className="pointer-events-none absolute inset-0 grid-bg opacity-30" />
-      <div className="pointer-events-none absolute left-1/2 top-0 h-96 w-96 -translate-x-1/2 rounded-full bg-sky-500/15 blur-[120px]" />
+      <div className="grid-bg pointer-events-none absolute inset-0 opacity-30" />
+      <div className="pointer-events-none absolute top-0 left-1/2 h-96 w-96 -translate-x-1/2 rounded-full bg-sky-500/15 blur-[120px]" />
 
       <div className="relative mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
         <motion.div
@@ -29,7 +29,7 @@ export default function PricingPage() {
           <h1 className="text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">
             Simple, transparent <span className="gradient-text">pricing</span>
           </h1>
-          <p className="mt-4 text-lg text-muted-foreground">
+          <p className="text-muted-foreground mt-4 text-lg">
             Start free and scale as your bot portfolio grows. No hidden fees on bot subscriptions.
           </p>
         </motion.div>
@@ -45,13 +45,13 @@ export default function PricingPage() {
             >
               <Card
                 className={cn(
-                  "relative h-full border-border/70 bg-card/80 transition-colors",
+                  "border-border/70 bg-card/80 relative h-full transition-colors",
                   plan.popular && "border-sky-500/50 shadow-lg shadow-sky-500/10"
                 )}
               >
                 {plan.popular && (
                   <div className="absolute -top-3.5 left-1/2 -translate-x-1/2">
-                    <Badge className="bg-gradient-to-r from-sky-500 to-blue-600 px-4 py-1 text-white border-0">
+                    <Badge className="border-0 bg-gradient-to-r from-sky-500 to-blue-600 px-4 py-1 text-white">
                       <Sparkles className="mr-1 h-3 w-3" />
                       Most Popular
                     </Badge>
@@ -67,7 +67,7 @@ export default function PricingPage() {
                       <span className="text-muted-foreground">/{plan.period}</span>
                     )}
                   </div>
-                  <p className="mt-2 text-sm text-muted-foreground">{plan.description}</p>
+                  <p className="text-muted-foreground mt-2 text-sm">{plan.description}</p>
                 </CardHeader>
                 <CardContent>
                   <ul className="space-y-3">
@@ -102,7 +102,7 @@ export default function PricingPage() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.5 }}
-          className="mt-12 text-center text-sm text-muted-foreground"
+          className="text-muted-foreground mt-12 text-center text-sm"
         >
           All plans include access to the marketplace. Bot subscription fees are billed separately
           by each EA provider.{" "}

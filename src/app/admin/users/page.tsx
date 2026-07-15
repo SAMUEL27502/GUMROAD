@@ -25,9 +25,7 @@ export default function AdminUsersPage() {
     <div className="space-y-6">
       <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}>
         <h1 className="text-3xl font-bold tracking-tight">Users</h1>
-        <p className="mt-1 text-muted-foreground">
-          Manage registered traders and account roles.
-        </p>
+        <p className="text-muted-foreground mt-1">Manage registered traders and account roles.</p>
       </motion.div>
 
       <Card className="glass border-border/60">
@@ -35,7 +33,7 @@ export default function AdminUsersPage() {
           <CardTitle>All Users</CardTitle>
           <CardDescription>{filtered.length} users found</CardDescription>
           <div className="relative mt-4 max-w-sm">
-            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+            <Search className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
             <Input
               placeholder="Search by name, email, or plan..."
               value={search}
@@ -48,11 +46,11 @@ export default function AdminUsersPage() {
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b border-border/60 text-left text-muted-foreground">
-                  <th className="pb-3 pr-4 font-medium">User</th>
-                  <th className="pb-3 pr-4 font-medium">Plan</th>
-                  <th className="pb-3 pr-4 font-medium">Role</th>
-                  <th className="pb-3 pr-4 font-medium">Joined</th>
+                <tr className="border-border/60 text-muted-foreground border-b text-left">
+                  <th className="pr-4 pb-3 font-medium">User</th>
+                  <th className="pr-4 pb-3 font-medium">Plan</th>
+                  <th className="pr-4 pb-3 font-medium">Role</th>
+                  <th className="pr-4 pb-3 font-medium">Joined</th>
                   <th className="pb-3 font-medium">Status</th>
                 </tr>
               </thead>
@@ -63,11 +61,11 @@ export default function AdminUsersPage() {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: i * 0.03 }}
-                    className="border-b border-border/40 last:border-0"
+                    className="border-border/40 border-b last:border-0"
                   >
                     <td className="py-4 pr-4">
                       <p className="font-medium">{user.name}</p>
-                      <p className="text-xs text-muted-foreground">{user.email}</p>
+                      <p className="text-muted-foreground text-xs">{user.email}</p>
                     </td>
                     <td className="py-4 pr-4">
                       <Badge variant="secondary">{user.plan}</Badge>
@@ -77,7 +75,7 @@ export default function AdminUsersPage() {
                         {user.role}
                       </Badge>
                     </td>
-                    <td className="py-4 pr-4 text-muted-foreground">{user.joined}</td>
+                    <td className="text-muted-foreground py-4 pr-4">{user.joined}</td>
                     <td className="py-4">
                       <Badge
                         variant={

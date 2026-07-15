@@ -29,27 +29,21 @@ export default function CalendarPage() {
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="mb-10"
-      >
+      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-10">
         <div className="flex items-center gap-3 text-sky-400">
           <Calendar className="h-6 w-6" />
-          <span className="text-sm font-semibold uppercase tracking-wider">Economic Calendar</span>
+          <span className="text-sm font-semibold tracking-wider uppercase">Economic Calendar</span>
         </div>
         <h1 className="mt-2 text-4xl font-bold tracking-tight">
           <span className="gradient-text">Today&apos;s Events</span>
         </h1>
-        <p className="mt-2 text-muted-foreground">{today}</p>
+        <p className="text-muted-foreground mt-2">{today}</p>
       </motion.div>
 
       <Card className="glass border-border/60">
         <CardHeader>
           <CardTitle>Scheduled Releases</CardTitle>
-          <CardDescription>
-            High-impact events that may affect your subscribed bots
-          </CardDescription>
+          <CardDescription>High-impact events that may affect your subscribed bots</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="space-y-3">
@@ -59,10 +53,10 @@ export default function CalendarPage() {
                 initial={{ opacity: 0, x: -12 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: i * 0.06 }}
-                className="flex flex-col gap-3 rounded-xl border border-border/60 bg-muted/20 p-4 sm:flex-row sm:items-center sm:justify-between"
+                className="border-border/60 bg-muted/20 flex flex-col gap-3 rounded-xl border p-4 sm:flex-row sm:items-center sm:justify-between"
               >
                 <div className="flex items-center gap-4">
-                  <div className="flex items-center gap-2 text-sm font-mono text-muted-foreground">
+                  <div className="text-muted-foreground flex items-center gap-2 font-mono text-sm">
                     <Clock className="h-4 w-4" />
                     {event.time}
                   </div>
@@ -77,7 +71,7 @@ export default function CalendarPage() {
                   <Badge variant={impactVariant[event.impact as keyof typeof impactVariant]}>
                     {event.impact}
                   </Badge>
-                  <div className="flex gap-4 text-xs text-muted-foreground">
+                  <div className="text-muted-foreground flex gap-4 text-xs">
                     <span>
                       Forecast: <span className="text-foreground">{event.forecast}</span>
                     </span>
@@ -94,9 +88,21 @@ export default function CalendarPage() {
 
       <div className="mt-6 grid gap-4 sm:grid-cols-3">
         {[
-          { label: "High Impact", count: economicEvents.filter((e) => e.impact === "HIGH").length, color: "text-red-400" },
-          { label: "Medium Impact", count: economicEvents.filter((e) => e.impact === "MEDIUM").length, color: "text-amber-400" },
-          { label: "Low Impact", count: economicEvents.filter((e) => e.impact === "LOW").length, color: "text-emerald-400" },
+          {
+            label: "High Impact",
+            count: economicEvents.filter((e) => e.impact === "HIGH").length,
+            color: "text-red-400",
+          },
+          {
+            label: "Medium Impact",
+            count: economicEvents.filter((e) => e.impact === "MEDIUM").length,
+            color: "text-amber-400",
+          },
+          {
+            label: "Low Impact",
+            count: economicEvents.filter((e) => e.impact === "LOW").length,
+            color: "text-emerald-400",
+          },
         ].map((stat, i) => (
           <motion.div
             key={stat.label}
@@ -106,7 +112,7 @@ export default function CalendarPage() {
           >
             <Card className="glass border-border/60">
               <CardContent className="flex items-center justify-between p-5">
-                <span className="text-sm text-muted-foreground">{stat.label}</span>
+                <span className="text-muted-foreground text-sm">{stat.label}</span>
                 <span className={`text-2xl font-bold ${stat.color}`}>{stat.count}</span>
               </CardContent>
             </Card>

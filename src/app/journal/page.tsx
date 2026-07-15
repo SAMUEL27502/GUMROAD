@@ -94,19 +94,15 @@ export default function JournalPage() {
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="mb-10"
-      >
+      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-10">
         <div className="flex items-center gap-3 text-sky-400">
           <BookOpen className="h-6 w-6" />
-          <span className="text-sm font-semibold uppercase tracking-wider">Trading Journal</span>
+          <span className="text-sm font-semibold tracking-wider uppercase">Trading Journal</span>
         </div>
         <h1 className="mt-2 text-4xl font-bold tracking-tight">
           <span className="gradient-text">Your Trade Log</span>
         </h1>
-        <p className="mt-2 text-muted-foreground">
+        <p className="text-muted-foreground mt-2">
           Document trades, review decisions, and track performance over time.
         </p>
       </motion.div>
@@ -114,8 +110,15 @@ export default function JournalPage() {
       <div className="mb-8 grid gap-4 sm:grid-cols-3">
         {[
           { label: "Total Entries", value: entries.length.toString() },
-          { label: "Net P/L", value: formatCurrency(totalProfit), color: totalProfit >= 0 ? "text-emerald-400" : "text-red-400" },
-          { label: "Win Rate", value: entries.length ? `${((wins / entries.length) * 100).toFixed(0)}%` : "—" },
+          {
+            label: "Net P/L",
+            value: formatCurrency(totalProfit),
+            color: totalProfit >= 0 ? "text-emerald-400" : "text-red-400",
+          },
+          {
+            label: "Win Rate",
+            value: entries.length ? `${((wins / entries.length) * 100).toFixed(0)}%` : "—",
+          },
         ].map((stat, i) => (
           <motion.div
             key={stat.label}
@@ -125,7 +128,7 @@ export default function JournalPage() {
           >
             <Card className="glass border-border/60">
               <CardContent className="p-5">
-                <p className="text-sm text-muted-foreground">{stat.label}</p>
+                <p className="text-muted-foreground text-sm">{stat.label}</p>
                 <p className={`mt-1 text-2xl font-bold ${stat.color ?? ""}`}>{stat.value}</p>
               </CardContent>
             </Card>
@@ -200,7 +203,7 @@ export default function JournalPage() {
                   placeholder="What happened? Lessons learned?"
                   value={notes}
                   onChange={(e) => setNotes(e.target.value)}
-                  className="flex w-full rounded-xl border border-border bg-muted/40 px-4 py-2 text-sm text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  className="border-border bg-muted/40 text-foreground placeholder:text-muted-foreground focus-visible:ring-ring flex w-full rounded-xl border px-4 py-2 text-sm focus-visible:ring-2 focus-visible:outline-none"
                 />
               </div>
               <Button type="submit" className="w-full">
@@ -230,10 +233,10 @@ export default function JournalPage() {
                           {entry.type}
                         </Badge>
                         {entry.bot && <Badge variant="outline">{entry.bot}</Badge>}
-                        <span className="text-xs text-muted-foreground">{entry.date}</span>
+                        <span className="text-muted-foreground text-xs">{entry.date}</span>
                       </div>
                       {entry.notes && (
-                        <p className="text-sm text-muted-foreground">{entry.notes}</p>
+                        <p className="text-muted-foreground text-sm">{entry.notes}</p>
                       )}
                     </div>
                     <div className="flex items-center gap-3">
@@ -249,7 +252,7 @@ export default function JournalPage() {
                         onClick={() => removeEntry(entry.id)}
                         aria-label="Delete entry"
                       >
-                        <Trash2 className="h-4 w-4 text-muted-foreground hover:text-red-400" />
+                        <Trash2 className="text-muted-foreground h-4 w-4 hover:text-red-400" />
                       </Button>
                     </div>
                   </CardContent>

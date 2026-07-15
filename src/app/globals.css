@@ -87,8 +87,7 @@ body {
   background:
     radial-gradient(ellipse 80% 60% at 50% -20%, rgba(14, 165, 233, 0.18), transparent),
     radial-gradient(ellipse 50% 40% at 100% 0%, rgba(37, 99, 235, 0.12), transparent),
-    radial-gradient(ellipse 40% 30% at 0% 100%, rgba(14, 165, 233, 0.08), transparent),
-    #020617;
+    radial-gradient(ellipse 40% 30% at 0% 100%, rgba(14, 165, 233, 0.08), transparent), #020617;
   background-attachment: fixed;
 }
 
@@ -120,13 +119,23 @@ body {
 }
 
 @keyframes float {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-12px); }
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-12px);
+  }
 }
 
 @keyframes pulse-glow {
-  0%, 100% { opacity: 0.4; }
-  50% { opacity: 0.8; }
+  0%,
+  100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 0.8;
+  }
 }
 
 .animate-float {

@@ -43,24 +43,25 @@ const columns = [
 
 export function Footer() {
   return (
-    <footer className="border-t border-border/60 bg-background/80">
+    <footer className="border-border/60 bg-background/80 border-t">
       <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
         <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-5">
           <div className="lg:col-span-1">
             <Logo />
-            <p className="mt-4 max-w-xs text-sm text-muted-foreground">
-              Discover verified MetaTrader 5 Expert Advisors, connect accounts, and automate with confidence.
+            <p className="text-muted-foreground mt-4 max-w-xs text-sm">
+              Discover verified MetaTrader 5 Expert Advisors, connect accounts, and automate with
+              confidence.
             </p>
           </div>
           {columns.map((col) => (
             <div key={col.title}>
-              <h4 className="mb-4 text-sm font-semibold text-foreground">{col.title}</h4>
+              <h4 className="text-foreground mb-4 text-sm font-semibold">{col.title}</h4>
               <ul className="space-y-2.5">
                 {col.links.map((link) => (
                   <li key={link.href}>
                     <Link
                       href={link.href}
-                      className="text-sm text-muted-foreground transition-colors hover:text-sky-400"
+                      className="text-muted-foreground text-sm transition-colors hover:text-sky-400"
                     >
                       {link.label}
                     </Link>
@@ -70,11 +71,11 @@ export function Footer() {
             </div>
           ))}
         </div>
-        <div className="mt-12 flex flex-col gap-3 border-t border-border/60 pt-8 sm:flex-row sm:items-center sm:justify-between">
-          <p className="text-xs text-muted-foreground">
+        <div className="border-border/60 mt-12 flex flex-col gap-3 border-t pt-8 sm:flex-row sm:items-center sm:justify-between">
+          <p className="text-muted-foreground text-xs">
             © {new Date().getFullYear()} TradeBib. All rights reserved.
           </p>
-          <p className="max-w-xl text-xs text-muted-foreground">
+          <p className="text-muted-foreground max-w-xl text-xs">
             Trading involves risk. Past performance does not guarantee future results.
           </p>
         </div>

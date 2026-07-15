@@ -8,7 +8,8 @@ export const platformStats = [
 export const features = [
   {
     title: "Verified MT5 Bots",
-    description: "Every Expert Advisor is validated against live trading performance before listing.",
+    description:
+      "Every Expert Advisor is validated against live trading performance before listing.",
     icon: "ShieldCheck",
   },
   {
@@ -38,7 +39,8 @@ export const features = [
   },
   {
     title: "One Click Deployment",
-    description: "Push settings, lots, and risk parameters directly to your connected MT5 terminal.",
+    description:
+      "Push settings, lots, and risk parameters directly to your connected MT5 terminal.",
     icon: "MousePointerClick",
   },
   {
@@ -126,11 +128,56 @@ export const connectedAccounts = [
 ];
 
 export const recentTrades = [
-  { id: "t1", symbol: "XAUUSD", type: "BUY", volume: 0.15, profit: 84.2, status: "CLOSED", time: "2h ago", bot: "GoldScalper Pro" },
-  { id: "t2", symbol: "EURUSD", type: "SELL", volume: 0.5, profit: 32.1, status: "CLOSED", time: "5h ago", bot: "EuroTrend AI" },
-  { id: "t3", symbol: "GBPUSD", type: "BUY", volume: 0.3, profit: -18.4, status: "CLOSED", time: "8h ago", bot: "BreakoutHunter" },
-  { id: "t4", symbol: "USDJPY", type: "BUY", volume: 0.4, profit: 12.6, status: "OPEN", time: "1h ago", bot: "NightOwl Grid" },
-  { id: "t5", symbol: "BTCUSD", type: "BUY", volume: 0.05, profit: 126.8, status: "CLOSED", time: "12h ago", bot: "CryptoForex Hybrid" },
+  {
+    id: "t1",
+    symbol: "XAUUSD",
+    type: "BUY",
+    volume: 0.15,
+    profit: 84.2,
+    status: "CLOSED",
+    time: "2h ago",
+    bot: "GoldScalper Pro",
+  },
+  {
+    id: "t2",
+    symbol: "EURUSD",
+    type: "SELL",
+    volume: 0.5,
+    profit: 32.1,
+    status: "CLOSED",
+    time: "5h ago",
+    bot: "EuroTrend AI",
+  },
+  {
+    id: "t3",
+    symbol: "GBPUSD",
+    type: "BUY",
+    volume: 0.3,
+    profit: -18.4,
+    status: "CLOSED",
+    time: "8h ago",
+    bot: "BreakoutHunter",
+  },
+  {
+    id: "t4",
+    symbol: "USDJPY",
+    type: "BUY",
+    volume: 0.4,
+    profit: 12.6,
+    status: "OPEN",
+    time: "1h ago",
+    bot: "NightOwl Grid",
+  },
+  {
+    id: "t5",
+    symbol: "BTCUSD",
+    type: "BUY",
+    volume: 0.05,
+    profit: 126.8,
+    status: "CLOSED",
+    time: "12h ago",
+    bot: "CryptoForex Hybrid",
+  },
 ];
 
 export const notifications = [
@@ -215,11 +262,51 @@ export const watchlistSymbols = [
 ];
 
 export const economicEvents = [
-  { id: "e1", time: "12:30", currency: "USD", impact: "HIGH", event: "CPI m/m", forecast: "0.2%", previous: "0.1%" },
-  { id: "e2", time: "14:00", currency: "USD", impact: "MEDIUM", event: "FOMC Member Speaks", forecast: "—", previous: "—" },
-  { id: "e3", time: "09:00", currency: "EUR", impact: "HIGH", event: "ECB Press Conference", forecast: "—", previous: "—" },
-  { id: "e4", time: "07:00", currency: "GBP", impact: "MEDIUM", event: "GDP m/m", forecast: "0.1%", previous: "0.0%" },
-  { id: "e5", time: "23:50", currency: "JPY", impact: "LOW", event: "Trade Balance", forecast: "0.45T", previous: "0.38T" },
+  {
+    id: "e1",
+    time: "12:30",
+    currency: "USD",
+    impact: "HIGH",
+    event: "CPI m/m",
+    forecast: "0.2%",
+    previous: "0.1%",
+  },
+  {
+    id: "e2",
+    time: "14:00",
+    currency: "USD",
+    impact: "MEDIUM",
+    event: "FOMC Member Speaks",
+    forecast: "—",
+    previous: "—",
+  },
+  {
+    id: "e3",
+    time: "09:00",
+    currency: "EUR",
+    impact: "HIGH",
+    event: "ECB Press Conference",
+    forecast: "—",
+    previous: "—",
+  },
+  {
+    id: "e4",
+    time: "07:00",
+    currency: "GBP",
+    impact: "MEDIUM",
+    event: "GDP m/m",
+    forecast: "0.1%",
+    previous: "0.0%",
+  },
+  {
+    id: "e5",
+    time: "23:50",
+    currency: "JPY",
+    impact: "LOW",
+    event: "Trade Balance",
+    forecast: "0.45T",
+    previous: "0.38T",
+  },
 ];
 
 export const forexNews = [

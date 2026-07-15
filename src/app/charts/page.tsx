@@ -32,13 +32,7 @@ const TV_SYMBOL_MAP: Record<string, string> = {
   ETHUSD: "BINANCE:ETHUSDT",
 };
 
-function TradingViewChart({
-  symbol,
-  interval,
-}: {
-  symbol: string;
-  interval: string;
-}) {
+function TradingViewChart({ symbol, interval }: { symbol: string; interval: string }) {
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -54,8 +48,7 @@ function TradingViewChart({
     container.appendChild(widgetDiv);
 
     const script = document.createElement("script");
-    script.src =
-      "https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js";
+    script.src = "https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js";
     script.type = "text/javascript";
     script.async = true;
     script.innerHTML = JSON.stringify({
@@ -104,7 +97,7 @@ export default function ChartsPage() {
 
   return (
     <div className="relative min-h-[calc(100vh-4rem)]">
-      <div className="pointer-events-none absolute inset-0 grid-bg opacity-20" />
+      <div className="grid-bg pointer-events-none absolute inset-0 opacity-20" />
 
       <div className="relative mx-auto max-w-[1600px] px-4 py-8 sm:px-6 lg:px-8">
         <motion.div
@@ -119,7 +112,7 @@ export default function ChartsPage() {
           <h1 className="text-3xl font-bold tracking-tight">
             <span className="gradient-text">TradingView</span> Charts
           </h1>
-          <p className="mt-2 text-muted-foreground">
+          <p className="text-muted-foreground mt-2">
             Real-time charts powered by TradingView with multi-timeframe analysis.
           </p>
         </motion.div>
@@ -133,7 +126,7 @@ export default function ChartsPage() {
             className="w-full shrink-0 lg:w-72"
           >
             {/* Watchlist */}
-            <Card className="mb-4 border-border/70 bg-card/80">
+            <Card className="border-border/70 bg-card/80 mb-4">
               <CardHeader className="pb-3">
                 <CardTitle className="flex items-center gap-2 text-base">
                   <Star className="h-4 w-4 text-amber-400" />
@@ -151,7 +144,7 @@ export default function ChartsPage() {
                         setCategory(item.category as "Forex" | "Metals" | "Crypto");
                       }}
                       className={cn(
-                        "flex w-full items-center justify-between rounded-xl px-3 py-2.5 text-left text-sm transition-colors cursor-pointer",
+                        "flex w-full cursor-pointer items-center justify-between rounded-xl px-3 py-2.5 text-left text-sm transition-colors",
                         activeSymbol === item.symbol
                           ? "bg-sky-500/15 text-sky-300"
                           : "hover:bg-muted/50"
@@ -169,7 +162,7 @@ export default function ChartsPage() {
                     </button>
                   ))
                 ) : (
-                  <p className="py-4 text-center text-xs text-muted-foreground">
+                  <p className="text-muted-foreground py-4 text-center text-xs">
                     Add symbols to your watchlist below
                   </p>
                 )}
@@ -210,7 +203,7 @@ export default function ChartsPage() {
                             <button
                               type="button"
                               onClick={() => setActiveSymbol(item.symbol)}
-                              className="flex flex-1 items-center gap-2 text-left text-sm cursor-pointer"
+                              className="flex flex-1 cursor-pointer items-center gap-2 text-left text-sm"
                             >
                               <span className="font-semibold">{item.symbol}</span>
                               {item.change >= 0 ? (
@@ -232,7 +225,7 @@ export default function ChartsPage() {
                                 type="button"
                                 onClick={() => toggleSymbol(item.symbol)}
                                 className={cn(
-                                  "flex h-7 w-7 items-center justify-center rounded-lg transition-colors cursor-pointer",
+                                  "flex h-7 w-7 cursor-pointer items-center justify-center rounded-lg transition-colors",
                                   hasSymbol(item.symbol)
                                     ? "bg-amber-500/20 text-amber-400"
                                     : "bg-muted/50 text-muted-foreground hover:text-foreground"
@@ -263,11 +256,11 @@ export default function ChartsPage() {
             transition={{ duration: 0.5, delay: 0.15 }}
             className="min-w-0 flex-1"
           >
-            <Card className="overflow-hidden border-border/70 bg-card/80">
-              <div className="flex flex-col gap-3 border-b border-border/50 p-4 sm:flex-row sm:items-center sm:justify-between">
+            <Card className="border-border/70 bg-card/80 overflow-hidden">
+              <div className="border-border/50 flex flex-col gap-3 border-b p-4 sm:flex-row sm:items-center sm:justify-between">
                 <div>
                   <h2 className="text-lg font-bold">{activeSymbol}</h2>
-                  <p className="text-xs text-muted-foreground">
+                  <p className="text-muted-foreground text-xs">
                     {TV_SYMBOL_MAP[activeSymbol] || activeSymbol}
                   </p>
                 </div>

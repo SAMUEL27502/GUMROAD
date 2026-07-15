@@ -10,15 +10,11 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 export default function BlogPage() {
   return (
     <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="mb-10"
-      >
+      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-10">
         <h1 className="text-4xl font-bold tracking-tight">
           <span className="gradient-text">TradeBib Blog</span>
         </h1>
-        <p className="mt-3 max-w-2xl text-muted-foreground">
+        <p className="text-muted-foreground mt-3 max-w-2xl">
           Guides, market insights, and platform updates for automated traders.
         </p>
       </motion.div>
@@ -31,11 +27,11 @@ export default function BlogPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: i * 0.06 }}
           >
-            <Card className="glass group flex h-full flex-col border-border/60 transition-colors hover:border-sky-500/30">
+            <Card className="glass group border-border/60 flex h-full flex-col transition-colors hover:border-sky-500/30">
               <CardHeader>
                 <div className="flex items-center justify-between">
                   <Badge variant="secondary">{post.category}</Badge>
-                  <span className="flex items-center gap-1 text-xs text-muted-foreground">
+                  <span className="text-muted-foreground flex items-center gap-1 text-xs">
                     <Clock className="h-3 w-3" />
                     {post.readTime}
                   </span>
@@ -46,7 +42,7 @@ export default function BlogPage() {
                 <CardDescription>{post.excerpt}</CardDescription>
               </CardHeader>
               <CardContent className="mt-auto flex items-center justify-between pt-0">
-                <div className="text-xs text-muted-foreground">
+                <div className="text-muted-foreground text-xs">
                   <p>{post.author}</p>
                   <p>{post.date}</p>
                 </div>

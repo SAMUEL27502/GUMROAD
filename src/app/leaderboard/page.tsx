@@ -27,7 +27,7 @@ export default function LeaderboardPage() {
         <h1 className="text-4xl font-bold tracking-tight">
           <span className="gradient-text">Trader Leaderboard</span>
         </h1>
-        <p className="mx-auto mt-3 max-w-2xl text-muted-foreground">
+        <p className="text-muted-foreground mx-auto mt-3 max-w-2xl">
           Top-performing traders on TradeBib ranked by verified ROI and portfolio size.
         </p>
       </motion.div>
@@ -57,7 +57,7 @@ export default function LeaderboardPage() {
                   <p className="mt-1 text-3xl font-bold text-emerald-400">
                     {formatPercent(trader.roi)}
                   </p>
-                  <div className="mt-4 flex justify-center gap-4 text-sm text-muted-foreground">
+                  <div className="text-muted-foreground mt-4 flex justify-center gap-4 text-sm">
                     <span>{trader.bots} bots</span>
                     <span className="inline-flex items-center gap-1">
                       <Users className="h-3.5 w-3.5" />
@@ -85,10 +85,10 @@ export default function LeaderboardPage() {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.4 + i * 0.06 }}
-                  className="flex items-center justify-between rounded-xl border border-border/60 bg-muted/20 px-4 py-3"
+                  className="border-border/60 bg-muted/20 flex items-center justify-between rounded-xl border px-4 py-3"
                 >
                   <div className="flex items-center gap-4">
-                    <span className="w-8 text-center font-bold text-muted-foreground">
+                    <span className="text-muted-foreground w-8 text-center font-bold">
                       #{trader.rank}
                     </span>
                     <span className="font-medium">{trader.name}</span>
