@@ -121,7 +121,8 @@ export async function removeAvatarAction(): Promise<ProfileActionResult> {
   if (!isSupabaseConfigured()) {
     const session = await readDemoSession();
     if (!session) return { success: false, error: "Not authenticated" };
-    const { avatarUrl: _removed, ...rest } = session;
+    const { avatarUrl: _, ...rest } = session;
+    void _;
     await writeDemoSession(rest);
     return { success: true, message: "Avatar removed", avatarUrl: "" };
   }

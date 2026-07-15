@@ -30,6 +30,7 @@ const columns = [
       { href: "/news", label: "Forex News" },
       { href: "/leaderboard", label: "Leaderboard" },
       { href: "/design-system", label: "Design System" },
+      { href: "/animations", label: "Animations" },
     ],
   },
   {

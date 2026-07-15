@@ -38,6 +38,16 @@ import {
 } from "@/components/ui/card";
 import { BotCard } from "@/components/bots/bot-card";
 import { CountUp } from "@/components/landing/count-up";
+import {
+  AnimatedGradient,
+  AnimatedParticles,
+  FloatingCard,
+  HoverLift,
+  Scale,
+  Slide,
+  Stagger,
+  StaggerItem,
+} from "@/components/motion";
 import { getFeaturedBots } from "@/lib/data/bots";
 import {
   features,
@@ -80,33 +90,12 @@ export function LandingPage() {
     <div>
       {/* Hero */}
       <section className="relative overflow-hidden">
-        <div className="pointer-events-none absolute inset-0">
-          <div className="animate-pulse-glow absolute top-0 left-1/2 h-[520px] w-[820px] -translate-x-1/2 rounded-full bg-sky-500/20 blur-[120px]" />
-          <div className="absolute top-40 right-0 h-72 w-72 rounded-full bg-blue-600/20 blur-[100px]" />
-          <div className="absolute bottom-0 left-10 h-56 w-56 rounded-full bg-cyan-400/10 blur-[90px]" />
-          <div className="grid-bg absolute inset-0" />
-          {/* Soft particles */}
-          {[...Array(12)].map((_, i) => (
-            <motion.span
-              key={i}
-              className="absolute h-1 w-1 rounded-full bg-sky-400/40"
-              style={{
-                left: `${8 + ((i * 7) % 84)}%`,
-                top: `${12 + ((i * 11) % 70)}%`,
-              }}
-              animate={{ y: [0, -18, 0], opacity: [0.2, 0.8, 0.2] }}
-              transition={{ duration: 4 + (i % 3), repeat: Infinity, delay: i * 0.2 }}
-            />
-          ))}
-        </div>
+        <AnimatedGradient variant="hero" />
+        <AnimatedParticles count={12} />
 
         <div className="relative mx-auto max-w-7xl px-4 pt-16 pb-20 sm:px-6 sm:pt-24 lg:px-8 lg:pb-28">
           <div className="mx-auto max-w-4xl text-center">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-            >
+            <Slide direction="up" duration={0.6}>
               <p className="mb-6 text-sm font-semibold tracking-[0.2em] text-sky-400 uppercase">
                 TradeBib
               </p>
@@ -127,65 +116,56 @@ export function LandingPage() {
                   <Link href="/marketplace">View Marketplace</Link>
                 </Button>
               </div>
-            </motion.div>
+            </Slide>
           </div>
 
           <div className="relative mx-auto mt-16 max-w-5xl">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.96 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.7, delay: 0.2 }}
-              className="glass relative overflow-hidden rounded-3xl p-6 sm:p-8"
-            >
-              <div className="absolute -top-10 -right-10 h-40 w-40 rounded-full bg-sky-500/20 blur-3xl" />
-              <div className="grid gap-4 sm:grid-cols-3">
-                {[
-                  { label: "Live Equity", value: "$24,850", change: "+8.7%" },
-                  { label: "Open Trades", value: "3", change: "Synced" },
-                  { label: "Active Bots", value: "4", change: "Running" },
-                ].map((item, i) => (
-                  <motion.div
-                    key={item.label}
-                    className={`border-border/60 bg-card/60 rounded-2xl border p-4 ${
-                      i === 0 ? "animate-float" : i === 2 ? "animate-float-delayed" : ""
-                    }`}
-                    initial={{ opacity: 0, y: 16 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.35 + i * 0.1 }}
-                  >
-                    <p className="text-muted-foreground text-xs">{item.label}</p>
-                    <p className="mt-1 text-2xl font-bold">{item.value}</p>
-                    <p className="mt-1 text-xs text-emerald-400">{item.change}</p>
-                  </motion.div>
-                ))}
+            <Scale delay={0.2} duration={0.7} from={0.96}>
+              <div className="glass relative overflow-hidden rounded-3xl p-6 sm:p-8">
+                <div className="absolute -top-10 -right-10 h-40 w-40 rounded-full bg-sky-500/20 blur-3xl" />
+                <div className="grid gap-4 sm:grid-cols-3">
+                  {[
+                    { label: "Live Equity", value: "$24,850", change: "+8.7%", delay: 0 },
+                    { label: "Open Trades", value: "3", change: "Synced", delay: 0.4 },
+                    { label: "Active Bots", value: "4", change: "Running", delay: 0.8 },
+                  ].map((item) => (
+                    <FloatingCard key={item.label} delay={item.delay} amplitude={10} duration={6}>
+                      <div className="border-border/60 bg-card/60 rounded-2xl border p-4">
+                        <p className="text-muted-foreground text-xs">{item.label}</p>
+                        <p className="mt-1 text-2xl font-bold">{item.value}</p>
+                        <p className="mt-1 text-xs text-emerald-400">{item.change}</p>
+                      </div>
+                    </FloatingCard>
+                  ))}
+                </div>
+                <div className="mt-6 h-28 overflow-hidden rounded-2xl bg-gradient-to-r from-sky-500/10 via-blue-600/10 to-transparent">
+                  <svg viewBox="0 0 400 100" className="h-full w-full" preserveAspectRatio="none">
+                    <defs>
+                      <linearGradient id="heroGraph" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stopColor="#0EA5E9" stopOpacity="0.4" />
+                        <stop offset="100%" stopColor="#0EA5E9" stopOpacity="0" />
+                      </linearGradient>
+                    </defs>
+                    <motion.path
+                      d="M0,70 C40,65 60,40 100,45 C140,50 160,20 200,28 C240,36 260,55 300,40 C340,25 360,30 400,18 L400,100 L0,100 Z"
+                      fill="url(#heroGraph)"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: 0.6, duration: 0.8 }}
+                    />
+                    <motion.path
+                      d="M0,70 C40,65 60,40 100,45 C140,50 160,20 200,28 C240,36 260,55 300,40 C340,25 360,30 400,18"
+                      fill="none"
+                      stroke="#0EA5E9"
+                      strokeWidth="2.5"
+                      initial={{ pathLength: 0 }}
+                      animate={{ pathLength: 1 }}
+                      transition={{ delay: 0.5, duration: 1.2, ease: "easeOut" }}
+                    />
+                  </svg>
+                </div>
               </div>
-              <div className="mt-6 h-28 overflow-hidden rounded-2xl bg-gradient-to-r from-sky-500/10 via-blue-600/10 to-transparent">
-                <svg viewBox="0 0 400 100" className="h-full w-full" preserveAspectRatio="none">
-                  <defs>
-                    <linearGradient id="heroGraph" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" stopColor="#0EA5E9" stopOpacity="0.4" />
-                      <stop offset="100%" stopColor="#0EA5E9" stopOpacity="0" />
-                    </linearGradient>
-                  </defs>
-                  <motion.path
-                    d="M0,70 C40,65 60,40 100,45 C140,50 160,20 200,28 C240,36 260,55 300,40 C340,25 360,30 400,18 L400,100 L0,100 Z"
-                    fill="url(#heroGraph)"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.6, duration: 0.8 }}
-                  />
-                  <motion.path
-                    d="M0,70 C40,65 60,40 100,45 C140,50 160,20 200,28 C240,36 260,55 300,40 C340,25 360,30 400,18"
-                    fill="none"
-                    stroke="#0EA5E9"
-                    strokeWidth="2.5"
-                    initial={{ pathLength: 0 }}
-                    animate={{ pathLength: 1 }}
-                    transition={{ delay: 0.5, duration: 1.2, ease: "easeOut" }}
-                  />
-                </svg>
-              </div>
-            </motion.div>
+            </Scale>
           </div>
         </div>
       </section>
@@ -226,31 +206,26 @@ export function LandingPage() {
             Everything you need to discover, verify, and deploy automated trading strategies.
           </p>
         </motion.div>
-        <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          {features.map((feature, i) => {
+        <Stagger className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          {features.map((feature) => {
             const Icon = featureIcons[feature.icon as keyof typeof featureIcons];
             return (
-              <motion.div
-                key={feature.title}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.05 }}
-                whileHover={{ y: -4, scale: 1.02 }}
-              >
-                <Card className="border-border/70 bg-card/70 h-full transition-colors hover:border-sky-500/40">
-                  <CardContent className="p-6">
-                    <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-sky-500/15 text-sky-400">
-                      <Icon className="h-5 w-5" />
-                    </div>
-                    <h3 className="font-bold">{feature.title}</h3>
-                    <p className="text-muted-foreground mt-2 text-sm">{feature.description}</p>
-                  </CardContent>
-                </Card>
-              </motion.div>
+              <StaggerItem key={feature.title}>
+                <HoverLift>
+                  <Card className="border-border/70 bg-card/70 h-full transition-colors hover:border-sky-500/40">
+                    <CardContent className="p-6">
+                      <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-sky-500/15 text-sky-400">
+                        <Icon className="h-5 w-5" />
+                      </div>
+                      <h3 className="font-bold">{feature.title}</h3>
+                      <p className="text-muted-foreground mt-2 text-sm">{feature.description}</p>
+                    </CardContent>
+                  </Card>
+                </HoverLift>
+              </StaggerItem>
             );
           })}
-        </div>
+        </Stagger>
       </section>
 
       {/* Featured Bots */}

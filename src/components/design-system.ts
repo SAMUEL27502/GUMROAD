@@ -88,3 +88,24 @@ export {
   AccordionContent,
 } from "@/components/ui/accordion";
 export { Loader, PageLoader } from "@/components/ui/loader";
+
+// Motion
+export {
+  Fade,
+  FadeInView,
+  Slide,
+  SlideInView,
+  Scale,
+  ScaleInView,
+  HoverLift,
+  HoverScale,
+  HoverGlow,
+  FloatingCard,
+  FloatingCardSway,
+  AnimatedGradient,
+  AnimatedParticles,
+  ScrollReveal,
+  Stagger,
+  StaggerItem,
+  CountUp,
+} from "@/components/motion";
