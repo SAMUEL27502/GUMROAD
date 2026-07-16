@@ -24,11 +24,14 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: process.env.CI
-      ? `npm run start -- --port ${PORT}`
-      : `npm run dev -- --port ${PORT}`,
+    command: process.env.CI ? "npm run start" : `npm run dev -- --port ${PORT}`,
     url: BASE_URL,
     reuseExistingServer: !process.env.CI,
     timeout: 120_000,
+    env: {
+      ...process.env,
+      PORT: String(PORT),
+      HOSTNAME: "127.0.0.1",
+    },
   },
 });

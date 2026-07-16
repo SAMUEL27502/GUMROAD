@@ -65,6 +65,7 @@ docker compose up --build
 - Entrypoint runs `prisma migrate deploy` when `RUN_MIGRATIONS=true` (default) and `DATABASE_URL` is set.
 - Healthcheck hits `/api/health`.
 - Image only: `docker build -t tradebib . && docker run --env-file .env.local -p 3000:3000 tradebib`
+- Local production serve after build: `npm start` (standalone runner; use `npm run start:next` only without `output: "standalone"`).
 
 ## Database migrations
 
