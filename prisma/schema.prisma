@@ -7,6 +7,8 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// ─── Enums ───────────────────────────────────────────────────────────────────
+
 enum Role {
   USER
   ADMIN
@@ -24,6 +26,7 @@ enum SubscriptionStatus {
   CANCELLED
   PAST_DUE
   TRIALING
+  INCOMPLETE
 }
 
 enum PlanTier {
@@ -44,65 +47,147 @@ enum NotificationType {
   SUBSCRIPTION
   SYSTEM
   REVIEW
+  REFERRAL
+  PAYMENT
 }
+
+enum PaymentProvider {
+  STRIPE
+  PAYPAL
+  MANUAL
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  FAILED
+  REFUNDED
+  VOID
+}
+
+enum TradeSide {
+  BUY
+  SELL
+}
+
+enum TradeStatus {
+  OPEN
+  CLOSED
+  CANCELLED
+}
+
+enum ReferralStatus {
+  PENDING
+  ACTIVE
+  INACTIVE
+  BLOCKED
+}
+
+enum CommissionStatus {
+  PENDING
+  APPROVED
+  PAID
+  VOID
+}
+
+enum PayoutStatus {
+  PENDING
+  PROCESSING
+  PAID
+  REJECTED
+}
+
+enum ReferralTier {
+  STARTER
+  PARTNER
+  ELITE
+}
+
+// ─── Users ───────────────────────────────────────────────────────────────────
 
 model User {
-  id                String             @id @default(cuid())
-  email             String             @unique
-  name              String?
-  avatarUrl         String?
-  role              Role               @default(USER)
-  plan              PlanTier           @default(STARTER)
-  stripeCustomerId  String?
+  id                   String    @id @default(cuid())
+  email                String    @unique
+  name                 String?
+  avatarUrl            String?
+  role                 Role      @default(USER)
+  plan                 PlanTier  @default(STARTER)
+  stripeCustomerId     String?   @unique
   stripeSubscriptionId String?
-  paypalSubscriberId String?
+  paypalSubscriberId   String?
   paypalSubscriptionId String?
-  emailVerified     Boolean            @default(false)
-  referralCode      String             @unique @default(cuid())
-  referredBy        String?
-  createdAt         DateTime           @default(now())
-  updatedAt         DateTime           @updatedAt
-  subscriptions     Subscription[]
-  reviews           Review[]
-  favorites         Favorite[]
-  connectedAccounts ConnectedAccount[]
-  trades            Trade[]
-  notifications     Notification[]
-  payments          Payment[]
-  journalEntries    JournalEntry[]
-  watchlistItems    WatchlistItem[]
-  apiKeys           ApiKey[]
+  emailVerified        Boolean   @default(false)
+  referralCode         String    @unique @default(cuid())
+  referredById         String?
+  referralTier         ReferralTier @default(STARTER)
+  commissionRate       Float     @default(0.15)
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
+
+  referredBy           User?     @relation("UserReferrals", fields: [referredById], references: [id], onDelete: SetNull)
+  referrals            User[]    @relation("UserReferrals")
+
+  subscriptions        Subscription[]
+  platformSubscriptions PlatformSubscription[]
+  reviews              Review[]
+  favorites            Favorite[]
+  connectedAccounts    ConnectedAccount[]
+  trades               Trade[]
+  notifications        Notification[]
+  payments             Payment[]
+  journalEntries       JournalEntry[]
+  watchlistItems       WatchlistItem[]
+  apiKeys              ApiKey[]
+
+  referralAsReferrer   Referral[]           @relation("ReferrerReferrals")
+  referralAsReferred   Referral?            @relation("ReferredReferral")
+  commissionsEarned    ReferralCommission[] @relation("CommissionEarner")
+  referralPayouts      ReferralPayout[]
+
+  @@index([referredById])
+  @@index([plan])
+  @@map("users")
 }
 
+// ─── Bots ────────────────────────────────────────────────────────────────────
+
 model Bot {
-  id              String           @id @default(cuid())
-  slug            String           @unique
-  name            String
-  description     String
-  strategy        String
-  tradingPair     String
-  riskLevel       RiskLevel
-  roi             Float
-  drawdown        Float
-  winRate         Float
-  profitFactor    Float
-  subscribers     Int              @default(0)
-  price           Float
-  rating          Float            @default(0)
-  imageUrl        String?
-  verified        Boolean          @default(false)
-  category        String
-  tags            String[]
-  featured        Boolean          @default(false)
-  monthlyReturns  Json?
-  createdAt       DateTime         @default(now())
-  updatedAt       DateTime         @updatedAt
-  subscriptions   Subscription[]
-  reviews         Review[]
-  favorites       Favorite[]
-  performances    BotPerformance[]
-  trades          Trade[]
+  id             String           @id @default(cuid())
+  slug           String           @unique
+  name           String
+  description    String
+  strategy       String
+  tradingPair    String
+  riskLevel      RiskLevel
+  roi            Float
+  drawdown       Float
+  winRate        Float
+  profitFactor   Float
+  subscribers    Int              @default(0)
+  price          Float
+  rating         Float            @default(0)
+  imageUrl       String?
+  verified       Boolean          @default(false)
+  category       String
+  tags           String[]
+  featured       Boolean          @default(false)
+  monthlyReturns Json?
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+
+  subscriptions  Subscription[]
+  reviews        Review[]
+  favorites      Favorite[]
+  performances   BotPerformance[]
+  trades         Trade[]
+
+  @@index([category])
+  @@index([riskLevel])
+  @@index([featured])
+  @@map("bots")
 }
+
+// ─── Subscriptions (bot marketplace) ─────────────────────────────────────────
 
 model Subscription {
   id        String             @id @default(cuid())
@@ -113,13 +198,40 @@ model Subscription {
   price     Float
   startedAt DateTime           @default(now())
   endsAt    DateTime?
+  renewsAt  DateTime?
   createdAt DateTime           @default(now())
   updatedAt DateTime           @updatedAt
-  user      User               @relation(fields: [userId], references: [id], onDelete: Cascade)
-  bot       Bot                @relation(fields: [botId], references: [id], onDelete: Cascade)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  bot  Bot  @relation(fields: [botId], references: [id], onDelete: Cascade)
 
   @@unique([userId, botId])
+  @@index([status])
+  @@map("subscriptions")
 }
+
+/// Platform SaaS plan (Starter / Pro / Elite) billed via Stripe or PayPal
+model PlatformSubscription {
+  id                   String             @id @default(cuid())
+  userId               String
+  plan                 PlanTier           @default(STARTER)
+  status               SubscriptionStatus @default(ACTIVE)
+  interval             String             @default("monthly") // monthly | yearly
+  provider             PaymentProvider    @default(STRIPE)
+  externalSubscriptionId String?
+  cancelAtPeriodEnd    Boolean            @default(false)
+  currentPeriodStart   DateTime           @default(now())
+  currentPeriodEnd     DateTime?
+  createdAt            DateTime           @default(now())
+  updatedAt            DateTime           @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, status])
+  @@map("platform_subscriptions")
+}
+
+// ─── Reviews ─────────────────────────────────────────────────────────────────
 
 model Review {
   id        String   @id @default(cuid())
@@ -131,74 +243,106 @@ model Review {
   approved  Boolean  @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  bot       Bot      @relation(fields: [botId], references: [id], onDelete: Cascade)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  bot  Bot  @relation(fields: [botId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, botId])
+  @@index([botId, approved])
+  @@map("reviews")
 }
+
+// ─── Favorites ───────────────────────────────────────────────────────────────
 
 model Favorite {
   id        String   @id @default(cuid())
   userId    String
   botId     String
   createdAt DateTime @default(now())
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  bot       Bot      @relation(fields: [botId], references: [id], onDelete: Cascade)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  bot  Bot  @relation(fields: [botId], references: [id], onDelete: Cascade)
 
   @@unique([userId, botId])
+  @@map("favorites")
 }
+
+// ─── Connected Accounts (MT5) ────────────────────────────────────────────────
 
 model ConnectedAccount {
-  id           String      @id @default(cuid())
-  userId       String
-  brokerServer String
+  id            String      @id @default(cuid())
+  userId        String
+  broker        String
+  brokerServer  String
   accountNumber String
-  nickname     String
-  accountType  AccountType @default(INVESTOR)
-  balance      Float       @default(0)
-  equity       Float       @default(0)
-  freeMargin   Float       @default(0)
-  marginLevel  Float       @default(0)
-  leverage     String      @default("1:100")
-  broker       String
-  connected    Boolean     @default(true)
-  lastSyncAt   DateTime?
-  createdAt    DateTime    @default(now())
-  updatedAt    DateTime    @updatedAt
-  user         User        @relation(fields: [userId], references: [id], onDelete: Cascade)
-  trades       Trade[]
+  nickname      String
+  accountType   AccountType @default(INVESTOR)
+  balance       Float       @default(0)
+  equity        Float       @default(0)
+  freeMargin    Float       @default(0)
+  marginLevel   Float       @default(0)
+  leverage      String      @default("1:100")
+  connected     Boolean     @default(true)
+  lastSyncAt    DateTime?
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  user   User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  trades Trade[]
+
+  @@unique([userId, brokerServer, accountNumber])
+  @@index([userId, connected])
+  @@map("connected_accounts")
 }
 
+// ─── Trades ──────────────────────────────────────────────────────────────────
+
 model Trade {
-  id                 String            @id @default(cuid())
+  id                 String      @id @default(cuid())
   userId             String
   botId              String?
   connectedAccountId String?
   symbol             String
-  type               String
+  type               TradeSide
   volume             Float
   openPrice          Float
   closePrice         Float?
-  profit             Float             @default(0)
-  openTime           DateTime          @default(now())
+  profit             Float       @default(0)
+  openTime           DateTime    @default(now())
   closeTime          DateTime?
-  status             String            @default("OPEN")
-  user               User              @relation(fields: [userId], references: [id], onDelete: Cascade)
-  bot                Bot?              @relation(fields: [botId], references: [id])
-  connectedAccount   ConnectedAccount? @relation(fields: [connectedAccountId], references: [id])
+  status             TradeStatus @default(OPEN)
+  createdAt          DateTime    @default(now())
+
+  user             User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  bot              Bot?              @relation(fields: [botId], references: [id], onDelete: SetNull)
+  connectedAccount ConnectedAccount? @relation(fields: [connectedAccountId], references: [id], onDelete: SetNull)
+
+  @@index([userId, status])
+  @@index([botId])
+  @@index([openTime])
+  @@map("trades")
 }
+
+// ─── Bot Performance ─────────────────────────────────────────────────────────
 
 model BotPerformance {
-  id           String   @id @default(cuid())
-  botId        String
-  date         DateTime
-  equity       Float
-  roi          Float
-  drawdown     Float
-  trades       Int
-  winRate      Float
-  bot          Bot      @relation(fields: [botId], references: [id], onDelete: Cascade)
+  id       String   @id @default(cuid())
+  botId    String
+  date     DateTime
+  equity   Float
+  roi      Float
+  drawdown Float
+  trades   Int
+  winRate  Float
 
+  bot Bot @relation(fields: [botId], references: [id], onDelete: Cascade)
+
+  @@unique([botId, date])
   @@index([botId, date])
+  @@map("bot_performances")
 }
+
+// ─── Notifications ───────────────────────────────────────────────────────────
 
 model Notification {
   id        String           @id @default(cuid())
@@ -209,21 +353,101 @@ model Notification {
   read      Boolean          @default(false)
   href      String?
   createdAt DateTime         @default(now())
-  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, read])
+  @@map("notifications")
 }
 
+// ─── Payments ────────────────────────────────────────────────────────────────
+
 model Payment {
-  id            String   @id @default(cuid())
+  id          String          @id @default(cuid())
+  userId      String
+  amount      Float
+  currency    String          @default("USD")
+  provider    PaymentProvider
+  status      PaymentStatus   @default(PENDING)
+  externalId  String?
+  description String?
+  invoiceUrl  String?
+  plan        PlanTier?
+  interval    String?
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+
+  user        User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+  commissions ReferralCommission[]
+
+  @@index([userId, status])
+  @@index([provider, externalId])
+  @@map("payments")
+}
+
+// ─── Referral Program ────────────────────────────────────────────────────────
+
+/// Tracks a referrer → referred user relationship
+model Referral {
+  id             String         @id @default(cuid())
+  referrerId     String
+  referredUserId String         @unique
+  codeUsed       String
+  status         ReferralStatus @default(PENDING)
+  signedUpAt     DateTime       @default(now())
+  activatedAt    DateTime?
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+
+  referrer     User                 @relation("ReferrerReferrals", fields: [referrerId], references: [id], onDelete: Cascade)
+  referredUser User                 @relation("ReferredReferral", fields: [referredUserId], references: [id], onDelete: Cascade)
+  commissions  ReferralCommission[]
+
+  @@index([referrerId, status])
+  @@map("referrals")
+}
+
+/// Commission earned when a referred user pays
+model ReferralCommission {
+  id          String           @id @default(cuid())
+  referralId  String
+  earnerId    String
+  paymentId   String?
+  amount      Float
+  rate        Float
+  status      CommissionStatus @default(PENDING)
+  description String?
+  createdAt   DateTime         @default(now())
+  paidAt      DateTime?
+
+  referral Referral @relation(fields: [referralId], references: [id], onDelete: Cascade)
+  earner   User     @relation("CommissionEarner", fields: [earnerId], references: [id], onDelete: Cascade)
+  payment  Payment? @relation(fields: [paymentId], references: [id], onDelete: SetNull)
+
+  @@index([earnerId, status])
+  @@map("referral_commissions")
+}
+
+/// Payout request / batch for referral earnings
+model ReferralPayout {
+  id            String       @id @default(cuid())
   userId        String
   amount        Float
-  currency      String   @default("USD")
-  provider      String
-  status        String
-  externalId    String?
-  description   String?
-  createdAt     DateTime @default(now())
-  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  currency      String       @default("USD")
+  status        PayoutStatus @default(PENDING)
+  method        String       @default("paypal") // paypal | bank | stripe
+  destination   String?
+  processedAt   DateTime?
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, status])
+  @@map("referral_payouts")
 }
+
+// ─── Supporting tables ───────────────────────────────────────────────────────
 
 model JournalEntry {
   id        String   @id @default(cuid())
@@ -235,7 +459,11 @@ model JournalEntry {
   pnl       Float?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("journal_entries")
 }
 
 model WatchlistItem {
@@ -243,9 +471,11 @@ model WatchlistItem {
   userId    String
   symbol    String
   createdAt DateTime @default(now())
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId, symbol])
+  @@map("watchlist_items")
 }
 
 model ApiKey {
@@ -255,7 +485,11 @@ model ApiKey {
   keyHash   String
   lastUsed  DateTime?
   createdAt DateTime  @default(now())
-  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("api_keys")
 }
 
 model Category {
@@ -264,4 +498,6 @@ model Category {
   slug        String   @unique
   description String?
   createdAt   DateTime @default(now())
+
+  @@map("categories")
 }
