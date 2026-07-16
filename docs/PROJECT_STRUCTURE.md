@@ -22,6 +22,7 @@ tradebib/
 │   │   ├── robots.ts
 │   │   ├── marketplace/
 │   │   ├── recommend/           # AI bot recommendation quiz
+│   │   ├── compare/             # Multi-bot comparison
 │   │   ├── bots/[slug]/
 │   │   ├── charts/
 │   │   ├── dashboard/
@@ -38,11 +39,13 @@ tradebib/
 │   │   ├── layout/              # Navbar, Footer, Logo, AdminNav
 │   │   ├── bots/                # BotCard, BotDetails
 │   │   ├── recommend/           # Recommendation engine UI
+│   │   ├── compare/             # Bot comparison UI
 │   │   └── landing/
 │   ├── hooks/
 │   ├── lib/
 │   │   ├── data/                # Seed/demo domain data
 │   │   ├── recommendations/     # Bot scoring engine
+│   │   ├── compare/             # Comparison series helpers
 │   │   ├── supabase/            # Browser + server clients
 │   │   ├── prisma.ts
 │   │   ├── validations.ts       # Zod schemas

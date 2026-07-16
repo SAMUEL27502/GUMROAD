@@ -183,6 +183,13 @@ export function BotDetails({ bot }: { bot: Bot }) {
                 <Heart className={cn("h-4 w-4", favored && "fill-rose-500 text-rose-500")} />
                 {favored ? "Wishlisted" : "Wishlist"}
               </Button>
+              <Button size="lg" variant="outline" asChild>
+                <Link
+                  href={`/compare?bots=${bot.slug},${bot.slug === "eurotrend-ai" ? "goldscalper-pro" : "eurotrend-ai"}`}
+                >
+                  Compare
+                </Link>
+              </Button>
               <Button size="lg" onClick={handleSubscribe}>
                 {existingSub?.status === "ACTIVE" ? "Subscribed" : "Subscribe"}
               </Button>

@@ -482,7 +482,14 @@ export function RecommendationEngine() {
                 <Link href="/marketplace">Browse full marketplace</Link>
               </Button>
               <Button variant="outline" asChild>
-                <Link href="/compare">Compare top picks</Link>
+                <Link
+                  href={`/compare?bots=${matches
+                    .slice(0, 3)
+                    .map((m) => m.bot.slug)
+                    .join(",")}`}
+                >
+                  Compare top picks
+                </Link>
               </Button>
             </div>
           </motion.div>

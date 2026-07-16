@@ -38,6 +38,7 @@ import { logoutAction } from "@/app/actions/auth";
 const links = [
   { href: "/marketplace", label: "Marketplace" },
   { href: "/recommend", label: "Recommend" },
+  { href: "/compare", label: "Compare" },
   { href: "/charts", label: "Charts" },
   { href: "/dashboard", label: "Dashboard" },
   { href: "/mt5", label: "MT5 Connect" },
