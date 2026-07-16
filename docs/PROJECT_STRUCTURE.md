@@ -42,7 +42,7 @@ tradebib/
 │   │   ├── api/affiliate/       # Affiliate summary API
 │   │   └── actions/             # Server actions
 │   ├── components/
-│   │   ├── ui/                  # Shadcn-style primitives
+│   │   ├── ui/                  # Shadcn-style primitives (+ *.test.tsx)
 │   │   ├── layout/              # Navbar, Footer, Logo, AdminNav
 │   │   ├── bots/                # BotCard, BotDetails
 │   │   ├── reviews/             # Ratings, comments, helpful, verified badge
@@ -55,7 +55,7 @@ tradebib/
 │   │   ├── performance/         # Dynamic chart / heavy UI wrappers
 │   │   └── landing/
 │   ├── hooks/
-│   ├── lib/
+│   ├── lib/                     # Utils, SEO, data, scoring (+ *.test.ts)
 │   │   ├── data/                # Seed/demo domain data
 │   │   ├── recommendations/     # Bot scoring engine
 │   │   ├── compare/             # Comparison series helpers
@@ -67,6 +67,10 @@ tradebib/
 │   ├── providers/               # Theme + React Query + Toasts
 │   ├── stores/                  # Zustand (auth, favorites, recommendations)
 │   └── types/
+├── e2e/                         # Playwright smoke specs
+├── vitest.config.ts
+├── vitest.setup.tsx
+├── playwright.config.ts
 └── tsconfig.json
 ```
 
@@ -93,4 +97,5 @@ tradebib/
 | Responsive            | ✅                                       |
 | SEO                   | ✅ (metadata, sitemap, robots)           |
 | Performance           | ✅ (lazy charts, image, cache, prefetch) |
+| Testing               | ✅ (Vitest, RTL, Playwright)             |
 | Framer Motion         | ✅                                       |
