@@ -18,6 +18,7 @@ import {
   Sparkles,
   Star,
   TrendingUp,
+  Trophy,
   Wallet,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
@@ -550,6 +551,12 @@ export default function DashboardPage() {
                 <Link href="/recommend">
                   <Sparkles className="h-4 w-4" />
                   AI Bot Recommendations
+                </Link>
+              </Button>
+              <Button variant="outline" className="justify-start" asChild>
+                <Link href="/leaderboard">
+                  <Trophy className="h-4 w-4" />
+                  View Leaderboard
                 </Link>
               </Button>
               <Button variant="outline" className="justify-start" asChild>

@@ -23,6 +23,7 @@ tradebib/
 │   │   ├── marketplace/
 │   │   ├── recommend/           # AI bot recommendation quiz
 │   │   ├── compare/             # Multi-bot comparison
+│   │   ├── leaderboard/         # Top traders / bots rankings
 │   │   ├── bots/[slug]/
 │   │   ├── charts/
 │   │   ├── dashboard/
@@ -41,6 +42,7 @@ tradebib/
 │   │   ├── reviews/             # Ratings, comments, helpful, verified badge
 │   │   ├── recommend/           # Recommendation engine UI
 │   │   ├── compare/             # Bot comparison UI
+│   │   ├── leaderboard/         # Leaderboard boards
 │   │   └── landing/
 │   ├── hooks/
 │   ├── lib/

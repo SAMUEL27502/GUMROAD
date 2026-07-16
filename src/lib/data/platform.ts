@@ -542,13 +542,7 @@ export const forexNews = [
   },
 ];
 
-export const leaderboard = [
-  { rank: 1, name: "NovaCapital", roi: 42.8, bots: 6, followers: 1820 },
-  { rank: 2, name: "TokyoRange", roi: 36.2, bots: 4, followers: 1240 },
-  { rank: 3, name: "GoldEdge", roi: 31.5, bots: 3, followers: 980 },
-  { rank: 4, name: "LondonBreak", roi: 28.1, bots: 5, followers: 760 },
-  { rank: 5, name: "QuietGrid", roi: 24.4, bots: 2, followers: 640 },
-];
+export { leaderboard, topTraders } from "@/lib/data/leaderboard";
 
 export const mt5Steps = [
   {

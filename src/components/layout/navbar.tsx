@@ -39,6 +39,7 @@ const links = [
   { href: "/marketplace", label: "Marketplace" },
   { href: "/recommend", label: "Recommend" },
   { href: "/compare", label: "Compare" },
+  { href: "/leaderboard", label: "Leaderboard" },
   { href: "/charts", label: "Charts" },
   { href: "/dashboard", label: "Dashboard" },
   { href: "/mt5", label: "MT5 Connect" },
