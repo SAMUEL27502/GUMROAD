@@ -21,6 +21,7 @@ tradebib/
 │   │   ├── sitemap.ts
 │   │   ├── robots.ts
 │   │   ├── marketplace/
+│   │   ├── recommend/           # AI bot recommendation quiz
 │   │   ├── bots/[slug]/
 │   │   ├── charts/
 │   │   ├── dashboard/
@@ -30,21 +31,24 @@ tradebib/
 │   │   ├── profile/
 │   │   ├── admin/               # Admin layout + pages
 │   │   ├── api/bots/            # REST API routes
+│   │   ├── api/recommend/       # Recommendation scoring API
 │   │   └── actions/             # Server actions
 │   ├── components/
 │   │   ├── ui/                  # Shadcn-style primitives
 │   │   ├── layout/              # Navbar, Footer, Logo, AdminNav
 │   │   ├── bots/                # BotCard, BotDetails
+│   │   ├── recommend/           # Recommendation engine UI
 │   │   └── landing/
 │   ├── hooks/
 │   ├── lib/
 │   │   ├── data/                # Seed/demo domain data
+│   │   ├── recommendations/     # Bot scoring engine
 │   │   ├── supabase/            # Browser + server clients
 │   │   ├── prisma.ts
 │   │   ├── validations.ts       # Zod schemas
 │   │   └── utils.ts
 │   ├── providers/               # Theme + React Query + Toasts
-│   ├── stores/                  # Zustand (auth, favorites, watchlist)
+│   ├── stores/                  # Zustand (auth, favorites, recommendations)
 │   └── types/
 └── tsconfig.json
 ```

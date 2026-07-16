@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import Link from "next/link";
 import { motion } from "framer-motion";
 import { Heart, Search, SlidersHorizontal, X } from "lucide-react";
 import { BotCard } from "@/components/bots/bot-card";
@@ -371,6 +372,11 @@ export default function MarketplacePage() {
             Search and filter by category, risk, ROI, price, and strategy. Save bots to your
             wishlist and subscribe when ready.
           </p>
+          <div className="mt-4">
+            <Button variant="outline" asChild>
+              <Link href="/recommend">Not sure where to start? Get AI recommendations</Link>
+            </Button>
+          </div>
         </motion.div>
 
         <div className="glass mb-6 rounded-2xl p-4 sm:p-5">

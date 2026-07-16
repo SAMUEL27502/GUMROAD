@@ -6,6 +6,7 @@ const columns = [
     title: "Product",
     links: [
       { href: "/marketplace", label: "Marketplace" },
+      { href: "/recommend", label: "Recommend" },
       { href: "/dashboard", label: "Dashboard" },
       { href: "/charts", label: "Charts" },
       { href: "/pricing", label: "Pricing" },
@@ -24,6 +25,7 @@ const columns = [
   {
     title: "Tools",
     links: [
+      { href: "/recommend", label: "AI Recommendations" },
       { href: "/compare", label: "Bot Comparison" },
       { href: "/calculator", label: "Profit Calculator" },
       { href: "/calendar", label: "Economic Calendar" },

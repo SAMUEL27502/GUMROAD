@@ -15,6 +15,7 @@ import {
   LineChart,
   Plus,
   Rocket,
+  Sparkles,
   Star,
   TrendingUp,
   Wallet,
@@ -543,6 +544,12 @@ export default function DashboardPage() {
                 <Link href="/marketplace">
                   <Plus className="h-4 w-4" />
                   Subscribe to a Bot
+                </Link>
+              </Button>
+              <Button variant="outline" className="justify-start" asChild>
+                <Link href="/recommend">
+                  <Sparkles className="h-4 w-4" />
+                  AI Bot Recommendations
                 </Link>
               </Button>
               <Button variant="outline" className="justify-start" asChild>
