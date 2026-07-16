@@ -262,74 +262,7 @@ export const revenueChartData = [
   { month: "Jul", revenue: 284650, users: 12483 },
 ];
 
-export const blogPosts = [
-  {
-    id: "b1",
-    slug: "how-to-evaluate-mt5-bots",
-    title: "How to Evaluate MT5 Bots Before You Subscribe",
-    excerpt:
-      "A practical framework for assessing drawdown, win rate, and live vs. backtested performance.",
-    author: "TradeBib Editorial",
-    date: "2026-07-10",
-    category: "Guides",
-    readTime: "6 min",
-  },
-  {
-    id: "b2",
-    slug: "risk-management-for-ea-portfolios",
-    title: "Risk Management for Multi-Bot EA Portfolios",
-    excerpt:
-      "Learn how to allocate capital across correlated strategies and set portfolio-level stop rules.",
-    author: "Sarah Mitchell",
-    date: "2026-07-05",
-    category: "Risk",
-    readTime: "8 min",
-  },
-  {
-    id: "b3",
-    slug: "gold-scalping-session-guide",
-    title: "Gold Scalping: Best Sessions and Broker Conditions",
-    excerpt:
-      "When XAUUSD moves best, which spreads to avoid, and how verified bots handle volatility spikes.",
-    author: "Marcus Chen",
-    date: "2026-06-28",
-    category: "Markets",
-    readTime: "5 min",
-  },
-  {
-    id: "b4",
-    slug: "mt5-vps-deployment-tips",
-    title: "MT5 VPS Deployment: 5 Tips for 24/7 Uptime",
-    excerpt:
-      "From broker proximity to auto-restart scripts — keep your Expert Advisors running reliably.",
-    author: "TradeBib Editorial",
-    date: "2026-06-20",
-    category: "Infrastructure",
-    readTime: "4 min",
-  },
-  {
-    id: "b5",
-    slug: "understanding-profit-factor",
-    title: "Understanding Profit Factor and Why It Matters",
-    excerpt:
-      "Profit factor is more than a vanity metric. Here's how to interpret it across different strategies.",
-    author: "Elena Kowalski",
-    date: "2026-06-12",
-    category: "Analytics",
-    readTime: "7 min",
-  },
-  {
-    id: "b6",
-    slug: "tradebib-platform-update-july",
-    title: "Platform Update: July 2026",
-    excerpt:
-      "New bot comparison tools, enhanced economic calendar, and improved MT5 sync reliability.",
-    author: "TradeBib Team",
-    date: "2026-07-01",
-    category: "Product",
-    readTime: "3 min",
-  },
-];
+export { blogPostsSummary as blogPosts } from "@/lib/data/blog";
 
 export const careers = [
   {

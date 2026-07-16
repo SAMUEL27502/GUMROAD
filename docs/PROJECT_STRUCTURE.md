@@ -27,6 +27,7 @@ tradebib/
 │   │   ├── notifications/       # Notification Center
 │   │   ├── referrals/           # Affiliate Dashboard
 │   │   ├── affiliate/           # Redirect → /referrals
+│   │   ├── blog/                # Blog index + [slug] posts
 │   │   ├── bots/[slug]/
 │   │   ├── charts/
 │   │   ├── dashboard/
@@ -50,6 +51,7 @@ tradebib/
 │   │   ├── leaderboard/         # Leaderboard boards
 │   │   ├── notifications/       # Notification Center UI
 │   │   ├── affiliate/           # Affiliate dashboard UI
+│   │   ├── blog/                # Blog index + Markdown renderer
 │   │   └── landing/
 │   ├── hooks/
 │   ├── lib/
