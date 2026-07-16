@@ -5,6 +5,8 @@ export type LeaderboardTrader = {
   rank: number;
   name: string;
   handle: string;
+  /** URL slug without @ */
+  slug: string;
   roi: number;
   profit: number;
   bots: number;
@@ -12,6 +14,9 @@ export type LeaderboardTrader = {
   winRate: number;
   country: string;
   verified: boolean;
+  bio?: string;
+  joinedAt?: string;
+  strategies?: string[];
 };
 
 export type LeaderboardBotEntry = {
@@ -27,6 +32,10 @@ export const topTraders: LeaderboardTrader[] = [
     rank: 1,
     name: "NovaCapital",
     handle: "@novacapital",
+    slug: "novacapital",
+    bio: "Public TradeBib trader focused on verified MT5 automation and risk-aware growth.",
+    joinedAt: "2025-11-01",
+    strategies: ["Trend", "Scalping"],
     roi: 42.8,
     profit: 128400,
     bots: 6,
@@ -40,6 +49,10 @@ export const topTraders: LeaderboardTrader[] = [
     rank: 2,
     name: "TokyoRange",
     handle: "@tokyorange",
+    slug: "tokyorange",
+    bio: "Public TradeBib trader focused on verified MT5 automation and risk-aware growth.",
+    joinedAt: "2025-11-01",
+    strategies: ["Trend", "Scalping"],
     roi: 36.2,
     profit: 96400,
     bots: 4,
@@ -53,6 +66,10 @@ export const topTraders: LeaderboardTrader[] = [
     rank: 3,
     name: "GoldEdge",
     handle: "@goldedge",
+    slug: "goldedge",
+    bio: "Public TradeBib trader focused on verified MT5 automation and risk-aware growth.",
+    joinedAt: "2025-11-01",
+    strategies: ["Trend", "Scalping"],
     roi: 31.5,
     profit: 87200,
     bots: 3,
@@ -66,6 +83,10 @@ export const topTraders: LeaderboardTrader[] = [
     rank: 4,
     name: "LondonBreak",
     handle: "@londonbreak",
+    slug: "londonbreak",
+    bio: "Public TradeBib trader focused on verified MT5 automation and risk-aware growth.",
+    joinedAt: "2025-11-01",
+    strategies: ["Trend", "Scalping"],
     roi: 28.1,
     profit: 71500,
     bots: 5,
@@ -79,6 +100,10 @@ export const topTraders: LeaderboardTrader[] = [
     rank: 5,
     name: "QuietGrid",
     handle: "@quietgrid",
+    slug: "quietgrid",
+    bio: "Public TradeBib trader focused on verified MT5 automation and risk-aware growth.",
+    joinedAt: "2025-11-01",
+    strategies: ["Trend", "Scalping"],
     roi: 24.4,
     profit: 58300,
     bots: 2,
@@ -92,6 +117,10 @@ export const topTraders: LeaderboardTrader[] = [
     rank: 6,
     name: "AuroraFX",
     handle: "@aurorafx",
+    slug: "aurorafx",
+    bio: "Public TradeBib trader focused on verified MT5 automation and risk-aware growth.",
+    joinedAt: "2025-11-01",
+    strategies: ["Trend", "Scalping"],
     roi: 22.9,
     profit: 54100,
     bots: 4,
@@ -105,6 +134,10 @@ export const topTraders: LeaderboardTrader[] = [
     rank: 7,
     name: "PulseScalper",
     handle: "@pulsescalper",
+    slug: "pulsescalper",
+    bio: "Public TradeBib trader focused on verified MT5 automation and risk-aware growth.",
+    joinedAt: "2025-11-01",
+    strategies: ["Trend", "Scalping"],
     roi: 21.3,
     profit: 49800,
     bots: 3,
@@ -118,6 +151,10 @@ export const topTraders: LeaderboardTrader[] = [
     rank: 8,
     name: "NordicSwing",
     handle: "@nordicswing",
+    slug: "nordicswing",
+    bio: "Public TradeBib trader focused on verified MT5 automation and risk-aware growth.",
+    joinedAt: "2025-11-01",
+    strategies: ["Trend", "Scalping"],
     roi: 19.7,
     profit: 45200,
     bots: 2,
@@ -131,6 +168,10 @@ export const topTraders: LeaderboardTrader[] = [
     rank: 9,
     name: "DesertTrend",
     handle: "@deserttrend",
+    slug: "deserttrend",
+    bio: "Public TradeBib trader focused on verified MT5 automation and risk-aware growth.",
+    joinedAt: "2025-11-01",
+    strategies: ["Trend", "Scalping"],
     roi: 18.2,
     profit: 38900,
     bots: 5,
@@ -144,6 +185,10 @@ export const topTraders: LeaderboardTrader[] = [
     rank: 10,
     name: "HarborEA",
     handle: "@harborea",
+    slug: "harborea",
+    bio: "Public TradeBib trader focused on verified MT5 automation and risk-aware growth.",
+    joinedAt: "2025-11-01",
+    strategies: ["Trend", "Scalping"],
     roi: 16.8,
     profit: 34100,
     bots: 3,
@@ -225,4 +270,14 @@ export function getMostFollowedTraders(limit = 10): LeaderboardTrader[] {
     .sort((a, b) => b.followers - a.followers || b.roi - a.roi)
     .slice(0, limit)
     .map((t, i) => ({ ...t, rank: i + 1 }));
+}
+
+
+export function getTraderBySlug(slug: string) {
+  const normalized = slug.replace(/^@/, "").toLowerCase();
+  return topTraders.find((t) => t.slug === normalized || t.handle.replace("@", "") === normalized);
+}
+
+export function getTraderByHandle(handle: string) {
+  return getTraderBySlug(handle);
 }
