@@ -1,13 +1,21 @@
 import type { MetadataRoute } from "next";
+import { ROBOTS_DISALLOW, absoluteUrl } from "@/lib/seo";
 
 export default function robots(): MetadataRoute.Robots {
-  const base = process.env.NEXT_PUBLIC_APP_URL || "https://tradebib.com";
   return {
-    rules: {
-      userAgent: "*",
-      allow: "/",
-      disallow: ["/admin", "/api/", "/profile"],
-    },
-    sitemap: `${base}/sitemap.xml`,
+    rules: [
+      {
+        userAgent: "*",
+        allow: "/",
+        disallow: ROBOTS_DISALLOW,
+      },
+      {
+        userAgent: "GPTBot",
+        allow: ["/", "/blog", "/marketplace", "/bots"],
+        disallow: ROBOTS_DISALLOW,
+      },
+    ],
+    sitemap: absoluteUrl("/sitemap.xml"),
+    host: absoluteUrl("/"),
   };
 }

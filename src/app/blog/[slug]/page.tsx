@@ -3,13 +3,11 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, Clock, Tag } from "lucide-react";
 import { MarkdownContent } from "@/components/blog/markdown-content";
+import { JsonLd } from "@/components/seo/json-ld";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-  blogPosts,
-  getBlogPostBySlug,
-  getReadingTime,
-} from "@/lib/data/blog";
+import { blogPosts, getBlogPostBySlug, getReadingTime } from "@/lib/data/blog";
+import { articleJsonLd, breadcrumbJsonLd, createMetadata } from "@/lib/seo";
 
 type PageProps = {
   params: Promise<{ slug: string }>;
@@ -23,35 +21,25 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const { slug } = await params;
   const post = getBlogPostBySlug(slug);
   if (!post) {
-    return { title: "Post not found | TradeBib Blog" };
+    return createMetadata({
+      title: "Post not found",
+      description: "This blog post could not be found.",
+      path: "/blog",
+      noIndex: true,
+    });
   }
 
-  const title = post.seoTitle || `${post.title} | TradeBib Blog`;
-  const description = post.seoDescription || post.excerpt;
-  const url = `/blog/${post.slug}`;
-
-  return {
-    title,
-    description,
+  return createMetadata({
+    title: post.seoTitle || post.title,
+    description: post.seoDescription || post.excerpt,
+    path: `/blog/${post.slug}`,
     keywords: [post.category, ...post.tags, "MT5", "TradeBib", "forex bots"],
-    authors: [{ name: post.author }],
-    alternates: { canonical: url },
-    openGraph: {
-      title: post.title,
-      description,
-      type: "article",
-      publishedTime: post.date,
-      modifiedTime: post.updatedAt || post.date,
-      authors: [post.author],
-      tags: post.tags,
-      url,
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: post.title,
-      description,
-    },
-  };
+    type: "article",
+    publishedTime: post.date,
+    modifiedTime: post.updatedAt || post.date,
+    authors: [post.author],
+    tags: post.tags,
+  });
 }
 
 export default async function BlogPostPage({ params }: PageProps) {
@@ -64,33 +52,28 @@ export default async function BlogPostPage({ params }: PageProps) {
     .filter((p) => p.slug !== post.slug && p.category === post.category)
     .slice(0, 3);
 
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "Article",
-    headline: post.title,
-    description: post.excerpt,
-    datePublished: post.date,
-    dateModified: post.updatedAt || post.date,
-    author: {
-      "@type": "Person",
-      name: post.author,
-    },
-    publisher: {
-      "@type": "Organization",
-      name: "TradeBib",
-    },
-    articleSection: post.category,
-    keywords: post.tags.join(", "),
-    wordCount: reading.words,
-    timeRequired: `PT${reading.minutes}M`,
-    mainEntityOfPage: `/blog/${post.slug}`,
-  };
-
   return (
     <article className="mx-auto max-w-3xl px-4 py-12 sm:px-6 lg:px-8">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      <JsonLd
+        data={[
+          articleJsonLd({
+            title: post.title,
+            excerpt: post.excerpt,
+            slug: post.slug,
+            author: post.author,
+            date: post.date,
+            updatedAt: post.updatedAt,
+            category: post.category,
+            tags: post.tags,
+            words: reading.words,
+            minutes: reading.minutes,
+          }),
+          breadcrumbJsonLd([
+            { name: "Home", path: "/" },
+            { name: "Blog", path: "/blog" },
+            { name: post.title, path: `/blog/${post.slug}` },
+          ]),
+        ]}
       />
 
       <Button variant="ghost" size="sm" className="mb-8" asChild>

@@ -1,49 +1,29 @@
 import type { MetadataRoute } from "next";
 import { blogPosts } from "@/lib/data/blog";
+import { bots } from "@/lib/data/bots";
+import { PUBLIC_SITEMAP_ROUTES, absoluteUrl } from "@/lib/seo";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const base = process.env.NEXT_PUBLIC_APP_URL || "https://tradebib.com";
-  const routes = [
-    "",
-    "/marketplace",
-    "/recommend",
-    "/charts",
-    "/dashboard",
-    "/mt5",
-    "/pricing",
-    "/login",
-    "/register",
-    "/about",
-    "/blog",
-    "/careers",
-    "/contact",
-    "/compare",
-    "/calculator",
-    "/calendar",
-    "/news",
-    "/journal",
-    "/leaderboard",
-    "/notifications",
-    "/referrals",
-    "/affiliate",
-    "/privacy",
-    "/terms",
-    "/risk-disclosure",
-  ];
-
-  const staticEntries: MetadataRoute.Sitemap = routes.map((route) => ({
-    url: `${base}${route}`,
-    lastModified: new Date(),
-    changeFrequency: route === "" || route === "/marketplace" ? "daily" : "weekly",
-    priority: route === "" ? 1 : route === "/marketplace" || route === "/blog" ? 0.9 : 0.7,
+  const staticEntries: MetadataRoute.Sitemap = PUBLIC_SITEMAP_ROUTES.map((route) => ({
+    url: absoluteUrl(route.path || "/"),
+    lastModified: new Date("2026-07-15"),
+    changeFrequency: route.changeFrequency,
+    priority: route.priority,
   }));
 
   const blogEntries: MetadataRoute.Sitemap = blogPosts.map((post) => ({
-    url: `${base}/blog/${post.slug}`,
+    url: absoluteUrl(`/blog/${post.slug}`),
     lastModified: new Date(post.updatedAt || post.date),
     changeFrequency: "monthly",
     priority: 0.75,
   }));
 
-  return [...staticEntries, ...blogEntries];
+  const botEntries: MetadataRoute.Sitemap = bots.map((bot) => ({
+    url: absoluteUrl(`/bots/${bot.slug}`),
+    lastModified: new Date("2026-07-15"),
+    changeFrequency: "weekly",
+    priority: 0.85,
+  }));
+
+  return [...staticEntries, ...blogEntries, ...botEntries];
 }

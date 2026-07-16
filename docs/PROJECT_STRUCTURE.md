@@ -60,6 +60,7 @@ tradebib/
 │   │   ├── compare/             # Comparison series helpers
 │   │   ├── supabase/            # Browser + server clients
 │   │   ├── prisma.ts
+│   │   ├── seo.ts                   # Metadata + JSON-LD helpers
 │   │   ├── validations.ts       # Zod schemas
 │   │   └── utils.ts
 │   ├── providers/               # Theme + React Query + Toasts

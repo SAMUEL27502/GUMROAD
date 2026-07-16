@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
+import { createMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = createMetadata({
   title: "Privacy Policy",
   description: "TradeBib privacy policy — how we collect, use, and protect your data.",
-};
+  path: "/privacy",
+});
 
 export default function PrivacyPage() {
   return (

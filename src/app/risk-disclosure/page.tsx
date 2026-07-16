@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { createMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = createMetadata({
   title: "Risk Disclosure",
   description: "Important risk disclosure for trading with automated Expert Advisors on TradeBib.",
-};
+  path: "/risk-disclosure",
+});
 
 export default function RiskDisclosurePage() {
   return (

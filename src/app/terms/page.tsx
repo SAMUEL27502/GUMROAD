@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
+import { createMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = createMetadata({
   title: "Terms of Service",
   description: "TradeBib terms of service — rules and conditions for using our platform.",
-};
+  path: "/terms",
+});
 
 export default function TermsPage() {
   return (
