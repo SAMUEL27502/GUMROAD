@@ -53,8 +53,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AnimatedGradient } from "@/components/motion";
 import { BotReviewsSection } from "@/components/reviews/bot-reviews-section";
 import { cn, formatCurrency, formatPercent } from "@/lib/utils";
-import { useFavoritesStore } from "@/stores/favorites-store";
-import { useSubscriptionsStore } from "@/stores/subscriptions-store";
+import { useFavoritesStore } from "@/store/favorites-store";
+import { useSubscriptionsStore } from "@/store/subscriptions-store";
 
 const riskVariant = {
   LOW: "low" as const,

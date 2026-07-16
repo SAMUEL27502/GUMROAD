@@ -30,8 +30,8 @@ import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn, formatCurrency } from "@/lib/utils";
-import { useAffiliateStore } from "@/stores/affiliate-store";
-import { useAuthStore } from "@/stores/auth-store";
+import { useAffiliateStore } from "@/store/affiliate-store";
+import { useAuthStore } from "@/store/auth-store";
 
 const statusVariant = {
   PENDING: "warning" as const,

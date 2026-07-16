@@ -12,7 +12,9 @@ Modern Forex & MT5 automation platform where traders discover verified Expert Ad
 - **Vitest** · **Playwright** · **Sentry** · **Vercel Analytics**
 - **ESLint** · **Prettier** · **Dark mode by default** · **SEO**
 
-See [`docs/PROJECT_STRUCTURE.md`](docs/PROJECT_STRUCTURE.md) for the folder map.  
+See [`docs/PROJECT_STRUCTURE.md`](docs/PROJECT_STRUCTURE.md) for the folder map
+(`app/(marketing|dashboard|admin)`, `components/{charts,bots,dashboard,layout,forms,ui}`,
+`lib`, `hooks`, `store`, `services`, `types`, `styles`).  
 Production: [`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md) · Testing: [`docs/TESTING.md`](docs/TESTING.md)
 
 ## Getting started

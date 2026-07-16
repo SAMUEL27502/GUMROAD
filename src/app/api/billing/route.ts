@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import { getPaymentProvider, providerStatus } from "@/lib/payments";
+import { getPaymentProvider, providerStatus } from "@/services/payments";
 
 const checkoutSchema = z.object({
   provider: z.enum(["stripe", "paypal"]).default("stripe"),

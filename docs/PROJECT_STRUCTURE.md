@@ -2,83 +2,53 @@
 
 ```text
 tradebib/
-├── .env.example                 # Env template (Postgres, Supabase, Stripe…)
-├── .prettierrc.json             # Prettier + Tailwind plugin
-├── .prettierignore
-├── components.json              # Shadcn UI config
-├── eslint.config.mjs            # ESLint (Next + TypeScript + Prettier)
-├── next.config.ts
-├── package.json
-├── postcss.config.mjs
-├── prisma/
-│   └── schema.prisma            # PostgreSQL models
-├── public/
+├── prisma/                      # Schema + migrations + seed
+├── public/                      # Static assets
+├── e2e/                         # Playwright specs
+├── scripts/                     # Docker entrypoint, env check, standalone start
 ├── src/
-│   ├── app/                     # App Router pages + API + SEO
-│   │   ├── layout.tsx           # Root layout (Navbar, Footer, Providers)
-│   │   ├── page.tsx             # Landing
-│   │   ├── globals.css          # Design tokens, dark mode, glass
-│   │   ├── sitemap.ts
-│   │   ├── robots.ts
-│   │   ├── marketplace/
-│   │   ├── recommend/           # AI bot recommendation quiz
-│   │   ├── compare/             # Multi-bot comparison
-│   │   ├── leaderboard/         # Top traders / bots rankings
-│   │   ├── notifications/       # Notification Center
-│   │   ├── referrals/           # Affiliate Dashboard
-│   │   ├── affiliate/           # Redirect → /referrals
-│   │   ├── blog/                # Blog index + [slug] posts
-│   │   ├── bots/[slug]/
-│   │   ├── charts/
-│   │   ├── dashboard/
-│   │   ├── mt5/
-│   │   ├── pricing/
-│   │   ├── login|register|forgot-password/
-│   │   ├── profile/
-│   │   ├── admin/               # Admin layout + pages
-│   │   ├── api/bots/            # REST API routes
-│   │   ├── api/recommend/       # Recommendation scoring API
-│   │   ├── api/notifications/   # Notification list API
-│   │   ├── api/affiliate/       # Affiliate summary API
-│   │   └── actions/             # Server actions
+│   ├── app/
+│   │   ├── layout.tsx           # Root shell (Navbar, Footer, Providers)
+│   │   ├── (marketing)/         # Public: home, marketplace, blog, auth entry, legal
+│   │   ├── (dashboard)/         # App: dashboard, profile, MT5, billing, referrals…
+│   │   ├── (admin)/admin/       # Admin panel (URL /admin)
+│   │   ├── api/                 # REST + webhooks
+│   │   ├── auth/                # OAuth callback + verify routes
+│   │   ├── actions/             # Server actions
+│   │   ├── sitemap.ts · robots.ts · opengraph-image.tsx
+│   │   └── error.tsx · global-error.tsx · not-found.tsx
 │   ├── components/
-│   │   ├── ui/                  # Shadcn-style primitives (+ *.test.tsx)
-│   │   ├── layout/              # Navbar, Footer, Logo, AdminNav
+│   │   ├── charts/              # TradingView widget
 │   │   ├── bots/                # BotCard, BotDetails
-│   │   ├── reviews/             # Ratings, comments, helpful, verified badge
-│   │   ├── recommend/           # Recommendation engine UI
-│   │   ├── compare/             # Bot comparison UI
-│   │   ├── leaderboard/         # Leaderboard boards
-│   │   ├── notifications/       # Notification Center UI
-│   │   ├── affiliate/           # Affiliate dashboard UI
-│   │   ├── blog/                # Blog index + Markdown renderer
-│   │   ├── performance/         # Dynamic chart / heavy UI wrappers
-│   │   └── landing/
+│   │   ├── dashboard/           # Dashboard charts
+│   │   ├── layout/              # Navbar, Footer, Container, PageHeader, AdminShell
+│   │   ├── forms/               # FormField, AuthShell, OAuthButtons
+│   │   ├── ui/                  # Shadcn primitives
+│   │   ├── landing/ · blog/ · compare/ · recommend/ · …
+│   │   └── motion/ · seo/ · performance/
+│   ├── lib/                     # Utils, SEO, validations, Prisma client, domain data
 │   ├── hooks/
-│   ├── lib/                     # Utils, SEO, data, scoring (+ *.test.ts)
-│   │   ├── data/                # Seed/demo domain data
-│   │   ├── recommendations/     # Bot scoring engine
-│   │   ├── compare/             # Comparison series helpers
-│   │   ├── supabase/            # Browser + server clients
-│   │   ├── prisma.ts
-│   │   ├── seo.ts                   # Metadata + JSON-LD helpers
-│   │   ├── validations.ts       # Zod schemas
-│   │   └── utils.ts
-│   ├── providers/               # Theme + React Query + Toasts
-│   ├── stores/                  # Zustand (auth, favorites, recommendations)
-│   └── types/
-├── e2e/                         # Playwright smoke specs
-├── scripts/                     # docker-entrypoint, env check
-├── .github/workflows/           # CI + migrate workflows
-├── Dockerfile
-├── docker-compose.yml
-├── vercel.json
-├── sentry.*.config.ts
-├── vitest.config.ts
-├── vitest.setup.tsx
-├── playwright.config.ts
-└── tsconfig.json
+│   ├── store/                   # Zustand stores
+│   ├── services/                # Supabase, Stripe, PayPal, payments, auth helpers
+│   ├── types/
+│   ├── providers/
+│   └── styles/globals.css       # Design tokens + global styles
+├── Dockerfile · docker-compose.yml · vercel.json
+├── vitest.config.ts · playwright.config.ts
+└── docs/                        # Feature + deployment docs
 ```
+
+## Route groups
+
+| Group | URL examples | Contents |
+| ----- | ------------ | -------- |
+| `(marketing)` | `/`, `/marketplace`, `/blog`, `/login` | Public marketing + auth entry |
+| `(dashboard)` | `/dashboard`, `/mt5`, `/billing`, `/profile` | Logged-in product surfaces |
+| `(admin)` | `/admin`, `/admin/users` | Admin shell + CRUD |
+| `api` | `/api/bots`, `/api/health` | HTTP APIs (not grouped) |
+
+Parentheses are App Router **route groups** — they organize code without changing URLs.
+
 ## Config checklist
 
 | Requirement           | Status                                   |
@@ -88,16 +58,17 @@ tradebib/
 | Tailwind CSS          | ✅                                       |
 | Shadcn UI             | ✅ (`components/ui` + `components.json`) |
 | React Query           | ✅ (`providers/providers.tsx`)           |
-| Zustand               | ✅ (`stores/*`)                          |
+| Zustand               | ✅ (`store/*`)                           |
 | React Hook Form       | ✅                                       |
 | Zod                   | ✅ (`lib/validations.ts`)                |
 | Prisma + PostgreSQL   | ✅ (`prisma/schema.prisma`)              |
-| Supabase              | ✅ (`lib/supabase/*`)                    |
+| Supabase              | ✅ (`services/supabase/*`)               |
+| Payments              | ✅ (`services/stripe` · `paypal` · `payments`) |
 | ESLint                | ✅                                       |
 | Prettier              | ✅                                       |
 | Dark Mode             | ✅ (`next-themes`, default dark)         |
 | Env variables         | ✅ (`.env.example`)                      |
-| Layouts               | ✅ (root + admin)                        |
+| Layouts               | ✅ (root + route groups + admin)         |
 | Reusable components   | ✅                                       |
 | Responsive            | ✅                                       |
 | SEO                   | ✅ (metadata, sitemap, robots)           |

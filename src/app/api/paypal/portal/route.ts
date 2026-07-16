@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import { getPaymentProvider } from "@/lib/payments";
+import { getPaymentProvider } from "@/services/payments";
 
 const bodySchema = z.object({
   customerId: z.string().optional(),

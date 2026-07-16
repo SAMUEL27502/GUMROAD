@@ -13,7 +13,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import type { Mt5Account } from "@/stores/mt5-accounts-store";
+import type { Mt5Account } from "@/store/mt5-accounts-store";
 import { cn, formatCurrency } from "@/lib/utils";
 
 export interface Mt5AccountCardProps {

@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { isPayPalConfigured, planFromPayPalPlanId } from "@/lib/paypal/config";
+import { isPayPalConfigured, planFromPayPalPlanId } from "@/services/paypal/config";
 
 export const runtime = "nodejs";
 

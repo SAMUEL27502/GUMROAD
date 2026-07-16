@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import { getPaymentProvider } from "@/lib/payments";
-import { isStripeConfigured } from "@/lib/stripe/config";
+import { getPaymentProvider } from "@/services/payments";
+import { isStripeConfigured } from "@/services/stripe/config";
 
 const bodySchema = z.object({
   action: z.enum(["upgrade", "downgrade", "cancel", "resume", "status"]),

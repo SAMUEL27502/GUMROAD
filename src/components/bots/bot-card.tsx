@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn, formatCurrency, formatPercent } from "@/lib/utils";
-import { useFavoritesStore } from "@/stores/favorites-store";
+import { useFavoritesStore } from "@/store/favorites-store";
 
 const riskVariant = {
   LOW: "low" as const,

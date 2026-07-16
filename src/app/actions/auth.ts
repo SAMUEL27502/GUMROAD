@@ -2,13 +2,13 @@
 
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@/services/supabase/server";
 import {
   DEMO_SESSION_COOKIE,
   REMEMBER_ME_COOKIE,
   isSupabaseConfigured,
-} from "@/lib/supabase/config";
-import { mapDemoUser } from "@/lib/auth/user";
+} from "@/services/supabase/config";
+import { mapDemoUser } from "@/services/auth/user";
 import {
   forgotPasswordSchema,
   loginSchema,

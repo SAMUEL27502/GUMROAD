@@ -35,7 +35,7 @@ import {
 } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
-import { useNotificationsStore } from "@/stores/notifications-store";
+import { useNotificationsStore } from "@/store/notifications-store";
 
 type FilterKey = NotificationCategory | "ALL";
 type ReadFilter = "all" | "unread" | "read";

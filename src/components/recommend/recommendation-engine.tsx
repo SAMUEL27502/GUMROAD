@@ -34,8 +34,8 @@ import {
   type RecommendationInput,
   type RecommendationMatch,
 } from "@/lib/recommendations/bot-recommender";
-import { useRecommendationStore } from "@/stores/recommendation-store";
-import { useSubscriptionsStore } from "@/stores/subscriptions-store";
+import { useRecommendationStore } from "@/store/recommendation-store";
+import { useSubscriptionsStore } from "@/store/subscriptions-store";
 
 const STEPS = [
   { id: "risk", title: "Risk tolerance", icon: Gauge },

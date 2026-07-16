@@ -10,8 +10,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { useAuthStore } from "@/stores/auth-store";
-import { useReviewsStore } from "@/stores/reviews-store";
+import { useAuthStore } from "@/store/auth-store";
+import { useReviewsStore } from "@/store/reviews-store";
 
 interface ReviewFormProps {
   bot: Bot;

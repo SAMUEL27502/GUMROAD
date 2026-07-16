@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { AdminNav, AdminNavMobile } from "@/components/layout/admin-nav";
 import { Loader } from "@/components/ui/loader";
-import { useAuthStore } from "@/stores/auth-store";
+import { useAuthStore } from "@/store/auth-store";
 
 export function AdminShell({ children }: { children: React.ReactNode }) {
   const router = useRouter();

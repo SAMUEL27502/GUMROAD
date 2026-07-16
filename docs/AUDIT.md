@@ -14,7 +14,7 @@ UI consistency · spacing · responsiveness · accessibility · dedupe · compon
 | `PageHeader` | `src/components/layout/page-header.tsx` | Badge/eyebrow + h1 + description + actions |
 | `Section` | `src/components/layout/section.tsx` | One-job marketing section chrome |
 | `MetricCard` / `StatGrid` | `src/components/ui/metric-card.tsx` | Dashboard/stat grids |
-| `AuthShell` / `OAuthButtons` | `src/components/auth/auth-shell.tsx` | Auth page shell + social buttons |
+| `AuthShell` / `OAuthButtons` | `src/components/forms/auth-shell.tsx` | Auth page shell + social buttons |
 
 Adopted on marketplace, pricing, blog index, navbar/footer, login, register, landing hero.
 

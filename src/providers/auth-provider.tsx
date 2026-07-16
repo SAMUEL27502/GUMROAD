@@ -1,9 +1,9 @@
 "use client";
 
 import { useEffect } from "react";
-import { createClient, canUseSupabaseAuth } from "@/lib/supabase/client";
-import { mapSupabaseUser, mapDemoUser, type AuthUser } from "@/lib/auth/user";
-import { useAuthStore } from "@/stores/auth-store";
+import { createClient, canUseSupabaseAuth } from "@/services/supabase/client";
+import { mapSupabaseUser, mapDemoUser, type AuthUser } from "@/services/auth/user";
+import { useAuthStore } from "@/store/auth-store";
 
 async function fetchDemoSession(): Promise<AuthUser | null> {
   try {

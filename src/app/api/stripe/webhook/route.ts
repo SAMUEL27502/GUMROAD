@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import type Stripe from "stripe";
-import { isStripeConfigured, planFromPriceId } from "@/lib/stripe/config";
-import { getStripe } from "@/lib/stripe/server";
+import { isStripeConfigured, planFromPriceId } from "@/services/stripe/config";
+import { getStripe } from "@/services/stripe/server";
 
 export const runtime = "nodejs";
 

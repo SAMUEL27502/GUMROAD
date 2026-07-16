@@ -7,8 +7,8 @@ import { StarRating } from "@/components/reviews/star-rating";
 import { VerifiedOwnerBadge } from "@/components/reviews/verified-owner-badge";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { useAuthStore } from "@/stores/auth-store";
-import { useReviewsStore } from "@/stores/reviews-store";
+import { useAuthStore } from "@/store/auth-store";
+import { useReviewsStore } from "@/store/reviews-store";
 
 interface ReviewCardProps {
   review: BotReview;

@@ -3,7 +3,7 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { BotCard } from "@/components/bots/bot-card";
 import { bots } from "@/lib/data/bots";
-import { useFavoritesStore } from "@/stores/favorites-store";
+import { useFavoritesStore } from "@/store/favorites-store";
 
 describe("BotCard", () => {
   beforeEach(() => {

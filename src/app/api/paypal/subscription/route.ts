@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import { getPaymentProvider } from "@/lib/payments";
-import { isPayPalConfigured } from "@/lib/paypal/config";
+import { getPaymentProvider } from "@/services/payments";
+import { isPayPalConfigured } from "@/services/paypal/config";
 
 const bodySchema = z.object({
   action: z.enum(["upgrade", "downgrade", "cancel", "resume", "status"]),

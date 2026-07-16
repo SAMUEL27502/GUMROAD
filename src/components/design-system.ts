@@ -22,7 +22,7 @@ export { Badge, badgeVariants } from "@/components/ui/badge";
 export { Input } from "@/components/ui/input";
 export { Textarea } from "@/components/ui/textarea";
 export { Label } from "@/components/ui/label";
-export { FormField } from "@/components/ui/form-field";
+export { FormField } from "@/components/forms/form-field";
 export { Checkbox } from "@/components/ui/checkbox";
 export { Switch } from "@/components/ui/switch";
 export {
@@ -100,7 +100,7 @@ export { BotCard, BotCardSkeleton, type BotCardProps } from "@/components/bots/b
 export { Container } from "@/components/layout/container";
 export { PageHeader } from "@/components/layout/page-header";
 export { Section } from "@/components/layout/section";
-export { AuthShell, OAuthButtons } from "@/components/auth/auth-shell";
+export { AuthShell, OAuthButtons } from "@/components/forms/auth-shell";
 
 // Motion
 export {

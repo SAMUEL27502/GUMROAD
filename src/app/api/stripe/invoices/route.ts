@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import { isStripeConfigured } from "@/lib/stripe/config";
-import { getStripe } from "@/lib/stripe/server";
+import { isStripeConfigured } from "@/services/stripe/config";
+import { getStripe } from "@/services/stripe/server";
 
 export async function GET(request: Request) {
   try {

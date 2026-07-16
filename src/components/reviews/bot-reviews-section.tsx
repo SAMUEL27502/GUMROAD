@@ -19,9 +19,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useAuthStore } from "@/stores/auth-store";
-import { useReviewsStore } from "@/stores/reviews-store";
-import { useSubscriptionsStore } from "@/stores/subscriptions-store";
+import { useAuthStore } from "@/store/auth-store";
+import { useReviewsStore } from "@/store/reviews-store";
+import { useSubscriptionsStore } from "@/store/subscriptions-store";
 
 type SortMode = "helpful" | "newest" | "highest" | "lowest";
 

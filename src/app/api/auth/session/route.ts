@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
-import { createClient } from "@/lib/supabase/server";
-import { DEMO_SESSION_COOKIE, isSupabaseConfigured } from "@/lib/supabase/config";
-import { mapDemoUser, mapSupabaseUser } from "@/lib/auth/user";
+import { createClient } from "@/services/supabase/server";
+import { DEMO_SESSION_COOKIE, isSupabaseConfigured } from "@/services/supabase/config";
+import { mapDemoUser, mapSupabaseUser } from "@/services/auth/user";
 
 export async function GET() {
   if (isSupabaseConfigured()) {

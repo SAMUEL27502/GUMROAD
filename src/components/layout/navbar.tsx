@@ -32,8 +32,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useAuthStore } from "@/stores/auth-store";
-import { useNotificationsStore } from "@/stores/notifications-store";
+import { useAuthStore } from "@/store/auth-store";
+import { useNotificationsStore } from "@/store/notifications-store";
 import { categoryLabels } from "@/lib/data/notifications";
 import { cn } from "@/lib/utils";
 import { logoutAction } from "@/app/actions/auth";
