@@ -1,0 +1,811 @@
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=Newsreader:opsz,ital,wght@6..72,0,500;6..72,0,650;6..72,1,500&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #f3f6fb;
+    --bg-elevated: rgba(255, 255, 255, 0.72);
+    --ink: #0b1f3a;
+    --muted: #4d6078;
+    --line: rgba(11, 31, 58, 0.12);
+    --accent: #e11d8f;
+    --accent-deep: #b31472;
+    --accent-soft: #f9a8d4;
+    --navy: #0b1f3a;
+    --navy-mid: #163456;
+    --glow-a: rgba(225, 29, 143, 0.22);
+    --glow-b: rgba(22, 52, 86, 0.18);
+    --hero-veil: linear-gradient(115deg, rgba(243, 246, 251, 0.94) 0%, rgba(243, 246, 251, 0.78) 42%, rgba(243, 246, 251, 0.28) 68%, rgba(243, 246, 251, 0.08) 100%);
+    --shadow: 0 22px 50px rgba(11, 31, 58, 0.12);
+    --font-display: "Newsreader", Georgia, serif;
+    --font-body: "Figtree", "Segoe UI", sans-serif;
+    --max: 1120px;
+    --radius: 18px;
+  }
+
+  html[data-theme="dark"] {
+    --bg: #07111f;
+    --bg-elevated: rgba(15, 32, 54, 0.72);
+    --ink: #eef3f9;
+    --muted: #9aadc2;
+    --line: rgba(238, 243, 249, 0.14);
+    --accent: #f472b6;
+    --accent-deep: #fb7185;
+    --accent-soft: #f9a8d4;
+    --navy: #eef3f9;
+    --navy-mid: #c7d5e6;
+    --glow-a: rgba(244, 114, 182, 0.18);
+    --glow-b: rgba(99, 140, 196, 0.14);
+    --hero-veil: linear-gradient(115deg, rgba(7, 17, 31, 0.94) 0%, rgba(7, 17, 31, 0.82) 44%, rgba(7, 17, 31, 0.42) 70%, rgba(7, 17, 31, 0.14) 100%);
+    --shadow: 0 22px 50px rgba(0, 0, 0, 0.35);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    html:not([data-theme="light"]) {
+      --bg: #07111f;
+      --bg-elevated: rgba(15, 32, 54, 0.72);
+      --ink: #eef3f9;
+      --muted: #9aadc2;
+      --line: rgba(238, 243, 249, 0.14);
+      --accent: #f472b6;
+      --accent-deep: #fb7185;
+      --accent-soft: #f9a8d4;
+      --navy: #eef3f9;
+      --navy-mid: #c7d5e6;
+      --glow-a: rgba(244, 114, 182, 0.18);
+      --glow-b: rgba(99, 140, 196, 0.14);
+      --hero-veil: linear-gradient(115deg, rgba(7, 17, 31, 0.94) 0%, rgba(7, 17, 31, 0.82) 44%, rgba(7, 17, 31, 0.42) 70%, rgba(7, 17, 31, 0.14) 100%);
+      --shadow: 0 22px 50px rgba(0, 0, 0, 0.35);
+    }
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font-family: var(--font-body);
+    color: var(--ink);
+    background:
+      radial-gradient(1000px 520px at 90% -8%, var(--glow-a), transparent 60%),
+      radial-gradient(820px 480px at -8% 18%, var(--glow-b), transparent 55%),
+      var(--bg);
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a { color: inherit; text-decoration: none; }
+  img { max-width: 100%; display: block; }
+  button {
+    font: inherit;
+    color: inherit;
+    background: none;
+    border: 0;
+    cursor: pointer;
+  }
+
+  .skip-link {
+    position: absolute;
+    left: 1rem;
+    top: -3rem;
+    z-index: 60;
+    padding: 0.65rem 0.95rem;
+    border-radius: 999px;
+    background: var(--ink);
+    color: var(--bg);
+    font-size: 0.875rem;
+    font-weight: 600;
+  }
+  .skip-link:focus {
+    top: 1rem;
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+  }
+
+  .wrap {
+    width: min(100% - 2rem, var(--max));
+    margin-inline: auto;
+  }
+
+  .site-header {
+    position: absolute;
+    inset: 0 0 auto;
+    z-index: 20;
+    padding: 1.1rem 0;
+  }
+
+  .nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .brand-lockup {
+    font-family: var(--font-display);
+    font-weight: 650;
+    font-size: clamp(1.15rem, 2.2vw, 1.4rem);
+    letter-spacing: -0.03em;
+    line-height: 1;
+  }
+
+  .nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+  }
+
+  .theme-toggle,
+  .ghost-link,
+  .solid-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 2.6rem;
+    padding: 0.55rem 1rem;
+    border-radius: 12px;
+    font-size: 0.92rem;
+    font-weight: 600;
+    transition: transform 180ms ease, background 180ms ease, color 180ms ease, border-color 180ms ease;
+  }
+
+  .theme-toggle,
+  .ghost-link {
+    border: 1px solid var(--line);
+    background: var(--bg-elevated);
+    backdrop-filter: blur(10px);
+  }
+
+  .theme-toggle:hover,
+  .ghost-link:hover,
+  .solid-link:hover {
+    transform: translateY(-1px);
+  }
+
+  .solid-link {
+    background: var(--navy);
+    color: #f3f6fb;
+  }
+
+  html[data-theme="dark"] .solid-link {
+    background: #eef3f9;
+    color: #07111f;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    html:not([data-theme="light"]) .solid-link {
+      background: #eef3f9;
+      color: #07111f;
+    }
+  }
+
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    min-height: 100svh;
+    display: grid;
+    align-items: end;
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  .hero-media {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    background:
+      linear-gradient(145deg, #163456 0%, #0b1f3a 48%, #1a0f24 100%);
+  }
+
+  .hero-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 68% 18%;
+    opacity: 0.92;
+    transform: scale(1.04);
+    animation: ken 18s ease-in-out infinite alternate;
+  }
+
+  .hero-veil {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: var(--hero-veil);
+  }
+
+  .hero-atmosphere::before,
+  .hero-atmosphere::after {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    border-radius: 999px;
+    filter: blur(42px);
+    pointer-events: none;
+    animation: drift 16s ease-in-out infinite alternate;
+  }
+
+  .hero-atmosphere::before {
+    width: min(48vw, 420px);
+    height: min(48vw, 420px);
+    top: 12%;
+    left: 8%;
+    background: radial-gradient(circle, var(--glow-a), transparent 70%);
+  }
+
+  .hero-atmosphere::after {
+    width: min(36vw, 320px);
+    height: min(36vw, 320px);
+    right: 10%;
+    bottom: 18%;
+    background: radial-gradient(circle, var(--glow-b), transparent 70%);
+    animation-delay: -5s;
+  }
+
+  .hero-copy {
+    width: min(100% - 2rem, 640px);
+    margin: 0 auto 0 0;
+    padding: clamp(6.5rem, 14vh, 8.5rem) 0 clamp(3.5rem, 8vh, 5.5rem);
+  }
+
+  .hero-brand {
+    margin: 0 0 1rem;
+    font-family: var(--font-display);
+    font-weight: 650;
+    font-size: clamp(3.4rem, 10vw, 6.4rem);
+    letter-spacing: -0.045em;
+    line-height: 0.9;
+  }
+
+  .hero-brand span {
+    display: block;
+  }
+
+  .hero-brand .accent {
+    color: var(--accent);
+  }
+
+  .hero-line {
+    margin: 0 0 0.85rem;
+    max-width: 28ch;
+    font-family: var(--font-display);
+    font-size: clamp(1.35rem, 3vw, 1.85rem);
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+  }
+
+  .hero-support {
+    margin: 0 0 1.6rem;
+    max-width: 36ch;
+    color: var(--muted);
+    font-size: 1.02rem;
+  }
+
+  .cta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .cta-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 3rem;
+    padding: 0.75rem 1.25rem;
+    border-radius: 14px;
+    background: var(--accent);
+    color: #fff;
+    font-weight: 700;
+    box-shadow: var(--shadow);
+    transition: transform 180ms ease, background 180ms ease;
+  }
+
+  .cta-primary:hover {
+    transform: translateY(-1px);
+    background: var(--accent-deep);
+  }
+
+  .cta-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 3rem;
+    padding: 0.75rem 1.25rem;
+    border-radius: 14px;
+    border: 1px solid var(--line);
+    background: var(--bg-elevated);
+    backdrop-filter: blur(10px);
+    font-weight: 650;
+    transition: transform 180ms ease;
+  }
+
+  .cta-secondary:hover { transform: translateY(-1px); }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(18px);
+    animation: rise 900ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  }
+
+  .reveal-delay-1 { animation-delay: 120ms; }
+  .reveal-delay-2 { animation-delay: 240ms; }
+  .reveal-delay-3 { animation-delay: 360ms; }
+
+  section {
+    padding: clamp(4rem, 8vw, 6rem) 0;
+  }
+
+  .section-kicker {
+    margin: 0 0 0.55rem;
+    color: var(--accent);
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .section-title {
+    margin: 0 0 0.7rem;
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 4.5vw, 3rem);
+    font-weight: 650;
+    letter-spacing: -0.03em;
+    line-height: 1.05;
+  }
+
+  .section-support {
+    margin: 0 0 2rem;
+    max-width: 48ch;
+    color: var(--muted);
+  }
+
+  .guide-list {
+    display: grid;
+    gap: 0.85rem;
+  }
+
+  .guide-link {
+    display: grid;
+    grid-template-columns: 88px 1fr auto;
+    gap: 1rem;
+    align-items: center;
+    padding: 0.85rem;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: color-mix(in srgb, var(--bg) 82%, white 18%);
+    transition: transform 180ms ease, border-color 180ms ease, background 180ms ease;
+  }
+
+  html[data-theme="dark"] .guide-link,
+  html:not([data-theme="light"]) .guide-link {
+    background: color-mix(in srgb, var(--bg) 86%, #163456 14%);
+  }
+
+  @media (prefers-color-scheme: light) {
+    html:not([data-theme="dark"]) .guide-link {
+      background: color-mix(in srgb, var(--bg) 82%, white 18%);
+    }
+  }
+
+  .guide-link:hover {
+    transform: translateY(-2px);
+    border-color: color-mix(in srgb, var(--accent) 45%, var(--line));
+  }
+
+  .guide-thumb {
+    width: 88px;
+    height: 88px;
+    border-radius: 14px;
+    overflow: hidden;
+    background:
+      linear-gradient(145deg, color-mix(in srgb, var(--accent) 35%, var(--navy-mid)), var(--navy-mid));
+  }
+
+  .guide-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .guide-copy h3 {
+    margin: 0 0 0.35rem;
+    font-family: var(--font-display);
+    font-size: 1.28rem;
+    font-weight: 650;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+  }
+
+  .guide-copy p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 0.95rem;
+  }
+
+  .guide-meta {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.35rem;
+    text-align: right;
+    white-space: nowrap;
+  }
+
+  .guide-price {
+    font-weight: 700;
+    font-size: 0.95rem;
+  }
+
+  .guide-cta {
+    color: var(--accent);
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .about {
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    background:
+      linear-gradient(180deg, transparent, color-mix(in srgb, var(--accent) 5%, transparent) 40%, transparent);
+  }
+
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: clamp(1.5rem, 4vw, 3rem);
+    align-items: center;
+  }
+
+  .about-bio {
+    margin: 0;
+    color: var(--muted);
+    font-size: 1.05rem;
+    white-space: pre-wrap;
+  }
+
+  .about-portrait {
+    position: relative;
+    border-radius: 28px;
+    overflow: hidden;
+    aspect-ratio: 4 / 5;
+    box-shadow: var(--shadow);
+  }
+
+  .about-portrait img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 15%;
+  }
+
+  .about-portrait::after {
+    content: "";
+    position: absolute;
+    inset: auto 0 0;
+    height: 42%;
+    background: linear-gradient(transparent, rgba(7, 17, 31, 0.55));
+  }
+
+  .site-footer {
+    padding: 2.2rem 0 3rem;
+  }
+
+  .footer-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.85rem;
+    color: var(--muted);
+    font-size: 0.92rem;
+  }
+
+  .footer-brand {
+    font-family: var(--font-display);
+    font-weight: 650;
+    color: var(--ink);
+  }
+
+  @keyframes rise {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes drift {
+    from { transform: translate3d(0, 0, 0); }
+    to { transform: translate3d(18px, -16px, 0); }
+  }
+
+  @keyframes ken {
+    from { transform: scale(1.04) translate3d(0, 0, 0); }
+    to { transform: scale(1.08) translate3d(-1.5%, 1%, 0); }
+  }
+
+  @media (max-width: 820px) {
+    .about-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .about-portrait {
+      max-width: 360px;
+      width: 100%;
+    }
+
+    .guide-link {
+      grid-template-columns: 72px 1fr;
+      grid-template-areas:
+        "thumb copy"
+        "thumb meta";
+    }
+
+    .guide-thumb { grid-area: thumb; width: 72px; height: 72px; }
+    .guide-copy { grid-area: copy; }
+    .guide-meta {
+      grid-area: meta;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      text-align: left;
+      margin-top: 0.35rem;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .nav .ghost-link { display: none; }
+
+    .hero-copy {
+      padding-bottom: 3rem;
+    }
+
+    .guide-link {
+      grid-template-columns: 1fr;
+      grid-template-areas:
+        "thumb"
+        "copy"
+        "meta";
+    }
+
+    .guide-thumb {
+      width: 100%;
+      height: 180px;
+      border-radius: 14px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation: none !important;
+      transition: none !important;
+    }
+    .reveal {
+      opacity: 1;
+      transform: none;
+    }
+    .hero-media img { transform: none; }
+  }
+</style>
+
+<a class="skip-link" href="#guides">Skip to guides</a>
+
+<header class="site-header">
+  <div class="wrap nav">
+    <a class="brand-lockup" href="#top" aria-label="Life Reset home">Life Reset</a>
+    <div class="nav-actions">
+      <button class="theme-toggle" type="button" id="theme-toggle" aria-label="Toggle color theme">Theme</button>
+      <a class="ghost-link" href="#about">About</a>
+      <a class="solid-link" href="#guides">Guides</a>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero hero-atmosphere" aria-label="Life Reset hero">
+    <div class="hero-media" aria-hidden="true">
+      <img
+        src="https://public-files.gumroad.com/ej4frpkrodn5l9vnlr0vnz5ma93g"
+        alt=""
+        width="1200"
+        height="1200"
+      />
+    </div>
+    <div class="hero-veil" aria-hidden="true"></div>
+    <div class="wrap hero-copy">
+      <h1 class="hero-brand reveal">
+        <span>Life</span>
+        <span class="accent">Reset</span>
+      </h1>
+      <p class="hero-line reveal reveal-delay-1">Perimenopause guides that start with biology, not blame.</p>
+      <p class="hero-support reveal reveal-delay-2">
+        Practical, no-fluff research on sleep, mood, weight, and energy for the years your body rewrites the rules.
+      </p>
+      <div class="cta-row reveal reveal-delay-3">
+        <a class="cta-primary" href="#guides">Explore the guides</a>
+        <a class="cta-secondary" href="#about">Why this exists</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="guides" aria-labelledby="guides-title">
+    <div class="wrap">
+      <p class="section-kicker">The library</p>
+      <h2 class="section-title" id="guides-title">Choose the reset you need next.</h2>
+      <p class="section-support">
+        Each guide opens on its own product page — read the full details there, then grab the download that fits your season.
+      </p>
+      <div class="guide-list" id="products-root" role="list"></div>
+      <p id="products-empty" hidden>New guides are on the way. Check back soon.</p>
+    </div>
+  </section>
+
+  <section class="about" id="about" aria-labelledby="about-title">
+    <div class="wrap about-grid">
+      <div>
+        <p class="section-kicker">About</p>
+        <h2 class="section-title" id="about-title">I research perimenopause so you don’t have to.</h2>
+        <p class="about-bio" data-gumroad-field="description">I research perimenopause so you don't have to. Practical, no-fluff guides on weight, sleep, mood, brain fog, and energy, built from real research, not TikTok trends. Not a doctor, just someone who got tired of the information gap and decided to close it.</p>
+      </div>
+      <div class="about-portrait">
+        <img
+          src="https://public-files.gumroad.com/ej4frpkrodn5l9vnlr0vnz5ma93g"
+          alt="Portrait of the Life Reset creator"
+          width="800"
+          height="1000"
+        />
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap footer-row">
+    <div>
+      <div class="footer-brand">Life Reset</div>
+      <div>@drsheemidlifereset</div>
+    </div>
+    <div>Educational guides only · Not medical advice</div>
+  </div>
+</footer>
+
+<script id="gumroad-data" type="application/json">
+{
+  "products": [
+    {
+      "name": "The Perimenopause Reset",
+      "url": "https://drsheemidlifereset.gumroad.com/l/pqlkpv",
+      "price": "$21+",
+      "description": "An 18-page plain-language guide to the season when your body switches operating systems overnight.",
+      "thumbnail_url": "https://public-files.gumroad.com/ezcftc1jio9c61fp0kj41togvu6k"
+    },
+    {
+      "name": "The 3AM Reset",
+      "url": "https://drsheemidlifereset.gumroad.com/l/mvrvn",
+      "price": "$19+",
+      "description": "Why you wake wide awake at 3am — and a clear way back to sleep that starts with biology.",
+      "thumbnail_url": "https://public-files.gumroad.com/w5odwg945v2iist4cr5bjj9ba8jh"
+    },
+    {
+      "name": "The Rage Reset",
+      "url": "https://drsheemidlifereset.gumroad.com/l/ttafxb",
+      "price": "$19+",
+      "description": "The mechanism behind hormonal rage, without blame or “just breathe” platitudes.",
+      "thumbnail_url": "https://public-files.gumroad.com/jxy2vtns5czv893o6j8g06jzz5bg"
+    },
+    {
+      "name": "The Perimenopause Symptom Tracker & Doctor Prep Kit",
+      "url": "https://drsheemidlifereset.gumroad.com/l/pjgmaf",
+      "price": "$10+",
+      "description": "Turn a foggy month of symptoms into a clear appointment conversation — five printable pages.",
+      "thumbnail_url": "https://public-files.gumroad.com/7f2kfni5ufx78n98xllxq9cs57c5"
+    }
+  ]
+}
+</script>
+
+<script>
+  (function () {
+    var root = document.documentElement;
+    var toggle = document.getElementById("theme-toggle");
+    var storageKey = "life-reset-theme";
+
+    function systemTheme() {
+      return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    }
+
+    function applyTheme(theme) {
+      root.setAttribute("data-theme", theme);
+      if (toggle) {
+        toggle.textContent = theme === "dark" ? "Light" : "Dark";
+        toggle.setAttribute("aria-pressed", theme === "dark" ? "true" : "false");
+      }
+    }
+
+    var saved = null;
+    try { saved = localStorage.getItem(storageKey); } catch (e) {}
+    applyTheme(saved === "light" || saved === "dark" ? saved : systemTheme());
+
+    if (toggle) {
+      toggle.addEventListener("click", function () {
+        var next = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
+        applyTheme(next);
+        try { localStorage.setItem(storageKey, next); } catch (e) {}
+      });
+    }
+
+    function escapeHtml(value) {
+      return String(value || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    }
+
+    function formatPrice(product) {
+      if (product.price) return product.price;
+      if (typeof product.price_cents === "number") {
+        var amount = product.price_cents / 100;
+        if (amount === 0) return "Free";
+        return "$" + (amount % 1 === 0 ? amount.toFixed(0) : amount.toFixed(2)) + (product.is_pay_what_you_want ? "+" : "");
+      }
+      return "";
+    }
+
+    function readData() {
+      var el = document.getElementById("gumroad-data");
+      if (!el) return { products: [] };
+      try {
+        var parsed = JSON.parse(el.textContent || "{}");
+        return parsed && typeof parsed === "object" ? parsed : { products: [] };
+      } catch (e) {
+        return { products: [] };
+      }
+    }
+
+    function renderProducts(products) {
+      var rootEl = document.getElementById("products-root");
+      var emptyEl = document.getElementById("products-empty");
+      if (!rootEl) return;
+
+      rootEl.innerHTML = "";
+      if (!products || !products.length) {
+        if (emptyEl) emptyEl.hidden = false;
+        return;
+      }
+      if (emptyEl) emptyEl.hidden = true;
+
+      products.forEach(function (product) {
+        var item = document.createElement("a");
+        item.className = "guide-link";
+        item.href = product.url || "#";
+        item.setAttribute("role", "listitem");
+
+        var thumb = document.createElement("div");
+        thumb.className = "guide-thumb";
+        thumb.setAttribute("aria-hidden", "true");
+        if (product.thumbnail_url) {
+          thumb.innerHTML = '<img src="' + escapeHtml(product.thumbnail_url) + '" alt="" width="176" height="176" loading="lazy" />';
+        }
+
+        var copy = document.createElement("div");
+        copy.className = "guide-copy";
+        copy.innerHTML =
+          "<h3>" + escapeHtml(product.name || "Untitled guide") + "</h3>" +
+          "<p>" + escapeHtml(product.description || "Open the product page for details.") + "</p>";
+
+        var meta = document.createElement("div");
+        meta.className = "guide-meta";
+        meta.innerHTML =
+          '<div class="guide-price">' + escapeHtml(formatPrice(product)) + "</div>" +
+          '<div class="guide-cta">View guide</div>';
+
+        item.appendChild(thumb);
+        item.appendChild(copy);
+        item.appendChild(meta);
+        rootEl.appendChild(item);
+      });
+    }
+
+    renderProducts((readData().products) || []);
+  })();
+</script>
