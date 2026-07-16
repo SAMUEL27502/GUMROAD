@@ -38,6 +38,8 @@ export type AdminReviewRecord = {
   title: string;
   content: string;
   approved: boolean;
+  verifiedOwner: boolean;
+  helpfulCount: number;
   date: string;
 };
 
@@ -87,6 +89,8 @@ export const seedAdminReviews: AdminReviewRecord[] = [
     title: "Solid gold sessions",
     content: "Consistent during London open. Drawdown stayed within advertised range.",
     approved: true,
+    verifiedOwner: true,
+    helpfulCount: 18,
     date: "2026-07-10",
   },
   {
@@ -97,6 +101,8 @@ export const seedAdminReviews: AdminReviewRecord[] = [
     title: "Steady EURUSD trends",
     content: "Good risk control. Occasional misses on news days.",
     approved: true,
+    verifiedOwner: true,
+    helpfulCount: 9,
     date: "2026-07-08",
   },
   {
@@ -107,6 +113,8 @@ export const seedAdminReviews: AdminReviewRecord[] = [
     title: "Needs more filters",
     content: "False breakouts during Asian range. Otherwise OK.",
     approved: false,
+    verifiedOwner: true,
+    helpfulCount: 2,
     date: "2026-07-12",
   },
   {
@@ -117,6 +125,8 @@ export const seedAdminReviews: AdminReviewRecord[] = [
     title: "Quiet overnight profits",
     content: "Works well on demo and live with investor sync.",
     approved: false,
+    verifiedOwner: false,
+    helpfulCount: 0,
     date: "2026-07-14",
   },
 ];

@@ -38,6 +38,7 @@ tradebib/
 │   │   ├── ui/                  # Shadcn-style primitives
 │   │   ├── layout/              # Navbar, Footer, Logo, AdminNav
 │   │   ├── bots/                # BotCard, BotDetails
+│   │   ├── reviews/             # Ratings, comments, helpful, verified badge
 │   │   ├── recommend/           # Recommendation engine UI
 │   │   ├── compare/             # Bot comparison UI
 │   │   └── landing/

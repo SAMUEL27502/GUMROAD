@@ -51,6 +51,7 @@ import {
 } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AnimatedGradient } from "@/components/motion";
+import { BotReviewsSection } from "@/components/reviews/bot-reviews-section";
 import { cn, formatCurrency, formatPercent } from "@/lib/utils";
 import { useFavoritesStore } from "@/stores/favorites-store";
 import { useSubscriptionsStore } from "@/stores/subscriptions-store";
@@ -459,61 +460,14 @@ export function BotDetails({ bot }: { bot: Bot }) {
           </Card>
         </motion.section>
 
-        <div className="mt-8 grid gap-8 lg:grid-cols-2">
+        <div className="mt-8 grid gap-8 lg:grid-cols-[1.4fr_1fr]">
           {/* Reviews */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            <Card className="h-full border-border/70 bg-card/80">
-              <CardHeader>
-                <CardTitle>Reviews</CardTitle>
-                <CardDescription>What traders say about {bot.name}</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                {bot.reviews.length > 0 ? (
-                  bot.reviews.map((review) => (
-                    <div
-                      key={review.id}
-                      className="rounded-xl border border-border/50 bg-muted/20 p-4"
-                    >
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-2">
-                          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-sky-500/20 text-xs font-bold text-sky-300">
-                            {review.author.charAt(0)}
-                          </div>
-                          <div>
-                            <p className="text-sm font-semibold">{review.author}</p>
-                            <p className="text-xs text-muted-foreground">{review.date}</p>
-                          </div>
-                        </div>
-                        <div className="flex items-center gap-0.5">
-                          {Array.from({ length: 5 }).map((_, i) => (
-                            <Star
-                              key={i}
-                              className={cn(
-                                "h-3.5 w-3.5",
-                                i < review.rating
-                                  ? "fill-amber-400 text-amber-400"
-                                  : "text-muted-foreground/30"
-                              )}
-                            />
-                          ))}
-                        </div>
-                      </div>
-                      <p className="mt-3 text-sm font-medium">{review.title}</p>
-                      <p className="mt-1 text-sm text-muted-foreground">{review.content}</p>
-                    </div>
-                  ))
-                ) : (
-                  <EmptyState
-                    title="No reviews yet"
-                    description="Be the first to subscribe and share feedback."
-                  />
-                )}
-              </CardContent>
-            </Card>
+            <BotReviewsSection bot={bot} />
           </motion.div>
 
           {/* FAQ */}
