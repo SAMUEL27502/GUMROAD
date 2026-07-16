@@ -55,6 +55,8 @@ model User {
   plan              PlanTier           @default(STARTER)
   stripeCustomerId  String?
   stripeSubscriptionId String?
+  paypalSubscriberId String?
+  paypalSubscriptionId String?
   emailVerified     Boolean            @default(false)
   referralCode      String             @unique @default(cuid())
   referredBy        String?

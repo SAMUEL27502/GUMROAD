@@ -17,12 +17,12 @@ export async function POST(request: Request) {
     if (!parsed.success) {
       return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 });
     }
-    const result = await getPaymentProvider("stripe").createCheckout(parsed.data);
+    const result = await getPaymentProvider("paypal").createCheckout(parsed.data);
     return NextResponse.json(result);
   } catch (error) {
-    console.error("[stripe/checkout]", error);
+    console.error("[paypal/checkout]", error);
     return NextResponse.json(
-      { error: error instanceof Error ? error.message : "Checkout failed" },
+      { error: error instanceof Error ? error.message : "PayPal checkout failed" },
       { status: 500 }
     );
   }

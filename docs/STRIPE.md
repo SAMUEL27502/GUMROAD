@@ -1,7 +1,8 @@
 # Stripe Subscriptions
 
-UI: `/billing` · APIs: `/api/stripe/*`  
+UI: `/billing` · APIs: `/api/stripe/*` + unified `/api/billing`  
 Config: `src/lib/stripe/config.ts` · Client: `src/lib/stripe/server.ts`  
+Adapter: `src/lib/payments/stripe-provider.ts` (implements shared `PaymentProvider`)  
 Store (demo): `src/stores/billing-store.ts`
 
 ## Includes
@@ -19,7 +20,7 @@ Store (demo): `src/stores/billing-store.ts`
 
 ## Demo vs live
 
-Without `STRIPE_SECRET_KEY`, endpoints run in **demo mode** (Checkout redirects to `/billing?checkout=success`, portal opens demo toast). With keys + Price IDs, live Stripe Checkout / Portal / Subscription updates are used.
+Without `STRIPE_SECRET_KEY`, endpoints run in **demo mode**. With keys + Price IDs, live Stripe Checkout / Portal / Subscription updates are used.
 
 ## Env
 
@@ -33,5 +34,6 @@ STRIPE_PRICE_ELITE_MONTHLY=
 STRIPE_PRICE_ELITE_YEARLY=
 ```
 
-Webhook URL: `{NEXT_PUBLIC_APP_URL}/api/stripe/webhook`  
-Events: `checkout.session.completed`, `customer.subscription.*`, `invoice.paid`, `invoice.payment_failed`
+Webhook URL: `{NEXT_PUBLIC_APP_URL}/api/stripe/webhook`
+
+See also: `docs/PAYPAL.md`, `docs/BILLING.md`

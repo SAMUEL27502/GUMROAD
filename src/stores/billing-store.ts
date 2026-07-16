@@ -1,7 +1,8 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import type { PlanTier } from "@/lib/auth/user";
-import type { BillingInterval } from "@/lib/stripe/config";
+import type { BillingInterval, PaymentProviderId } from "@/lib/payments/types";
+import { PLAN_AMOUNTS } from "@/lib/payments/types";
 
 export type SubscriptionStatus =
   | "NONE"
@@ -20,25 +21,33 @@ export interface BillingInvoice {
   createdAt: string;
   pdfUrl?: string;
   description: string;
+  provider?: PaymentProviderId;
 }
 
 interface BillingState {
   plan: PlanTier;
   status: SubscriptionStatus;
   interval: BillingInterval;
+  provider: PaymentProviderId;
   cancelAtPeriodEnd: boolean;
   currentPeriodEnd: string;
   stripeCustomerId: string | null;
   stripeSubscriptionId: string | null;
+  paypalSubscriberId: string | null;
+  paypalSubscriptionId: string | null;
   invoices: BillingInvoice[];
-  setFromCheckout: (plan: PlanTier, interval: BillingInterval) => void;
+  setProvider: (provider: PaymentProviderId) => void;
+  setFromCheckout: (
+    plan: PlanTier,
+    interval: BillingInterval,
+    provider?: PaymentProviderId
+  ) => void;
   upgrade: (plan: PlanTier) => void;
   downgrade: (plan: PlanTier) => void;
   cancel: () => void;
   resume: () => void;
   setStatus: (status: SubscriptionStatus) => void;
   addInvoice: (invoice: BillingInvoice) => void;
-  openPortalDemo: () => void;
 }
 
 function nextPeriodEnd(interval: BillingInterval) {
@@ -48,25 +57,23 @@ function nextPeriodEnd(interval: BillingInterval) {
   return d.toISOString();
 }
 
-function makeInvoice(plan: PlanTier, interval: BillingInterval, amount: number): BillingInvoice {
-  const id = `inv_${Date.now()}`;
+function makeInvoice(
+  plan: PlanTier,
+  interval: BillingInterval,
+  amount: number,
+  provider: PaymentProviderId
+): BillingInvoice {
   return {
-    id,
+    id: `inv_${Date.now()}`,
     number: `TB-${String(Date.now()).slice(-6)}`,
     amount,
     currency: "usd",
     status: "paid",
     createdAt: new Date().toISOString(),
-    description: `${plan} plan · ${interval}`,
-    pdfUrl: undefined,
+    description: `${plan} plan · ${interval} · ${provider}`,
+    provider,
   };
 }
-
-const planAmount: Record<PlanTier, { monthly: number; yearly: number }> = {
-  STARTER: { monthly: 0, yearly: 0 },
-  PRO: { monthly: 29, yearly: 290 },
-  ELITE: { monthly: 79, yearly: 790 },
-};
 
 export const useBillingStore = create<BillingState>()(
   persist(
@@ -74,10 +81,13 @@ export const useBillingStore = create<BillingState>()(
       plan: "STARTER",
       status: "NONE",
       interval: "monthly",
+      provider: "stripe",
       cancelAtPeriodEnd: false,
       currentPeriodEnd: nextPeriodEnd("monthly"),
       stripeCustomerId: null,
       stripeSubscriptionId: null,
+      paypalSubscriberId: null,
+      paypalSubscriptionId: null,
       invoices: [
         {
           id: "inv_seed_1",
@@ -86,7 +96,8 @@ export const useBillingStore = create<BillingState>()(
           currency: "usd",
           status: "paid",
           createdAt: "2026-06-15T10:00:00.000Z",
-          description: "PRO plan · monthly",
+          description: "PRO plan · monthly · stripe",
+          provider: "stripe",
         },
         {
           id: "inv_seed_2",
@@ -95,33 +106,47 @@ export const useBillingStore = create<BillingState>()(
           currency: "usd",
           status: "paid",
           createdAt: "2026-05-15T10:00:00.000Z",
-          description: "PRO plan · monthly",
+          description: "PRO plan · monthly · stripe",
+          provider: "stripe",
         },
       ],
-      setFromCheckout: (plan, interval) => {
-        const amount = planAmount[plan][interval];
+      setProvider: (provider) => set({ provider }),
+      setFromCheckout: (plan, interval, provider = get().provider) => {
+        const amount = PLAN_AMOUNTS[plan][interval];
         set({
           plan,
           interval,
+          provider,
           status: "ACTIVE",
           cancelAtPeriodEnd: false,
           currentPeriodEnd: nextPeriodEnd(interval),
-          stripeCustomerId: get().stripeCustomerId ?? `cus_demo_${Date.now()}`,
-          stripeSubscriptionId: `sub_demo_${Date.now()}`,
-          invoices: [makeInvoice(plan, interval, amount), ...get().invoices],
+          stripeCustomerId:
+            provider === "stripe"
+              ? get().stripeCustomerId ?? `cus_demo_${Date.now()}`
+              : get().stripeCustomerId,
+          stripeSubscriptionId:
+            provider === "stripe" ? `sub_demo_${Date.now()}` : get().stripeSubscriptionId,
+          paypalSubscriberId:
+            provider === "paypal"
+              ? get().paypalSubscriberId ?? `paypal_subr_${Date.now()}`
+              : get().paypalSubscriberId,
+          paypalSubscriptionId:
+            provider === "paypal" ? `paypal_sub_${Date.now()}` : get().paypalSubscriptionId,
+          invoices: [makeInvoice(plan, interval, amount, provider), ...get().invoices],
         });
       },
       upgrade: (plan) => {
-        const { interval } = get();
-        const amount = planAmount[plan][interval];
+        const { interval, provider } = get();
+        const amount = PLAN_AMOUNTS[plan][interval];
         set({
           plan,
           status: "ACTIVE",
           cancelAtPeriodEnd: false,
-          invoices: [makeInvoice(plan, interval, amount), ...get().invoices],
+          invoices: [makeInvoice(plan, interval, amount, provider), ...get().invoices],
         });
       },
       downgrade: (plan) => {
+        const { interval, provider } = get();
         set({
           plan,
           cancelAtPeriodEnd: plan === "STARTER",
@@ -129,7 +154,10 @@ export const useBillingStore = create<BillingState>()(
           invoices:
             plan === "STARTER"
               ? get().invoices
-              : [makeInvoice(plan, get().interval, planAmount[plan][get().interval]), ...get().invoices],
+              : [
+                  makeInvoice(plan, interval, PLAN_AMOUNTS[plan][interval], provider),
+                  ...get().invoices,
+                ],
         });
       },
       cancel: () =>
@@ -144,9 +172,6 @@ export const useBillingStore = create<BillingState>()(
         }),
       setStatus: (status) => set({ status }),
       addInvoice: (invoice) => set((s) => ({ invoices: [invoice, ...s.invoices] })),
-      openPortalDemo: () => {
-        /* no-op — UI handles toast + panel */
-      },
     }),
     { name: "tradebib-billing" }
   )

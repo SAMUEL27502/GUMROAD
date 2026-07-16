@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { getPaymentProvider } from "@/lib/payments";
-import { isStripeConfigured } from "@/lib/stripe/config";
+import { isPayPalConfigured } from "@/lib/paypal/config";
 
 const bodySchema = z.object({
   action: z.enum(["upgrade", "downgrade", "cancel", "resume", "status"]),
@@ -18,12 +18,12 @@ export async function POST(request: Request) {
     if (!parsed.success) {
       return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 });
     }
-    const result = await getPaymentProvider("stripe").updateSubscription(parsed.data);
+    const result = await getPaymentProvider("paypal").updateSubscription(parsed.data);
     return NextResponse.json(result);
   } catch (error) {
-    console.error("[stripe/subscription]", error);
+    console.error("[paypal/subscription]", error);
     return NextResponse.json(
-      { error: error instanceof Error ? error.message : "Subscription update failed" },
+      { error: error instanceof Error ? error.message : "PayPal subscription update failed" },
       { status: 500 }
     );
   }
@@ -31,8 +31,8 @@ export async function POST(request: Request) {
 
 export async function GET() {
   return NextResponse.json({
-    configured: isStripeConfigured(),
-    mode: isStripeConfigured() ? "live" : "demo",
-    provider: "stripe",
+    configured: isPayPalConfigured(),
+    mode: isPayPalConfigured() ? "live" : "demo",
+    provider: "paypal",
   });
 }

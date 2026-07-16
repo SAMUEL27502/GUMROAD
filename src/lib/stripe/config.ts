@@ -1,6 +1,8 @@
 import type { PlanTier } from "@/lib/auth/user";
+import type { BillingInterval } from "@/lib/payments/types";
 
-export type BillingInterval = "monthly" | "yearly";
+export type { BillingInterval } from "@/lib/payments/types";
+export { PLAN_RANK, appUrl } from "@/lib/payments/types";
 
 export function isStripeConfigured() {
   const key = process.env.STRIPE_SECRET_KEY ?? "";
@@ -26,22 +28,15 @@ export function getStripePriceId(plan: PlanTier, interval: BillingInterval): str
     : stripePriceEnv.eliteMonthly || null;
 }
 
-export function planFromPriceId(priceId: string): { plan: PlanTier; interval: BillingInterval } | null {
+export function planFromPriceId(
+  priceId: string
+): { plan: PlanTier; interval: BillingInterval } | null {
   const map: Record<string, { plan: PlanTier; interval: BillingInterval }> = {};
   if (stripePriceEnv.proMonthly) map[stripePriceEnv.proMonthly] = { plan: "PRO", interval: "monthly" };
   if (stripePriceEnv.proYearly) map[stripePriceEnv.proYearly] = { plan: "PRO", interval: "yearly" };
   if (stripePriceEnv.eliteMonthly)
     map[stripePriceEnv.eliteMonthly] = { plan: "ELITE", interval: "monthly" };
-  if (stripePriceEnv.eliteYearly) map[stripePriceEnv.eliteYearly] = { plan: "ELITE", interval: "yearly" };
+  if (stripePriceEnv.eliteYearly)
+    map[stripePriceEnv.eliteYearly] = { plan: "ELITE", interval: "yearly" };
   return map[priceId] ?? null;
-}
-
-export const PLAN_RANK: Record<PlanTier, number> = {
-  STARTER: 0,
-  PRO: 1,
-  ELITE: 2,
-};
-
-export function appUrl() {
-  return process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
 }

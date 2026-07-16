@@ -15,4 +15,4 @@ Data: `pricingPlans`, `pricingComparison` in `src/lib/data/platform.ts`
 
 Yearly prices: Pro `$290/yr`, Elite `$790/yr` (displayed as monthly equivalent).
 
-Paid CTAs route to `/billing?intent=checkout` (Stripe Checkout — see `docs/STRIPE.md`).
+Paid CTAs route to `/billing?intent=checkout` (Stripe or PayPal via reusable providers — see `docs/BILLING.md`).
