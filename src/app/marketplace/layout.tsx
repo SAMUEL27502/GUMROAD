@@ -9,6 +9,8 @@ export const metadata: Metadata = createMetadata({
   keywords: ["MT5 marketplace", "Expert Advisors", "forex bots", "TradeBib"],
 });
 
+export const revalidate = 3600;
+
 export default function MarketplaceLayout({ children }: { children: React.ReactNode }) {
   return children;
 }

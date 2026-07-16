@@ -52,6 +52,7 @@ tradebib/
 │   │   ├── notifications/       # Notification Center UI
 │   │   ├── affiliate/           # Affiliate dashboard UI
 │   │   ├── blog/                # Blog index + Markdown renderer
+│   │   ├── performance/         # Dynamic chart / heavy UI wrappers
 │   │   └── landing/
 │   ├── hooks/
 │   ├── lib/
@@ -91,4 +92,5 @@ tradebib/
 | Reusable components   | ✅                                       |
 | Responsive            | ✅                                       |
 | SEO                   | ✅ (metadata, sitemap, robots)           |
+| Performance           | ✅ (lazy charts, image, cache, prefetch) |
 | Framer Motion         | ✅                                       |

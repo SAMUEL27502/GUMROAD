@@ -1,6 +1,19 @@
 import Link from "next/link";
 import { Logo } from "./logo";
 
+/** Routes with large client bundles skip prefetch. */
+const HEAVY = new Set([
+  "/dashboard",
+  "/charts",
+  "/compare",
+  "/mt5",
+  "/recommend",
+  "/notifications",
+  "/referrals",
+  "/animations",
+  "/design-system",
+]);
+
 const columns = [
   {
     title: "Product",
@@ -67,6 +80,7 @@ export function Footer() {
                   <li key={link.href}>
                     <Link
                       href={link.href}
+                      prefetch={!HEAVY.has(link.href)}
                       className="text-muted-foreground text-sm transition-colors hover:text-sky-400"
                     >
                       {link.label}

@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import { Plus, Star, TrendingDown, TrendingUp } from "lucide-react";
-import { TradingViewAdvancedChart } from "@/components/charts/tradingview-advanced-chart";
+import { TradingViewChartLazy } from "@/components/performance/lazy-charts";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -240,7 +240,7 @@ export default function ChartsPage() {
                 </div>
               </div>
               <div className="h-[520px] bg-[#111827] lg:h-[640px]">
-                <TradingViewAdvancedChart symbol={activeSymbol} interval={interval} />
+                <TradingViewChartLazy symbol={activeSymbol} interval={interval} />
               </div>
             </Card>
 

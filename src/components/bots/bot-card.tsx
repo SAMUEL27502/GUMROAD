@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { Heart, Star, Users } from "lucide-react";
 import { toast } from "sonner";
@@ -78,11 +79,13 @@ export function BotCard({
           )}
         >
           {bot.imageUrl ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
+            <Image
               src={bot.imageUrl}
               alt={bot.name}
-              className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+              fill
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+              className="object-cover transition-transform duration-500 group-hover:scale-110"
+              loading="lazy"
             />
           ) : (
             <>

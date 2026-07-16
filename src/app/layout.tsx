@@ -77,6 +77,10 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className="dark" suppressHydrationWarning>
+      <head>
+        <link rel="dns-prefetch" href="https://images.unsplash.com" />
+        <link rel="preconnect" href="https://images.unsplash.com" crossOrigin="anonymous" />
+      </head>
       <body className={`${inter.variable} min-h-screen font-sans antialiased`}>
         <JsonLd data={[organizationJsonLd(), websiteJsonLd()]} />
         <Providers>

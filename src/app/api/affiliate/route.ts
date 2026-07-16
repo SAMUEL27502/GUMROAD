@@ -9,6 +9,8 @@ import {
   seedAffiliateWithdrawals,
 } from "@/lib/data/affiliate";
 
+export const revalidate = 300;
+
 export async function GET() {
   const stats = computeAffiliateStats(
     affiliateConversions,
@@ -17,15 +19,22 @@ export async function GET() {
     affiliateClicks
   );
 
-  return NextResponse.json({
-    profile: {
-      ...affiliateProfile,
-      referralLink: buildReferralLink(affiliateProfile.referralCode),
+  return NextResponse.json(
+    {
+      profile: {
+        ...affiliateProfile,
+        referralLink: buildReferralLink(affiliateProfile.referralCode),
+      },
+      stats,
+      clicks: affiliateClicks,
+      conversions: affiliateConversions,
+      commissions: seedAffiliateCommissions,
+      withdrawals: seedAffiliateWithdrawals,
     },
-    stats,
-    clicks: affiliateClicks,
-    conversions: affiliateConversions,
-    commissions: seedAffiliateCommissions,
-    withdrawals: seedAffiliateWithdrawals,
-  });
+    {
+      headers: {
+        "Cache-Control": "public, s-maxage=300, stale-while-revalidate=3600",
+      },
+    }
+  );
 }

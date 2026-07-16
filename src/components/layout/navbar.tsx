@@ -37,15 +37,16 @@ import { categoryLabels } from "@/lib/data/notifications";
 import { cn } from "@/lib/utils";
 import { logoutAction } from "@/app/actions/auth";
 
+/** Heavy client routes skip Link prefetch to keep hover bandwidth low. */
 const links = [
-  { href: "/marketplace", label: "Marketplace" },
-  { href: "/recommend", label: "Recommend" },
-  { href: "/compare", label: "Compare" },
-  { href: "/leaderboard", label: "Leaderboard" },
-  { href: "/charts", label: "Charts" },
-  { href: "/dashboard", label: "Dashboard" },
-  { href: "/mt5", label: "MT5 Connect" },
-  { href: "/pricing", label: "Pricing" },
+  { href: "/marketplace", label: "Marketplace", prefetch: true },
+  { href: "/recommend", label: "Recommend", prefetch: false },
+  { href: "/compare", label: "Compare", prefetch: false },
+  { href: "/leaderboard", label: "Leaderboard", prefetch: true },
+  { href: "/charts", label: "Charts", prefetch: false },
+  { href: "/dashboard", label: "Dashboard", prefetch: false },
+  { href: "/mt5", label: "MT5 Connect", prefetch: false },
+  { href: "/pricing", label: "Pricing", prefetch: true },
 ];
 
 export function Navbar() {
@@ -83,6 +84,7 @@ export function Navbar() {
               <Link
                 key={link.href}
                 href={link.href}
+                prefetch={link.prefetch}
                 className={cn(
                   "rounded-lg px-3 py-2 text-sm font-medium transition-colors",
                   pathname === link.href || pathname.startsWith(link.href + "/")
@@ -240,6 +242,7 @@ export function Navbar() {
               <Link
                 key={link.href}
                 href={link.href}
+                prefetch={link.prefetch}
                 onClick={() => setOpen(false)}
                 className={cn(
                   "rounded-lg px-3 py-3 text-sm font-medium",

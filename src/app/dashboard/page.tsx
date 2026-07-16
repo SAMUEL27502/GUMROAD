@@ -36,7 +36,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { DashboardCharts } from "@/components/dashboard/dashboard-charts";
+import { DashboardChartsLazy } from "@/components/performance/lazy-charts";
 import { bots } from "@/lib/data/bots";
 import {
   activities,
@@ -206,7 +206,7 @@ export default function DashboardPage() {
           transition={{ duration: 0.5, delay: 0.2 }}
           className="mt-8"
         >
-          <DashboardCharts />
+          <DashboardChartsLazy />
         </motion.div>
 
         <div className="mt-6 grid gap-6 lg:grid-cols-3">

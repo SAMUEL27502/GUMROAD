@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import { BotComparison } from "@/components/compare/bot-comparison";
+import { BotComparisonLazy } from "@/components/performance/lazy-charts";
 import { PageLoader } from "@/components/ui/loader";
 import { createMetadata } from "@/lib/seo";
 
@@ -14,7 +14,7 @@ export const metadata: Metadata = createMetadata({
 export default function ComparePage() {
   return (
     <Suspense fallback={<PageLoader />}>
-      <BotComparison />
+      <BotComparisonLazy />
     </Suspense>
   );
 }

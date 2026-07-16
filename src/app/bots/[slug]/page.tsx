@@ -17,6 +17,9 @@ export function generateStaticParams() {
   return bots.map((bot) => ({ slug: bot.slug }));
 }
 
+/** ISR: refresh bot detail pages hourly. */
+export const revalidate = 3600;
+
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
   const bot = getBotBySlug(slug);
