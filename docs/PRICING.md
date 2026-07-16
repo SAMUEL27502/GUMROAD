@@ -14,3 +14,5 @@ Data: `pricingPlans`, `pricingComparison` in `src/lib/data/platform.ts`
 | CTA buttons          | ✅ Per-card + bottom Start Free / Go Pro / Go Elite |
 
 Yearly prices: Pro `$290/yr`, Elite `$790/yr` (displayed as monthly equivalent).
+
+Paid CTAs route to `/billing?intent=checkout` (Stripe Checkout — see `docs/STRIPE.md`).

@@ -53,6 +53,8 @@ model User {
   avatarUrl         String?
   role              Role               @default(USER)
   plan              PlanTier           @default(STARTER)
+  stripeCustomerId  String?
+  stripeSubscriptionId String?
   emailVerified     Boolean            @default(false)
   referralCode      String             @unique @default(cuid())
   referredBy        String?

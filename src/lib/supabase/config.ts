@@ -23,6 +23,7 @@ export const PROTECTED_PATHS = [
   "/admin",
   "/journal",
   "/referrals",
+  "/billing",
 ] as const;
 
 export const AUTH_PATHS = ["/login", "/register", "/forgot-password", "/reset-password"] as const;

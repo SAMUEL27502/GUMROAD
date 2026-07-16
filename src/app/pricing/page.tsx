@@ -4,7 +4,6 @@ import { useState } from "react";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
 import { Check, Minus, Sparkles, X } from "lucide-react";
-import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -192,25 +191,17 @@ export default function PricingPage() {
                     </ul>
                   </CardContent>
                   <CardFooter>
-                    <Button
-                      className="w-full"
-                      variant={plan.popular ? "default" : "outline"}
-                      size="lg"
-                      asChild
-                    >
-                      <Link
-                        href={
-                          plan.price === 0
-                            ? "/register"
-                            : `/register?plan=${plan.id}&billing=${billing}`
-                        }
-                        onClick={() =>
-                          toast.success(`${plan.cta} — ${plan.name} (${billing}) selected`)
-                        }
-                      >
-                        {plan.cta}
-                      </Link>
-                    </Button>
+                    {plan.price === 0 ? (
+                      <Button className="w-full" variant="outline" size="lg" asChild>
+                        <Link href="/register">{plan.cta}</Link>
+                      </Button>
+                    ) : (
+                      <Button className="w-full" variant={plan.popular ? "default" : "outline"} size="lg" asChild>
+                        <Link href={`/billing?intent=checkout&plan=${plan.id.toUpperCase()}&interval=${billing}`}>
+                          {plan.cta}
+                        </Link>
+                      </Button>
+                    )}
                   </CardFooter>
                 </Card>
               </motion.div>
@@ -282,10 +273,10 @@ export default function PricingPage() {
               <Link href="/register">Start Free</Link>
             </Button>
             <Button size="lg" variant="outline" asChild>
-              <Link href={`/register?plan=pro&billing=${billing}`}>Go Pro</Link>
+              <Link href={`/billing?intent=checkout&plan=PRO&interval=${billing}`}>Go Pro</Link>
             </Button>
             <Button size="lg" variant="secondary" asChild>
-              <Link href={`/register?plan=elite&billing=${billing}`}>Go Elite</Link>
+              <Link href={`/billing?intent=checkout&plan=ELITE&interval=${billing}`}>Go Elite</Link>
             </Button>
           </div>
           <p className="mt-4 flex items-center justify-center gap-1 text-xs text-muted-foreground">

@@ -488,7 +488,7 @@ export default function ProfilePage() {
                     ))}
                   </ul>
                   <Button className="mt-4" variant="outline" asChild>
-                    <Link href="/pricing">Change plan</Link>
+                    <Link href="/billing">Manage billing</Link>
                   </Button>
                 </div>
 
