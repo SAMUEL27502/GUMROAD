@@ -344,35 +344,7 @@ export const recentTrades = [
   },
 ];
 
-export const notifications = [
-  {
-    id: "n1",
-    type: "BOT_PERFORMANCE",
-    title: "GoldScalper Pro +2.4%",
-    message: "Your subscribed bot closed 6 winning trades today.",
-    read: false,
-    time: "12m ago",
-    href: "/dashboard",
-  },
-  {
-    id: "n2",
-    type: "MT5_UPDATE",
-    title: "Account synced",
-    message: "IC Markets Live equity updated to $25,120.18",
-    read: false,
-    time: "1h ago",
-    href: "/mt5",
-  },
-  {
-    id: "n3",
-    type: "SUBSCRIPTION",
-    title: "Pro plan renews soon",
-    message: "Your Pro subscription renews in 3 days.",
-    read: true,
-    time: "1d ago",
-    href: "/profile",
-  },
-];
+export { notifications } from "@/lib/data/notifications";
 
 export const dashboardMetrics = {
   activeBots: 4,

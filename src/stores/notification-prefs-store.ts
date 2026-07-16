@@ -8,6 +8,7 @@ const defaultPrefs: NotificationPrefs = {
   mt5Sync: true,
   weeklyDigest: false,
   subscriptionBilling: true,
+  securityAlerts: true,
   marketing: false,
 };
 

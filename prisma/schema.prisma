@@ -44,11 +44,13 @@ enum AccountType {
 enum NotificationType {
   BOT_PERFORMANCE
   MT5_UPDATE
+  TRADE_ALERT
   SUBSCRIPTION
   SYSTEM
   REVIEW
   REFERRAL
   PAYMENT
+  SECURITY
 }
 
 enum PaymentProvider {

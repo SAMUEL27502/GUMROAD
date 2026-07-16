@@ -22,6 +22,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/news",
     "/journal",
     "/leaderboard",
+    "/notifications",
     "/referrals",
     "/privacy",
     "/terms",

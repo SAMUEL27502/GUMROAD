@@ -24,6 +24,7 @@ tradebib/
 │   │   ├── recommend/           # AI bot recommendation quiz
 │   │   ├── compare/             # Multi-bot comparison
 │   │   ├── leaderboard/         # Top traders / bots rankings
+│   │   ├── notifications/       # Notification Center
 │   │   ├── bots/[slug]/
 │   │   ├── charts/
 │   │   ├── dashboard/
@@ -34,6 +35,7 @@ tradebib/
 │   │   ├── admin/               # Admin layout + pages
 │   │   ├── api/bots/            # REST API routes
 │   │   ├── api/recommend/       # Recommendation scoring API
+│   │   ├── api/notifications/   # Notification list API
 │   │   └── actions/             # Server actions
 │   ├── components/
 │   │   ├── ui/                  # Shadcn-style primitives
@@ -43,6 +45,7 @@ tradebib/
 │   │   ├── recommend/           # Recommendation engine UI
 │   │   ├── compare/             # Bot comparison UI
 │   │   ├── leaderboard/         # Leaderboard boards
+│   │   ├── notifications/       # Notification Center UI
 │   │   └── landing/
 │   ├── hooks/
 │   ├── lib/

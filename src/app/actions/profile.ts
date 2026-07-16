@@ -188,6 +188,7 @@ export async function saveNotificationPrefsAction(
     mt5Sync: formData.get("mt5Sync") === "true",
     weeklyDigest: formData.get("weeklyDigest") === "true",
     subscriptionBilling: formData.get("subscriptionBilling") === "true",
+    securityAlerts: formData.get("securityAlerts") === "true",
     marketing: formData.get("marketing") === "true",
   };
 

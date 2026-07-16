@@ -416,14 +416,19 @@ export default function ProfilePage() {
                       desc: "Balance, equity, and connection status changes",
                     },
                     {
-                      key: "weeklyDigest" as const,
-                      label: "Weekly digest",
-                      desc: "Portfolio summary every Monday",
-                    },
-                    {
                       key: "subscriptionBilling" as const,
                       label: "Subscription & billing",
                       desc: "Renewals, invoices, and payment failures",
+                    },
+                    {
+                      key: "securityAlerts" as const,
+                      label: "Security alerts",
+                      desc: "Logins, password changes, and account security",
+                    },
+                    {
+                      key: "weeklyDigest" as const,
+                      label: "Weekly digest",
+                      desc: "Portfolio summary every Monday",
                     },
                     {
                       key: "marketing" as const,

@@ -94,6 +94,7 @@ export const notificationPrefsSchema = z.object({
   mt5Sync: z.boolean(),
   weeklyDigest: z.boolean(),
   subscriptionBilling: z.boolean(),
+  securityAlerts: z.boolean(),
   marketing: z.boolean(),
 });
 

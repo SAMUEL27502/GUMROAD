@@ -31,7 +31,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useAuthStore } from "@/stores/auth-store";
-import { notifications } from "@/lib/data/platform";
+import { useNotificationsStore } from "@/stores/notifications-store";
+import { categoryLabels } from "@/lib/data/notifications";
 import { cn } from "@/lib/utils";
 import { logoutAction } from "@/app/actions/auth";
 
@@ -51,9 +52,13 @@ export function Navbar() {
   const router = useRouter();
   const { theme, setTheme } = useTheme();
   const { user, isAuthenticated, isLoading, clear } = useAuthStore();
+  const { items, unreadCount, markRead } = useNotificationsStore();
   const [mounted, setMounted] = useState(false);
   const [open, setOpen] = useState(false);
-  const unread = notifications.filter((n) => !n.read).length;
+  const unread = unreadCount("ALL");
+  const preview = [...items]
+    .sort((a, b) => b.createdAt.localeCompare(a.createdAt))
+    .slice(0, 5);
 
   useEffect(() => setMounted(true), []);
 
@@ -114,22 +119,40 @@ export function Navbar() {
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-80">
-                  <DropdownMenuLabel>Notifications</DropdownMenuLabel>
+                  <DropdownMenuLabel className="flex items-center justify-between">
+                    <span>Notifications</span>
+                    {unread > 0 ? <Badge variant="default">{unread}</Badge> : null}
+                  </DropdownMenuLabel>
                   <DropdownMenuSeparator />
-                  {notifications.map((n) => (
-                    <DropdownMenuItem
-                      key={n.id}
-                      className="flex flex-col items-start gap-1 py-3"
-                      onClick={() => router.push(n.href)}
-                    >
-                      <div className="flex w-full items-center justify-between gap-2">
-                        <span className="font-medium">{n.title}</span>
-                        {!n.read && <Badge variant="default">New</Badge>}
-                      </div>
-                      <span className="text-muted-foreground text-xs">{n.message}</span>
-                      <span className="text-muted-foreground text-[10px]">{n.time}</span>
-                    </DropdownMenuItem>
-                  ))}
+                  {preview.length === 0 ? (
+                    <div className="text-muted-foreground px-2 py-6 text-center text-sm">
+                      No notifications
+                    </div>
+                  ) : (
+                    preview.map((n) => (
+                      <DropdownMenuItem
+                        key={n.id}
+                        className="flex flex-col items-start gap-1 py-3"
+                        onClick={() => {
+                          markRead(n.id);
+                          router.push(n.href);
+                        }}
+                      >
+                        <div className="flex w-full items-center justify-between gap-2">
+                          <span className="font-medium">{n.title}</span>
+                          {!n.read && <Badge variant="default">New</Badge>}
+                        </div>
+                        <span className="text-muted-foreground text-xs">{n.message}</span>
+                        <span className="text-muted-foreground text-[10px]">
+                          {categoryLabels[n.category]} · {n.time}
+                        </span>
+                      </DropdownMenuItem>
+                    ))
+                  )}
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={() => router.push("/notifications")}>
+                    <Bell className="h-4 w-4" /> View all notifications
+                  </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
 

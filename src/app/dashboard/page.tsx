@@ -42,12 +42,12 @@ import {
   botAllocation,
   dashboardMetrics,
   monthlyProfitSeries,
-  notifications,
   recentTrades,
   watchlistSymbols,
 } from "@/lib/data/platform";
 import { cn, formatCurrency, formatPercent } from "@/lib/utils";
 import { useAuthStore } from "@/stores/auth-store";
+import { useNotificationsStore } from "@/stores/notifications-store";
 import { useSubscriptionsStore } from "@/stores/subscriptions-store";
 import { useWatchlistStore } from "@/stores/watchlist-store";
 
@@ -62,6 +62,10 @@ export default function DashboardPage() {
   const router = useRouter();
   const { isAuthenticated, isLoading, user } = useAuthStore();
   const { subscriptions } = useSubscriptionsStore();
+  const { items: notificationItems, markRead, unreadCount } = useNotificationsStore();
+  const previewNotifications = [...notificationItems]
+    .sort((a, b) => b.createdAt.localeCompare(a.createdAt))
+    .slice(0, 4);
   const { symbols, toggleSymbol } = useWatchlistStore();
 
   useEffect(() => {
@@ -257,30 +261,43 @@ export default function DashboardPage() {
 
           {/* Notifications */}
           <Card className="border-border/70 bg-card/80">
-            <CardHeader>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0">
               <CardTitle className="flex items-center gap-2 text-base">
                 <Bell className="h-4 w-4 text-sky-400" />
                 Notifications
+                {unreadCount("ALL") > 0 ? (
+                  <Badge variant="default">{unreadCount("ALL")}</Badge>
+                ) : null}
               </CardTitle>
+              <Button variant="ghost" size="sm" asChild>
+                <Link href="/notifications">View all</Link>
+              </Button>
             </CardHeader>
             <CardContent className="space-y-3">
-              {notifications.map((n) => (
-                <Link
-                  key={n.id}
-                  href={n.href}
-                  className={cn(
-                    "block rounded-xl border p-3 transition-colors hover:bg-muted/30",
-                    !n.read ? "border-sky-500/30 bg-sky-500/5" : "border-border/50"
-                  )}
-                >
-                  <div className="flex items-start justify-between gap-2">
-                    <p className="text-sm font-semibold">{n.title}</p>
-                    {!n.read && <span className="mt-1 h-2 w-2 shrink-0 rounded-full bg-sky-500" />}
-                  </div>
-                  <p className="mt-1 text-xs text-muted-foreground">{n.message}</p>
-                  <p className="mt-1 text-[10px] text-muted-foreground/70">{n.time}</p>
-                </Link>
-              ))}
+              {previewNotifications.length === 0 ? (
+                <EmptyState title="No alerts" description="You're all caught up." />
+              ) : (
+                previewNotifications.map((n) => (
+                  <Link
+                    key={n.id}
+                    href={n.href}
+                    onClick={() => markRead(n.id)}
+                    className={cn(
+                      "block rounded-xl border p-3 transition-colors hover:bg-muted/30",
+                      !n.read ? "border-sky-500/30 bg-sky-500/5" : "border-border/50"
+                    )}
+                  >
+                    <div className="flex items-start justify-between gap-2">
+                      <p className="text-sm font-semibold">{n.title}</p>
+                      {!n.read && <span className="mt-1 h-2 w-2 shrink-0 rounded-full bg-sky-500" />}
+                    </div>
+                    <p className="mt-1 text-xs text-muted-foreground">{n.message}</p>
+                    <p className="mt-1 text-[10px] text-muted-foreground/70">
+                      {n.category} · {n.time}
+                    </p>
+                  </Link>
+                ))
+              )}
             </CardContent>
           </Card>
         </div>
