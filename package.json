@@ -94,6 +94,7 @@
     "eslint-config-prettier": "^10.1.8",
     "happy-dom": "^20.10.6",
     "jsdom": "^29.1.1",
+    "pngjs": "^7.0.0",
     "prettier": "^3.9.5",
     "prettier-plugin-tailwindcss": "^0.8.1",
     "prisma": "6.19.3",

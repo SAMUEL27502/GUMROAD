@@ -8,7 +8,6 @@ import {
   CreditCard,
   Gift,
   LayoutDashboard,
-  LineChart,
   LogOut,
   Menu,
   Moon,
@@ -21,6 +20,7 @@ import {
 import { useEffect, useId, useRef, useState } from "react";
 import { Logo } from "./logo";
 import { Container } from "./container";
+import { LocaleSwitcher } from "./locale-switcher";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
@@ -41,12 +41,11 @@ import { logoutAction } from "@/app/actions/auth";
 /** Heavy client routes skip Link prefetch to keep hover bandwidth low. */
 const links = [
   { href: "/marketplace", label: "Marketplace", prefetch: true },
-  { href: "/recommend", label: "Recommend", prefetch: false },
+  { href: "/signals", label: "Signals", prefetch: true },
   { href: "/compare", label: "Compare", prefetch: false },
   { href: "/leaderboard", label: "Leaderboard", prefetch: true },
   { href: "/charts", label: "Charts", prefetch: false },
   { href: "/dashboard", label: "Dashboard", prefetch: false },
-  { href: "/mt5", label: "MT5 Connect", prefetch: false },
   { href: "/pricing", label: "Pricing", prefetch: true },
 ];
 
@@ -135,6 +134,9 @@ export function Navbar() {
         </div>
 
         <div className="flex items-center gap-2">
+          <div className="hidden sm:block">
+            <LocaleSwitcher />
+          </div>
           {mounted ? (
             <Button
               variant="ghost"
@@ -231,6 +233,18 @@ export function Navbar() {
                   <DropdownMenuItem onClick={() => router.push("/profile")}>
                     <User className="h-4 w-4" /> Profile
                   </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => router.push("/journal")}>
+                    <LayoutDashboard className="h-4 w-4" /> AI Journal
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => router.push("/copy")}>
+                    <Gift className="h-4 w-4" /> Copy Trading
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => router.push("/vps")}>
+                    <Plug className="h-4 w-4" /> VPS Hosting
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => router.push("/alerts")}>
+                    <Bell className="h-4 w-4" /> Alerts
+                  </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => router.push("/referrals")}>
                     <Gift className="h-4 w-4" /> Affiliate
                   </DropdownMenuItem>
@@ -240,11 +254,11 @@ export function Navbar() {
                   <DropdownMenuItem onClick={() => router.push("/dashboard")}>
                     <LayoutDashboard className="h-4 w-4" /> Dashboard
                   </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => router.push("/charts")}>
-                    <LineChart className="h-4 w-4" /> Charts
-                  </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => router.push("/mt5")}>
                     <Plug className="h-4 w-4" /> MT5 Connect
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => router.push("/kyc")}>
+                    <Shield className="h-4 w-4" /> KYC Verification
                   </DropdownMenuItem>
                   {user?.role === "ADMIN" && (
                     <DropdownMenuItem onClick={() => router.push("/admin")}>

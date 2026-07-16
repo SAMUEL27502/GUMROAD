@@ -11,6 +11,11 @@ const HEAVY = new Set([
   "/recommend",
   "/notifications",
   "/referrals",
+  "/copy",
+  "/vps",
+  "/heatmap",
+  "/journal",
+  "/alerts",
   "/animations",
   "/design-system",
 ]);
@@ -20,11 +25,12 @@ const columns = [
     title: "Product",
     links: [
       { href: "/marketplace", label: "Marketplace" },
+      { href: "/signals", label: "Trading Signals" },
       { href: "/dashboard", label: "Dashboard" },
-      { href: "/charts", label: "Charts" },
+      { href: "/copy", label: "Copy Trading" },
+      { href: "/vps", label: "VPS Hosting" },
       { href: "/pricing", label: "Pricing" },
       { href: "/mt5", label: "MT5 Connect" },
-      { href: "/referrals", label: "Affiliate" },
     ],
   },
   {
@@ -32,6 +38,7 @@ const columns = [
     links: [
       { href: "/about", label: "About" },
       { href: "/blog", label: "Blog" },
+      { href: "/brokers", label: "Broker Directory" },
       { href: "/careers", label: "Careers" },
       { href: "/contact", label: "Contact" },
     ],
@@ -39,13 +46,15 @@ const columns = [
   {
     title: "Tools",
     links: [
-      { href: "/recommend", label: "AI Recommendations" },
-      { href: "/compare", label: "Bot Comparison" },
-      { href: "/calculator", label: "Profit Calculator" },
       { href: "/calendar", label: "Economic Calendar" },
       { href: "/news", label: "Forex News" },
+      { href: "/journal", label: "AI Trade Journal" },
+      { href: "/heatmap", label: "Portfolio Heatmap" },
       { href: "/leaderboard", label: "Leaderboard" },
-      { href: "/notifications", label: "Notifications" },
+      { href: "/alerts", label: "Telegram & Email Alerts" },
+      { href: "/kyc", label: "KYC Verification" },
+      { href: "/recommend", label: "AI Recommendations" },
+      { href: "/compare", label: "Bot Comparison" },
     ],
   },
   {

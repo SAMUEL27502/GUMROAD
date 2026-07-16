@@ -71,10 +71,20 @@ function TraderPodium({ traders }: { traders: LeaderboardTrader[] }) {
                   #{trader.rank}
                 </Badge>
                 <div className="mt-2 flex items-center justify-center gap-1.5">
-                  <h3 className="text-xl font-bold">{trader.name}</h3>
+                  <h3 className="text-xl font-bold">
+                    <Link
+                      href={`/traders/${trader.slug}`}
+                      className="hover:text-sky-300 focus-visible:ring-ring rounded-sm focus-visible:ring-2 focus-visible:outline-none"
+                    >
+                      {trader.name}
+                    </Link>
+                  </h3>
                   {trader.verified ? <BadgeCheck className="h-4 w-4 text-sky-400" /> : null}
                 </div>
                 <p className="text-muted-foreground text-xs">{trader.handle}</p>
+                <Button asChild variant="outline" size="sm" className="mt-4">
+                  <Link href={`/traders/${trader.slug}`}>View profile</Link>
+                </Button>
                 <p className="mt-3 text-3xl font-bold text-emerald-400">
                   {formatPercent(trader.roi)}
                 </p>

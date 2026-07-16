@@ -76,4 +76,5 @@ Parentheses are App Router **route groups** — they organize code without chang
 | Testing               | ✅ (Vitest, RTL, Playwright)             |
 | Deployment            | ✅ (Docker, Vercel, CI, Sentry, health)  |
 | UI audit              | ✅ (Container, PageHeader, a11y pass)    |
+| Extended features     | ✅ (signals, VPS, copy, PWA, i18n, …)    |
 | Framer Motion         | ✅                                       |

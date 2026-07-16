@@ -5,6 +5,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
 import { JsonLd } from "@/components/seo/json-ld";
+import { PwaRegister } from "@/components/pwa/pwa-register";
 import { Providers } from "@/providers/providers";
 import {
   DEFAULT_DESCRIPTION,
@@ -74,6 +75,19 @@ export const metadata: Metadata = {
     },
   },
   category: "finance",
+  manifest: "/manifest.webmanifest",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: SITE_NAME,
+  },
+  icons: {
+    icon: [
+      { url: "/icons/icon-192.png", sizes: "192x192", type: "image/png" },
+      { url: "/icons/icon-512.png", sizes: "512x512", type: "image/png" },
+    ],
+    apple: [{ url: "/icons/apple-touch-icon.png", sizes: "180x180" }],
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -99,6 +113,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </Providers>
         <Analytics />
         <SpeedInsights />
+        <PwaRegister />
       </body>
     </html>
   );

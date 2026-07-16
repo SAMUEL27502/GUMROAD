@@ -61,6 +61,28 @@ export default function JournalPage() {
 
   const totalProfit = entries.reduce((sum, e) => sum + e.profit, 0);
   const wins = entries.filter((e) => e.profit > 0).length;
+  const losses = entries.filter((e) => e.profit < 0).length;
+  const avgWin =
+    wins > 0 ? entries.filter((e) => e.profit > 0).reduce((s, e) => s + e.profit, 0) / wins : 0;
+  const avgLoss =
+    losses > 0
+      ? Math.abs(entries.filter((e) => e.profit < 0).reduce((s, e) => s + e.profit, 0) / losses)
+      : 0;
+
+  const aiInsights = [
+    totalProfit >= 0
+      ? `Net P/L is positive at ${formatCurrency(totalProfit)}. Protect gains by capping risk on high-volatility pairs.`
+      : `Net P/L is underwater at ${formatCurrency(totalProfit)}. Review losing notes for repeated setups.`,
+    entries.length
+      ? `Win rate sits at ${((wins / entries.length) * 100).toFixed(0)}% across ${entries.length} logged trades.`
+      : "Add a few entries so AI coaching has enough signal.",
+    avgWin && avgLoss
+      ? `Average win ${formatCurrency(avgWin)} vs average loss ${formatCurrency(avgLoss)} — aim for R-multiple ≥ 1.5.`
+      : "Log both winners and losers to unlock expectancy coaching.",
+    entries.some((e) => e.symbol === "XAUUSD")
+      ? "Gold appears often in your journal — align session filters with London/NY overlap."
+      : "Diversify journaling across majors and metals to spot regime bias.",
+  ];
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -100,12 +122,37 @@ export default function JournalPage() {
           <span className="text-sm font-semibold tracking-wider uppercase">Trading Journal</span>
         </div>
         <h1 className="mt-2 text-4xl font-bold tracking-tight">
-          <span className="gradient-text">Your Trade Log</span>
+          <span className="gradient-text">AI Trade Journal</span>
         </h1>
         <p className="text-muted-foreground mt-2">
-          Document trades, review decisions, and track performance over time.
+          Document trades, then get coaching-style insights from your recent P/L and notes.
         </p>
       </motion.div>
+
+      <Card className="border-sky-500/30 bg-sky-500/5 mb-8 border">
+        <CardHeader className="pb-2">
+          <CardTitle className="text-base">AI coaching insights</CardTitle>
+          <CardDescription>Generated locally from your journal — demo coaching, not financial advice.</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <ul className="space-y-2 text-sm">
+            {aiInsights.map((tip) => (
+              <li key={tip} className="text-muted-foreground flex gap-2">
+                <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-sky-400" aria-hidden />
+                <span>{tip}</span>
+              </li>
+            ))}
+          </ul>
+          <Button
+            variant="outline"
+            size="sm"
+            className="mt-4"
+            onClick={() => toast.success("Insights refreshed from latest entries")}
+          >
+            Refresh insights
+          </Button>
+        </CardContent>
+      </Card>
 
       <div className="mb-8 grid gap-4 sm:grid-cols-3">
         {[

@@ -19,6 +19,7 @@ import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 import { PageLoader } from "@/components/ui/loader";
 import {
   Table,
@@ -29,6 +30,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import type { PlanTier } from "@/services/auth/user";
+import { seedAdminCoupons } from "@/lib/data/admin-crud";
 import { pricingPlans } from "@/lib/data/platform";
 import { PLAN_RANK, type BillingInterval, type PaymentProviderId } from "@/services/payments/types";
 import { cn, formatCurrency } from "@/lib/utils";
@@ -56,6 +58,11 @@ export default function BillingClient() {
   const { isAuthenticated, isLoading, user, updateProfile } = useAuthStore();
   const billing = useBillingStore();
   const [busy, setBusy] = useState<string | null>(null);
+  const [couponCode, setCouponCode] = useState("");
+  const [appliedCoupon, setAppliedCoupon] = useState<{
+    code: string;
+    label: string;
+  } | null>(null);
   const [modes, setModes] = useState<{
     stripe: "demo" | "live";
     paypal: "demo" | "live";
@@ -268,6 +275,21 @@ export default function BillingClient() {
     }
   }, [billing, provider, subscriptionId]);
 
+  function applyCoupon() {
+    const code = couponCode.trim().toUpperCase();
+    const match = seedAdminCoupons.find(
+      (c) => c.code.toUpperCase() === code && c.active && c.redeemed < c.maxRedemptions
+    );
+    if (!match) {
+      toast.error("Invalid or expired coupon");
+      return;
+    }
+    const label =
+      match.type === "PERCENT" ? `${match.value}% off` : `${formatCurrency(match.value)} off`;
+    setAppliedCoupon({ code: match.code, label });
+    toast.success(`Coupon ${match.code} applied (${label})`);
+  }
+
   if (isLoading || !isAuthenticated) return <PageLoader />;
 
   const currentPlanMeta = pricingPlans.find((p) => p.id === billing.plan.toLowerCase());
@@ -304,6 +326,33 @@ export default function BillingClient() {
             upgrades, and webhooks.
           </p>
         </motion.div>
+
+        <Card className="mb-6 border-border/70 bg-card/80">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-base">Coupon code</CardTitle>
+            <CardDescription>
+              Try demo codes <span className="text-foreground font-medium">WELCOME20</span> or{" "}
+              <span className="text-foreground font-medium">PRO50</span>
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="flex flex-col gap-3 sm:flex-row sm:items-center">
+            <Input
+              value={couponCode}
+              onChange={(e) => setCouponCode(e.target.value)}
+              placeholder="Enter coupon"
+              aria-label="Coupon code"
+              className="sm:max-w-xs"
+            />
+            <Button type="button" variant="outline" onClick={applyCoupon}>
+              Apply
+            </Button>
+            {appliedCoupon ? (
+              <Badge variant="success">
+                {appliedCoupon.code} · {appliedCoupon.label}
+              </Badge>
+            ) : null}
+          </CardContent>
+        </Card>
 
         {/* Provider selector */}
         <Card className="mb-6 border-border/70 bg-card/80">
