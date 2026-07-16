@@ -3,9 +3,106 @@ export const adminStats = {
   activeBots: 340,
   monthlyRevenue: 284650,
   activeSubscriptions: 3892,
+  pendingBotApprovals: 7,
   userGrowth: 12.4,
   revenueGrowth: 18.2,
+  subscriptionGrowth: 9.6,
 };
+
+export const adminActivity = [
+  {
+    id: "a1",
+    type: "USER",
+    text: "Marcus Chen upgraded to Pro",
+    time: "12m ago",
+    href: "/admin/users",
+  },
+  {
+    id: "a2",
+    type: "BOT",
+    text: "GoldScalper Pro submitted for approval",
+    time: "34m ago",
+    href: "/admin/bots",
+  },
+  {
+    id: "a3",
+    type: "PAYMENT",
+    text: "Stripe payout settled — $12,480",
+    time: "1h ago",
+    href: "/admin/analytics",
+  },
+  {
+    id: "a4",
+    type: "SUBSCRIPTION",
+    text: "Elena Kowalski renewed Elite plan",
+    time: "2h ago",
+    href: "/admin/subscriptions",
+  },
+  {
+    id: "a5",
+    type: "BOT",
+    text: "EuroTrend AI verified by admin",
+    time: "3h ago",
+    href: "/admin/bots",
+  },
+  {
+    id: "a6",
+    type: "USER",
+    text: "Alex Rivera account suspended",
+    time: "5h ago",
+    href: "/admin/users",
+  },
+  {
+    id: "a7",
+    type: "SUBSCRIPTION",
+    text: "3 subscriptions marked PAST_DUE",
+    time: "8h ago",
+    href: "/admin/subscriptions",
+  },
+];
+
+export const pendingBotApprovals = [
+  {
+    id: "pb1",
+    name: "LondonOpen Breaker",
+    pair: "GBPUSD",
+    strategy: "Breakout",
+    submitted: "2026-07-15",
+    risk: "MEDIUM",
+  },
+  {
+    id: "pb2",
+    name: "Tokyo Range Grid",
+    pair: "USDJPY",
+    strategy: "Grid",
+    submitted: "2026-07-14",
+    risk: "HIGH",
+  },
+  {
+    id: "pb3",
+    name: "Silver Momentum AI",
+    pair: "XAGUSD",
+    strategy: "Trend Following",
+    submitted: "2026-07-14",
+    risk: "MEDIUM",
+  },
+  {
+    id: "pb4",
+    name: "Crypto Night Owl",
+    pair: "BTCUSD",
+    strategy: "Scalping",
+    submitted: "2026-07-13",
+    risk: "HIGH",
+  },
+  {
+    id: "pb5",
+    name: "Aussie Session Flow",
+    pair: "AUDUSD",
+    strategy: "Mean Reversion",
+    submitted: "2026-07-12",
+    risk: "LOW",
+  },
+];
 
 export const adminUsers = [
   {
