@@ -1,0 +1,31 @@
+{
+  "name": "TradeBib",
+  "short_name": "TradeBib",
+  "description": "Verified MT5 bots marketplace, automation, and portfolio tools.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#020617",
+  "theme_color": "#0ea5e9",
+  "orientation": "portrait-primary",
+  "lang": "en",
+  "icons": [
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["finance", "business"],
+  "shortcuts": [
+    { "name": "Marketplace", "url": "/marketplace" },
+    { "name": "Dashboard", "url": "/dashboard" },
+    { "name": "Signals", "url": "/signals" }
+  ]
+}

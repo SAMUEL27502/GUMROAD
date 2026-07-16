@@ -1,0 +1,44 @@
+# Dependencies
+node_modules
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-store
+
+# Next.js
+.next
+out
+build
+
+# Git / IDE
+.git
+.gitignore
+.cursor
+.vscode
+.idea
+
+# Env / secrets
+.env
+.env.*
+!.env.example
+
+# Tests / reports
+coverage
+playwright-report
+test-results
+blob-report
+e2e
+
+# Docs / misc
+*.md
+!README.md
+docs
+.github
+Dockerfile*
+docker-compose*
+.dockerignore
+
+# Turbo / OS
+.DS_Store
+*.pem
+.vercel
