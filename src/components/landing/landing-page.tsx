@@ -96,24 +96,25 @@ export function LandingPage() {
         <div className="relative mx-auto max-w-7xl px-4 pt-16 pb-20 sm:px-6 sm:pt-24 lg:px-8 lg:pb-28">
           <div className="mx-auto max-w-4xl text-center">
             <Slide direction="up" duration={0.6}>
-              <p className="mb-6 text-sm font-semibold tracking-[0.2em] text-sky-400 uppercase">
-                TradeBib
+              <p className="tb-display mb-4 font-bold tracking-tight">
+                Trade<span className="gradient-text">Bib</span>
               </p>
-              <h1 className="text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
-                Trade Smarter with <span className="gradient-text">Automated MT5 Bots</span>
+              <h1 className="tb-h1 text-balance text-foreground/90">
+                Automate trading with verified{" "}
+                <span className="gradient-text">MT5 Expert Advisors</span>
               </h1>
-              <p className="text-muted-foreground mx-auto mt-6 max-w-2xl text-lg">
-                Browse, subscribe and deploy verified MetaTrader 5 Expert Advisors using real
-                verified trading data.
+              <p className="text-muted-foreground mx-auto mt-5 max-w-2xl text-base leading-relaxed sm:text-lg">
+                Discover, compare, and subscribe to MetaTrader 5 bots — then connect your account and
+                monitor performance in one place.
               </p>
               <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
                 <Button size="lg" asChild>
                   <Link href="/marketplace">
-                    Browse Bots <ArrowRight className="h-4 w-4" />
+                    Browse Marketplace <ArrowRight className="h-4 w-4" aria-hidden />
                   </Link>
                 </Button>
                 <Button size="lg" variant="glass" asChild>
-                  <Link href="/marketplace">View Marketplace</Link>
+                  <Link href="/recommend">Get AI recommendations</Link>
                 </Button>
               </div>
             </Slide>

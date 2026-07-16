@@ -17,7 +17,10 @@ export function Pagination({ page, totalPages, onPageChange, className }: Pagina
   const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
 
   return (
-    <div className={cn("flex items-center justify-center gap-2", className)}>
+    <nav
+      className={cn("flex items-center justify-center gap-2", className)}
+      aria-label="Pagination"
+    >
       <Button
         variant="outline"
         size="icon"
@@ -25,7 +28,7 @@ export function Pagination({ page, totalPages, onPageChange, className }: Pagina
         onClick={() => onPageChange(Math.max(1, page - 1))}
         aria-label="Previous page"
       >
-        <ChevronLeft className="h-4 w-4" />
+        <ChevronLeft className="h-4 w-4" aria-hidden />
       </Button>
       {pages.map((p) => (
         <Button
@@ -34,6 +37,7 @@ export function Pagination({ page, totalPages, onPageChange, className }: Pagina
           size="sm"
           className="min-w-9"
           onClick={() => onPageChange(p)}
+          aria-label={`Page ${p}`}
           aria-current={p === page ? "page" : undefined}
         >
           {p}
@@ -46,8 +50,8 @@ export function Pagination({ page, totalPages, onPageChange, className }: Pagina
         onClick={() => onPageChange(Math.min(totalPages, page + 1))}
         aria-label="Next page"
       >
-        <ChevronRight className="h-4 w-4" />
+        <ChevronRight className="h-4 w-4" aria-hidden />
       </Button>
-    </div>
+    </nav>
   );
 }

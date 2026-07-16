@@ -3,15 +3,13 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { motion } from "framer-motion";
 import { Lock, Mail, User } from "lucide-react";
 import { toast } from "sonner";
+import { AuthShell, OAuthButtons } from "@/components/auth/auth-shell";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { FormField } from "@/components/ui/form-field";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { registerAction } from "@/app/actions/auth";
-import { signInWithOAuth } from "@/lib/auth/oauth";
 import { canUseSupabaseAuth } from "@/lib/supabase/client";
 
 export default function RegisterPage() {
@@ -44,122 +42,90 @@ export default function RegisterPage() {
     router.refresh();
   }
 
-  async function handleSocial(provider: "google" | "github") {
-    try {
-      setLoading(true);
-      await signInWithOAuth(provider);
-    } catch (err) {
-      setLoading(false);
-      toast.error(err instanceof Error ? err.message : "OAuth failed");
-    }
-  }
-
   return (
-    <div className="relative flex min-h-[calc(100vh-4rem)] items-center justify-center px-4 py-12">
-      <div className="grid-bg pointer-events-none absolute inset-0 opacity-30" />
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="relative w-full max-w-md"
-      >
-        <Card className="glass border-border/70">
-          <CardHeader className="text-center">
-            <CardTitle className="text-2xl">Create your account</CardTitle>
-            <CardDescription>
-              Start automating with verified MT5 bots
-              {!canUseSupabaseAuth() && " · demo mode"}
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-6">
-            <div className="grid grid-cols-2 gap-3">
-              <Button
-                type="button"
-                variant="outline"
-                disabled={loading}
-                onClick={() => handleSocial("google")}
-              >
-                Google
-              </Button>
-              <Button
-                type="button"
-                variant="outline"
-                disabled={loading}
-                onClick={() => handleSocial("github")}
-              >
-                GitHub
-              </Button>
-            </div>
+    <AuthShell
+      title="Create your account"
+      description={
+        <>
+          Start automating with verified MT5 bots
+          {!canUseSupabaseAuth() && " · demo mode"}
+        </>
+      }
+    >
+      <OAuthButtons disabled={loading} onBusy={setLoading} />
 
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="name">Full name</Label>
-                <div className="relative">
-                  <User className="text-muted-foreground absolute top-1/2 left-3.5 h-4 w-4 -translate-y-1/2" />
-                  <Input
-                    id="name"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    className="pl-10"
-                    required
-                    minLength={2}
-                  />
-                </div>
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
-                <div className="relative">
-                  <Mail className="text-muted-foreground absolute top-1/2 left-3.5 h-4 w-4 -translate-y-1/2" />
-                  <Input
-                    id="email"
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="pl-10"
-                    required
-                  />
-                </div>
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="password">Password</Label>
-                <div className="relative">
-                  <Lock className="text-muted-foreground absolute top-1/2 left-3.5 h-4 w-4 -translate-y-1/2" />
-                  <Input
-                    id="password"
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    className="pl-10"
-                    required
-                    minLength={8}
-                    placeholder="8+ chars, 1 uppercase, 1 number"
-                  />
-                </div>
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="confirmPassword">Confirm password</Label>
-                <Input
-                  id="confirmPassword"
-                  type="password"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  required
-                  minLength={8}
-                />
-              </div>
-              <Button type="submit" className="w-full" disabled={loading}>
-                {loading ? "Creating account..." : "Create account"}
-              </Button>
-            </form>
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <FormField label="Full name" htmlFor="name" required>
+          <div className="relative">
+            <User className="text-muted-foreground absolute top-1/2 left-3.5 h-4 w-4 -translate-y-1/2" aria-hidden />
+            <Input
+              id="name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              className="pl-10"
+              required
+              minLength={2}
+              autoComplete="name"
+            />
+          </div>
+        </FormField>
+        <FormField label="Email" htmlFor="email" required>
+          <div className="relative">
+            <Mail className="text-muted-foreground absolute top-1/2 left-3.5 h-4 w-4 -translate-y-1/2" aria-hidden />
+            <Input
+              id="email"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="pl-10"
+              required
+              autoComplete="email"
+            />
+          </div>
+        </FormField>
+        <FormField
+          label="Password"
+          htmlFor="password"
+          required
+          description="8+ characters, one uppercase letter, one number"
+        >
+          <div className="relative">
+            <Lock className="text-muted-foreground absolute top-1/2 left-3.5 h-4 w-4 -translate-y-1/2" aria-hidden />
+            <Input
+              id="password"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="pl-10"
+              required
+              minLength={8}
+              autoComplete="new-password"
+              aria-describedby="password-description"
+            />
+          </div>
+        </FormField>
+        <FormField label="Confirm password" htmlFor="confirmPassword" required>
+          <Input
+            id="confirmPassword"
+            type="password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            required
+            minLength={8}
+            autoComplete="new-password"
+          />
+        </FormField>
+        <Button type="submit" className="w-full" disabled={loading}>
+          {loading ? "Creating account..." : "Create account"}
+        </Button>
+      </form>
 
-            <p className="text-muted-foreground text-center text-sm">
-              Already have an account?{" "}
-              <Link href="/login" className="font-semibold text-sky-400 hover:underline">
-                Sign in
-              </Link>
-            </p>
-          </CardContent>
-        </Card>
-      </motion.div>
-    </div>
+      <p className="text-muted-foreground text-center text-sm">
+        Already have an account?{" "}
+        <Link href="/login" className="font-semibold text-sky-400 hover:underline">
+          Sign in
+        </Link>
+      </p>
+    </AuthShell>
   );
 }

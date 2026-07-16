@@ -2,9 +2,10 @@
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
-import { motion } from "framer-motion";
 import { Heart, Search, SlidersHorizontal, X } from "lucide-react";
 import { BotCard } from "@/components/bots/bot-card";
+import { Container } from "@/components/layout/container";
+import { PageHeader } from "@/components/layout/page-header";
 import { AnimatedGradient } from "@/components/motion";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -109,16 +110,20 @@ function FilterControls({
   return (
     <div className="space-y-4">
       <div>
-        <Label className="text-muted-foreground mb-2 block text-xs tracking-wide uppercase">
+        <p
+          id="filter-category-label"
+          className="text-muted-foreground mb-2 block text-xs tracking-wide uppercase"
+        >
           Category
-        </Label>
-        <div className="flex flex-wrap gap-2">
+        </p>
+        <div className="flex flex-wrap gap-2" role="group" aria-labelledby="filter-category-label">
           {categories.map((c) => (
             <Button
               key={c}
               size="sm"
               variant={filters.category === c ? "default" : "outline"}
               onClick={() => update("category", c)}
+              aria-pressed={filters.category === c}
             >
               {c}
             </Button>
@@ -128,11 +133,11 @@ function FilterControls({
 
       <div className="grid gap-3 sm:grid-cols-2">
         <div>
-          <Label className="text-muted-foreground mb-2 block text-xs tracking-wide uppercase">
+          <Label htmlFor="filter-risk" className="text-muted-foreground mb-2 block text-xs tracking-wide uppercase">
             Risk
           </Label>
           <Select value={filters.risk} onValueChange={(v) => update("risk", v)}>
-            <SelectTrigger>
+            <SelectTrigger id="filter-risk" aria-label="Filter by risk">
               <SelectValue placeholder="Risk" />
             </SelectTrigger>
             <SelectContent>
@@ -146,11 +151,11 @@ function FilterControls({
         </div>
 
         <div>
-          <Label className="text-muted-foreground mb-2 block text-xs tracking-wide uppercase">
+          <Label htmlFor="filter-strategy" className="text-muted-foreground mb-2 block text-xs tracking-wide uppercase">
             Strategy
           </Label>
           <Select value={filters.strategy} onValueChange={(v) => update("strategy", v)}>
-            <SelectTrigger>
+            <SelectTrigger id="filter-strategy" aria-label="Filter by strategy">
               <SelectValue placeholder="Strategy" />
             </SelectTrigger>
             <SelectContent>
@@ -164,11 +169,11 @@ function FilterControls({
         </div>
 
         <div>
-          <Label className="text-muted-foreground mb-2 block text-xs tracking-wide uppercase">
+          <Label htmlFor="filter-roi" className="text-muted-foreground mb-2 block text-xs tracking-wide uppercase">
             ROI
           </Label>
           <Select value={filters.roiRange} onValueChange={(v) => update("roiRange", v)}>
-            <SelectTrigger>
+            <SelectTrigger id="filter-roi" aria-label="Filter by ROI">
               <SelectValue placeholder="ROI" />
             </SelectTrigger>
             <SelectContent>
@@ -182,11 +187,11 @@ function FilterControls({
         </div>
 
         <div>
-          <Label className="text-muted-foreground mb-2 block text-xs tracking-wide uppercase">
+          <Label htmlFor="filter-price" className="text-muted-foreground mb-2 block text-xs tracking-wide uppercase">
             Price
           </Label>
           <Select value={filters.priceRange} onValueChange={(v) => update("priceRange", v)}>
-            <SelectTrigger>
+            <SelectTrigger id="filter-price" aria-label="Filter by price">
               <SelectValue placeholder="Price" />
             </SelectTrigger>
             <SelectContent>
@@ -202,10 +207,17 @@ function FilterControls({
 
       <div className="border-border/60 flex items-center justify-between rounded-xl border px-3 py-2.5">
         <div>
-          <p className="text-sm font-medium">Verified only</p>
+          <Label htmlFor="filter-verified" className="text-sm font-medium">
+            Verified only
+          </Label>
           <p className="text-muted-foreground text-xs">Show bots with performance verification</p>
         </div>
-        <Switch checked={filters.verifiedOnly} onCheckedChange={(v) => update("verifiedOnly", v)} />
+        <Switch
+          id="filter-verified"
+          checked={filters.verifiedOnly}
+          onCheckedChange={(v) => update("verifiedOnly", v)}
+          aria-label="Verified only"
+        />
       </div>
     </div>
   );
@@ -355,29 +367,21 @@ export default function MarketplacePage() {
     <div className="relative">
       <AnimatedGradient variant="subtle" />
 
-      <div className="relative mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="mb-10"
-        >
-          <Badge variant="secondary" className="mb-4">
-            Marketplace
-          </Badge>
-          <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
-            Browse <span className="gradient-text">Verified MT5 Bots</span>
-          </h1>
-          <p className="text-muted-foreground mt-3 max-w-2xl">
-            Search and filter by category, risk, ROI, price, and strategy. Save bots to your
-            wishlist and subscribe when ready.
-          </p>
-          <div className="mt-4">
+      <Container padY="md" className="relative">
+        <PageHeader
+          badge="Marketplace"
+          title={
+            <>
+              Browse <span className="gradient-text">Verified MT5 Bots</span>
+            </>
+          }
+          description="Search and filter by category, risk, ROI, price, and strategy. Save bots to your wishlist and subscribe when ready."
+          actions={
             <Button variant="outline" asChild>
               <Link href="/recommend">Not sure where to start? Get AI recommendations</Link>
             </Button>
-          </div>
-        </motion.div>
+          }
+        />
 
         <div className="glass mb-6 rounded-2xl p-4 sm:p-5">
           <div className="flex flex-col gap-4 lg:flex-row lg:items-center">
@@ -482,7 +486,7 @@ export default function MarketplacePage() {
         </div>
 
         {activeChips.length > 0 && (
-          <div className="mb-6 flex flex-wrap items-center gap-2">
+          <div className="mb-6 flex flex-wrap items-center gap-2" aria-label="Active filters">
             {activeChips.map((chip) => (
               <button
                 key={chip.key}
@@ -491,10 +495,11 @@ export default function MarketplacePage() {
                   chip.clear();
                   setPage(1);
                 }}
-                className="inline-flex cursor-pointer items-center gap-1.5 rounded-lg border border-sky-500/30 bg-sky-500/10 px-2.5 py-1 text-xs font-medium text-sky-300 transition hover:bg-sky-500/20"
+                aria-label={`Remove filter ${chip.label}`}
+                className="inline-flex cursor-pointer items-center gap-1.5 rounded-lg border border-sky-500/30 bg-sky-500/10 px-2.5 py-1 text-xs font-medium text-sky-300 transition hover:bg-sky-500/20 focus-visible:ring-ring focus-visible:ring-2 focus-visible:outline-none"
               >
                 {chip.label}
-                <X className="h-3 w-3" />
+                <X className="h-3 w-3" aria-hidden />
               </button>
             ))}
             <Button variant="ghost" size="sm" onClick={clearFilters}>
@@ -503,7 +508,7 @@ export default function MarketplacePage() {
           </div>
         )}
 
-        <div className="mb-6 flex items-center justify-between gap-3">
+        <div className="mb-6 flex items-center justify-between gap-3" aria-live="polite">
           <p className="text-muted-foreground text-sm">
             Showing{" "}
             <span className="text-foreground font-semibold">
@@ -536,7 +541,7 @@ export default function MarketplacePage() {
           totalPages={totalPages}
           onPageChange={setPage}
         />
-      </div>
+      </Container>
     </div>
   );
 }

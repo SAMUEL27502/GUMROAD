@@ -2,7 +2,6 @@
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
-import { motion } from "framer-motion";
 import { ArrowRight, Clock, Search, X } from "lucide-react";
 import {
   blogCategories,
@@ -11,6 +10,8 @@ import {
   type BlogCategory,
   type BlogPost,
 } from "@/lib/data/blog";
+import { Container } from "@/components/layout/container";
+import { PageHeader } from "@/components/layout/page-header";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -33,21 +34,16 @@ export function BlogIndex({ posts }: { posts: BlogPost[] }) {
   }, [posts]);
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-10">
-        <Badge className="mb-4 border-sky-500/30 bg-sky-500/10 text-sky-300">Blog</Badge>
-        <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
-          <span className="gradient-text">TradeBib Blog</span>
-        </h1>
-        <p className="text-muted-foreground mt-3 max-w-2xl">
-          Guides, risk, markets, infrastructure, analytics, and product updates — with Markdown
-          articles, categories, search, and reading time.
-        </p>
-      </motion.div>
+    <Container padY="md">
+      <PageHeader
+        badge="Blog"
+        title={<span className="gradient-text">TradeBib Blog</span>}
+        description="Guides, risk, markets, infrastructure, analytics, and product updates — with Markdown articles, categories, search, and reading time."
+      />
 
       <div className="mb-6 flex flex-col gap-4 lg:flex-row lg:items-center">
         <div className="relative flex-1">
-          <Search className="text-muted-foreground absolute top-1/2 left-3.5 h-4 w-4 -translate-y-1/2" />
+          <Search className="text-muted-foreground absolute top-1/2 left-3.5 h-4 w-4 -translate-y-1/2" aria-hidden />
           <Input
             value={query}
             onChange={(e) => setQuery(e.target.value)}
@@ -64,18 +60,19 @@ export function BlogIndex({ posts }: { posts: BlogPost[] }) {
               setCategory("All");
             }}
           >
-            <X className="h-4 w-4" />
+            <X className="h-4 w-4" aria-hidden />
             Clear filters
           </Button>
         )}
       </div>
 
-      <div className="mb-8 flex flex-wrap gap-2">
+      <div className="mb-8 flex flex-wrap gap-2" role="group" aria-label="Blog categories">
         <button
           type="button"
           onClick={() => setCategory("All")}
+          aria-pressed={category === "All"}
           className={cn(
-            "rounded-lg border px-3 py-1.5 text-sm font-medium transition-colors",
+            "rounded-lg border px-3 py-1.5 text-sm font-medium transition-colors focus-visible:ring-ring focus-visible:ring-2 focus-visible:outline-none",
             category === "All"
               ? "border-sky-500/50 bg-sky-500/15 text-sky-300"
               : "border-border/70 text-muted-foreground hover:border-sky-500/30"
@@ -88,8 +85,9 @@ export function BlogIndex({ posts }: { posts: BlogPost[] }) {
             key={cat.slug}
             type="button"
             onClick={() => setCategory(cat.name)}
+            aria-pressed={category === cat.name}
             className={cn(
-              "rounded-lg border px-3 py-1.5 text-sm font-medium transition-colors",
+              "rounded-lg border px-3 py-1.5 text-sm font-medium transition-colors focus-visible:ring-ring focus-visible:ring-2 focus-visible:outline-none",
               category === cat.name
                 ? "border-sky-500/50 bg-sky-500/15 text-sky-300"
                 : "border-border/70 text-muted-foreground hover:border-sky-500/30"
@@ -99,6 +97,10 @@ export function BlogIndex({ posts }: { posts: BlogPost[] }) {
           </button>
         ))}
       </div>
+
+      <p className="text-muted-foreground mb-6 text-sm" aria-live="polite">
+        {filtered.length} article{filtered.length === 1 ? "" : "s"}
+      </p>
 
       {filtered.length === 0 ? (
         <EmptyState
@@ -112,56 +114,58 @@ export function BlogIndex({ posts }: { posts: BlogPost[] }) {
         />
       ) : (
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {filtered.map((post, i) => {
+          {filtered.map((post) => {
             const reading = getReadingTime(post.content);
             return (
-              <motion.div
+              <Card
                 key={post.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.05 }}
+                className="border-border/70 bg-card/80 group flex h-full flex-col transition-colors hover:border-sky-500/40"
               >
-                <Card className="border-border/70 bg-card/80 group flex h-full flex-col transition-colors hover:border-sky-500/40">
-                  <CardHeader>
-                    <div className="flex items-center justify-between gap-2">
-                      <Badge variant="secondary">{post.category}</Badge>
-                      <span className="text-muted-foreground flex items-center gap-1 text-xs">
-                        <Clock className="h-3 w-3" />
-                        {reading.text}
-                      </span>
+                <CardHeader>
+                  <div className="flex items-center justify-between gap-2">
+                    <Badge variant="secondary">{post.category}</Badge>
+                    <span className="text-muted-foreground flex items-center gap-1 text-xs">
+                      <Clock className="h-3 w-3" aria-hidden />
+                      {reading.text}
+                    </span>
+                  </div>
+                  <CardTitle className="mt-3 text-lg leading-snug">
+                    <Link
+                      href={`/blog/${post.slug}`}
+                      className="focus-visible:ring-ring rounded-sm hover:text-sky-400 focus-visible:ring-2 focus-visible:outline-none"
+                    >
+                      {post.title}
+                    </Link>
+                  </CardTitle>
+                  <CardDescription>{post.excerpt}</CardDescription>
+                </CardHeader>
+                <CardContent className="mt-auto space-y-4 pt-0">
+                  <div className="flex flex-wrap gap-1.5">
+                    {post.tags.slice(0, 3).map((tag) => (
+                      <Badge key={tag} variant="outline" className="text-[10px]">
+                        {tag}
+                      </Badge>
+                    ))}
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <div className="text-muted-foreground text-xs">
+                      <p>{post.author}</p>
+                      <p>{post.date}</p>
                     </div>
-                    <CardTitle className="mt-3 text-lg leading-snug transition-colors group-hover:text-sky-400">
-                      <Link href={`/blog/${post.slug}`}>{post.title}</Link>
-                    </CardTitle>
-                    <CardDescription>{post.excerpt}</CardDescription>
-                  </CardHeader>
-                  <CardContent className="mt-auto space-y-4 pt-0">
-                    <div className="flex flex-wrap gap-1.5">
-                      {post.tags.slice(0, 3).map((tag) => (
-                        <Badge key={tag} variant="outline" className="text-[10px]">
-                          {tag}
-                        </Badge>
-                      ))}
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <div className="text-muted-foreground text-xs">
-                        <p>{post.author}</p>
-                        <p>{post.date}</p>
-                      </div>
-                      <Link
-                        href={`/blog/${post.slug}`}
-                        className="inline-flex items-center gap-1 text-sm font-medium text-sky-400 hover:text-sky-300"
-                      >
-                        Read <ArrowRight className="h-3.5 w-3.5" />
-                      </Link>
-                    </div>
-                  </CardContent>
-                </Card>
-              </motion.div>
+                    <Link
+                      href={`/blog/${post.slug}`}
+                      className="inline-flex items-center gap-1 text-sm font-medium text-sky-400 hover:text-sky-300 focus-visible:ring-ring rounded-sm focus-visible:ring-2 focus-visible:outline-none"
+                      aria-label={`Read ${post.title}`}
+                    >
+                      Read <ArrowRight className="h-3.5 w-3.5" aria-hidden />
+                    </Link>
+                  </div>
+                </CardContent>
+              </Card>
             );
           })}
         </div>
       )}
-    </div>
+    </Container>
   );
 }

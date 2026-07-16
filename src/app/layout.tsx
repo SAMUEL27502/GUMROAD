@@ -84,11 +84,16 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="preconnect" href="https://images.unsplash.com" crossOrigin="anonymous" />
       </head>
       <body className={`${inter.variable} min-h-screen font-sans antialiased`}>
+        <a href="#main-content" className="skip-link">
+          Skip to main content
+        </a>
         <JsonLd data={[organizationJsonLd(), websiteJsonLd()]} />
         <Providers>
           <div className="flex min-h-screen flex-col">
             <Navbar />
-            <main className="flex-1">{children}</main>
+            <main id="main-content" className="flex-1" tabIndex={-1}>
+              {children}
+            </main>
             <Footer />
           </div>
         </Providers>

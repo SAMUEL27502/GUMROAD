@@ -11,7 +11,7 @@ const Card = React.forwardRef<HTMLDivElement, CardProps>(
       ref={ref}
       className={cn(
         "text-card-foreground rounded-2xl",
-        variant === "default" && "border-border/80 bg-card border shadow-xl shadow-black/20",
+        variant === "default" && "border-border/80 bg-card border shadow-lg shadow-black/10 dark:shadow-xl dark:shadow-black/20",
         variant === "glass" && "glass shadow-xl shadow-black/10",
         variant === "outline" && "border-border/80 border bg-transparent",
         variant === "ghost" && "bg-transparent",

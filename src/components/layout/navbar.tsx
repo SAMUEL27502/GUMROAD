@@ -18,8 +18,9 @@ import {
   User,
   X,
 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import { Logo } from "./logo";
+import { Container } from "./container";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
@@ -49,6 +50,10 @@ const links = [
   { href: "/pricing", label: "Pricing", prefetch: true },
 ];
 
+function isActivePath(pathname: string, href: string) {
+  return pathname === href || pathname.startsWith(`${href}/`);
+}
+
 export function Navbar() {
   const pathname = usePathname();
   const router = useRouter();
@@ -57,12 +62,39 @@ export function Navbar() {
   const { items, unreadCount, markRead } = useNotificationsStore();
   const [mounted, setMounted] = useState(false);
   const [open, setOpen] = useState(false);
+  const menuId = useId();
+  const menuRef = useRef<HTMLDivElement>(null);
   const unread = unreadCount("ALL");
   const preview = [...items]
     .sort((a, b) => b.createdAt.localeCompare(a.createdAt))
     .slice(0, 5);
 
   useEffect(() => setMounted(true), []);
+
+  useEffect(() => {
+    setOpen(false);
+  }, [pathname]);
+
+  useEffect(() => {
+    if (!open) return;
+
+    function onKeyDown(e: KeyboardEvent) {
+      if (e.key === "Escape") setOpen(false);
+    }
+
+    document.addEventListener("keydown", onKeyDown);
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    // Focus first link in the panel
+    const first = menuRef.current?.querySelector<HTMLElement>("a, button");
+    first?.focus();
+
+    return () => {
+      document.removeEventListener("keydown", onKeyDown);
+      document.body.style.overflow = prev;
+    };
+  }, [open]);
 
   async function handleSignOut() {
     clear();
@@ -76,48 +108,60 @@ export function Navbar() {
 
   return (
     <header className="border-border/60 bg-background/70 sticky top-0 z-40 border-b backdrop-blur-xl">
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
+      <Container className="flex h-16 items-center justify-between gap-4">
         <div className="flex items-center gap-8">
           <Logo />
-          <nav className="hidden items-center gap-1 lg:flex">
-            {links.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                prefetch={link.prefetch}
-                className={cn(
-                  "rounded-lg px-3 py-2 text-sm font-medium transition-colors",
-                  pathname === link.href || pathname.startsWith(link.href + "/")
-                    ? "bg-sky-500/10 text-sky-400"
-                    : "text-muted-foreground hover:bg-muted/50 hover:text-foreground"
-                )}
-              >
-                {link.label}
-              </Link>
-            ))}
+          <nav className="hidden items-center gap-1 lg:flex" aria-label="Primary">
+            {links.map((link) => {
+              const active = isActivePath(pathname, link.href);
+              return (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  prefetch={link.prefetch}
+                  aria-current={active ? "page" : undefined}
+                  className={cn(
+                    "rounded-lg px-3 py-2 text-sm font-medium transition-colors focus-visible:ring-ring focus-visible:ring-2 focus-visible:outline-none",
+                    active
+                      ? "bg-sky-500/10 text-sky-400"
+                      : "text-muted-foreground hover:bg-muted/50 hover:text-foreground"
+                  )}
+                >
+                  {link.label}
+                </Link>
+              );
+            })}
           </nav>
         </div>
 
         <div className="flex items-center gap-2">
-          {mounted && (
+          {mounted ? (
             <Button
               variant="ghost"
               size="icon"
-              aria-label="Toggle theme"
+              aria-label={theme === "dark" ? "Switch to light theme" : "Switch to dark theme"}
+              aria-pressed={theme === "dark"}
               onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
             >
-              {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+              {theme === "dark" ? <Sun className="h-4 w-4" aria-hidden /> : <Moon className="h-4 w-4" aria-hidden />}
             </Button>
+          ) : (
+            <div className="h-10 w-10" aria-hidden />
           )}
 
           {isAuthenticated ? (
             <>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="icon" className="relative">
-                    <Bell className="h-4 w-4" />
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="relative"
+                    aria-label={unread > 0 ? `Notifications, ${unread} unread` : "Notifications"}
+                  >
+                    <Bell className="h-4 w-4" aria-hidden />
                     {unread > 0 && (
-                      <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-sky-400" />
+                      <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-sky-400" aria-hidden />
                     )}
                   </Button>
                 </DropdownMenuTrigger>
@@ -161,7 +205,11 @@ export function Navbar() {
 
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="gap-2 px-2">
+                  <Button
+                    variant="ghost"
+                    className="gap-2 px-2"
+                    aria-label={`Account menu for ${user?.name || "user"}`}
+                  >
                     <Avatar className="h-8 w-8">
                       <AvatarFallback>
                         {(user?.name || "U").slice(0, 2).toUpperCase()}
@@ -228,30 +276,43 @@ export function Navbar() {
             size="icon"
             className="lg:hidden"
             onClick={() => setOpen((v) => !v)}
-            aria-label="Toggle menu"
+            aria-label={open ? "Close menu" : "Open menu"}
+            aria-expanded={open}
+            aria-controls={menuId}
           >
-            {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            {open ? <X className="h-5 w-5" aria-hidden /> : <Menu className="h-5 w-5" aria-hidden />}
           </Button>
         </div>
-      </div>
+      </Container>
 
       {open && (
-        <div className="border-border/60 bg-background/95 border-t px-4 py-4 lg:hidden">
-          <nav className="flex flex-col gap-1">
-            {links.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                prefetch={link.prefetch}
-                onClick={() => setOpen(false)}
-                className={cn(
-                  "rounded-lg px-3 py-3 text-sm font-medium",
-                  pathname === link.href ? "bg-sky-500/10 text-sky-400" : "text-muted-foreground"
-                )}
-              >
-                {link.label}
-              </Link>
-            ))}
+        <div
+          id={menuId}
+          ref={menuRef}
+          className="border-border/60 bg-background/95 border-t px-4 py-4 lg:hidden"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Mobile navigation"
+        >
+          <nav className="flex flex-col gap-1" aria-label="Mobile primary">
+            {links.map((link) => {
+              const active = isActivePath(pathname, link.href);
+              return (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  prefetch={link.prefetch}
+                  onClick={() => setOpen(false)}
+                  aria-current={active ? "page" : undefined}
+                  className={cn(
+                    "rounded-lg px-3 py-3 text-sm font-medium focus-visible:ring-ring focus-visible:ring-2 focus-visible:outline-none",
+                    active ? "bg-sky-500/10 text-sky-400" : "text-muted-foreground"
+                  )}
+                >
+                  {link.label}
+                </Link>
+              );
+            })}
             {!isAuthenticated && (
               <div className="mt-3 flex flex-col gap-2">
                 <Button variant="outline" asChild>

@@ -95,7 +95,12 @@ export {
 } from "@/components/ui/accordion";
 export { Loader, PageLoader } from "@/components/ui/loader";
 export { Pagination } from "@/components/ui/pagination";
+export { MetricCard, StatGrid } from "@/components/ui/metric-card";
 export { BotCard, BotCardSkeleton, type BotCardProps } from "@/components/bots/bot-card";
+export { Container } from "@/components/layout/container";
+export { PageHeader } from "@/components/layout/page-header";
+export { Section } from "@/components/layout/section";
+export { AuthShell, OAuthButtons } from "@/components/auth/auth-shell";
 
 // Motion
 export {

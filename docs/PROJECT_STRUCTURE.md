@@ -104,4 +104,5 @@ tradebib/
 | Performance           | ✅ (lazy charts, image, cache, prefetch) |
 | Testing               | ✅ (Vitest, RTL, Playwright)             |
 | Deployment            | ✅ (Docker, Vercel, CI, Sentry, health)  |
+| UI audit              | ✅ (Container, PageHeader, a11y pass)    |
 | Framer Motion         | ✅                                       |

@@ -4,6 +4,8 @@ import { useState } from "react";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
 import { Check, Minus, Sparkles, X } from "lucide-react";
+import { Container } from "@/components/layout/container";
+import { PageHeader } from "@/components/layout/page-header";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -40,10 +42,20 @@ function planPrice(plan: (typeof pricingPlans)[number], billing: Billing) {
 
 function ComparisonCell({ value }: { value: string | boolean }) {
   if (value === true) {
-    return <Check className="mx-auto h-4 w-4 text-emerald-400" aria-label="Included" />;
+    return (
+      <span className="inline-flex items-center justify-center">
+        <Check className="h-4 w-4 text-emerald-400" aria-hidden />
+        <span className="sr-only">Included</span>
+      </span>
+    );
   }
   if (value === false) {
-    return <X className="mx-auto h-4 w-4 text-muted-foreground/40" aria-label="Not included" />;
+    return (
+      <span className="inline-flex items-center justify-center">
+        <X className="text-muted-foreground/40 h-4 w-4" aria-hidden />
+        <span className="sr-only">Not included</span>
+      </span>
+    );
   }
   return <span className="text-sm font-medium">{value}</span>;
 }
@@ -53,27 +65,23 @@ export default function PricingPage() {
 
   return (
     <div className="relative">
-      <div className="grid-bg pointer-events-none absolute inset-0 opacity-30" />
-      <div className="pointer-events-none absolute top-0 left-1/2 h-96 w-96 -translate-x-1/2 rounded-full bg-sky-500/15 blur-[120px]" />
+      <div className="grid-bg pointer-events-none absolute inset-0 opacity-30" aria-hidden />
+      <div
+        className="pointer-events-none absolute top-0 left-1/2 h-96 w-96 -translate-x-1/2 rounded-full bg-sky-500/15 blur-[120px]"
+        aria-hidden
+      />
 
-      <div className="relative mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="mx-auto mb-10 max-w-2xl text-center"
-        >
-          <Badge variant="secondary" className="mb-4">
-            Pricing
-          </Badge>
-          <h1 className="text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">
-            Simple, transparent <span className="gradient-text">pricing</span>
-          </h1>
-          <p className="mt-4 text-lg text-muted-foreground">
-            Starter, Pro, and Elite — scale as your bot portfolio grows. No hidden fees on bot
-            subscriptions.
-          </p>
-        </motion.div>
+      <Container padY="lg" className="relative">
+        <PageHeader
+          align="center"
+          badge="Pricing"
+          title={
+            <>
+              Simple, transparent <span className="gradient-text">pricing</span>
+            </>
+          }
+          description="Starter, Pro, and Elite — scale as your bot portfolio grows. No hidden fees on bot subscriptions."
+        />
 
         {/* Monthly / yearly switch */}
         <motion.div
@@ -280,11 +288,11 @@ export default function PricingPage() {
             </Button>
           </div>
           <p className="mt-4 flex items-center justify-center gap-1 text-xs text-muted-foreground">
-            <Minus className="h-3 w-3" />
+            <Minus className="h-3 w-3" aria-hidden />
             Bot subscription fees are billed separately by each EA provider
           </p>
         </motion.div>
-      </div>
+      </Container>
     </div>
   );
 }

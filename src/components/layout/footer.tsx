@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Logo } from "./logo";
+import { Container } from "./container";
 
 /** Routes with large client bundles skip prefetch. */
 const HEAVY = new Set([
@@ -19,7 +20,6 @@ const columns = [
     title: "Product",
     links: [
       { href: "/marketplace", label: "Marketplace" },
-      { href: "/recommend", label: "Recommend" },
       { href: "/dashboard", label: "Dashboard" },
       { href: "/charts", label: "Charts" },
       { href: "/pricing", label: "Pricing" },
@@ -46,8 +46,6 @@ const columns = [
       { href: "/news", label: "Forex News" },
       { href: "/leaderboard", label: "Leaderboard" },
       { href: "/notifications", label: "Notifications" },
-      { href: "/design-system", label: "Design System" },
-      { href: "/animations", label: "Animations" },
     ],
   },
   {
@@ -63,25 +61,25 @@ const columns = [
 export function Footer() {
   return (
     <footer className="border-border/60 bg-background/80 border-t">
-      <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+      <Container padY="lg">
         <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-5">
           <div className="lg:col-span-1">
             <Logo />
-            <p className="text-muted-foreground mt-4 max-w-xs text-sm">
+            <p className="text-muted-foreground mt-4 max-w-xs text-sm leading-relaxed">
               Discover verified MetaTrader 5 Expert Advisors, connect accounts, and automate with
               confidence.
             </p>
           </div>
           {columns.map((col) => (
             <div key={col.title}>
-              <h4 className="text-foreground mb-4 text-sm font-semibold">{col.title}</h4>
+              <p className="text-foreground mb-4 text-sm font-semibold">{col.title}</p>
               <ul className="space-y-2.5">
                 {col.links.map((link) => (
-                  <li key={link.href}>
+                  <li key={`${col.title}-${link.href}-${link.label}`}>
                     <Link
                       href={link.href}
                       prefetch={!HEAVY.has(link.href)}
-                      className="text-muted-foreground text-sm transition-colors hover:text-sky-400"
+                      className="text-muted-foreground focus-visible:ring-ring rounded-sm text-sm transition-colors hover:text-sky-400 focus-visible:ring-2 focus-visible:outline-none"
                     >
                       {link.label}
                     </Link>
@@ -95,11 +93,11 @@ export function Footer() {
           <p className="text-muted-foreground text-xs">
             © {new Date().getFullYear()} TradeBib. All rights reserved.
           </p>
-          <p className="text-muted-foreground max-w-xl text-xs">
+          <p className="text-muted-foreground max-w-xl text-xs leading-relaxed">
             Trading involves risk. Past performance does not guarantee future results.
           </p>
         </div>
-      </div>
+      </Container>
     </footer>
   );
 }
