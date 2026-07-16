@@ -3,13 +3,29 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
-import { BarChart3, Bot, CreditCard, LayoutDashboard, Users } from "lucide-react";
+import {
+  BarChart3,
+  Bot,
+  CreditCard,
+  FolderTree,
+  LayoutDashboard,
+  Megaphone,
+  MessageSquare,
+  Tags,
+  TicketPercent,
+  Users,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const links = [
   { href: "/admin", label: "Overview", icon: LayoutDashboard, exact: true },
   { href: "/admin/users", label: "Users", icon: Users },
   { href: "/admin/bots", label: "Bots", icon: Bot },
+  { href: "/admin/categories", label: "Categories", icon: FolderTree },
+  { href: "/admin/reviews", label: "Reviews", icon: MessageSquare },
+  { href: "/admin/pricing", label: "Pricing", icon: Tags },
+  { href: "/admin/coupons", label: "Coupons", icon: TicketPercent },
+  { href: "/admin/announcements", label: "Announcements", icon: Megaphone },
   { href: "/admin/subscriptions", label: "Subscriptions", icon: CreditCard },
   { href: "/admin/analytics", label: "Analytics", icon: BarChart3 },
 ];
@@ -19,8 +35,8 @@ export function AdminNav() {
 
   return (
     <nav className="hidden w-56 shrink-0 lg:block">
-      <div className="glass sticky top-24 rounded-2xl p-3">
-        <p className="text-muted-foreground mb-3 px-3 text-xs font-semibold tracking-wider uppercase">
+      <div className="glass sticky top-24 max-h-[calc(100vh-7rem)] overflow-y-auto rounded-2xl p-3">
+        <p className="mb-3 px-3 text-xs font-semibold tracking-wider text-muted-foreground uppercase">
           Admin Panel
         </p>
         <ul className="space-y-1">

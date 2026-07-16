@@ -18,3 +18,5 @@ Data: `src/lib/data/admin.ts`
 | Recent activity | ✅ Event feed                                       |
 
 Protected path — demo admin emails containing `admin`.
+
+See also: `docs/ADMIN_CRUD.md` for Bots · Users · Categories · Reviews · Pricing · Coupons · Announcements.
