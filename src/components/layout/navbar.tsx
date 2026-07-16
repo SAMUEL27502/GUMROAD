@@ -6,6 +6,7 @@ import { useTheme } from "next-themes";
 import {
   Bell,
   CreditCard,
+  Gift,
   LayoutDashboard,
   LineChart,
   LogOut,
@@ -179,6 +180,9 @@ export function Navbar() {
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={() => router.push("/profile")}>
                     <User className="h-4 w-4" /> Profile
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => router.push("/referrals")}>
+                    <Gift className="h-4 w-4" /> Affiliate
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => router.push("/billing")}>
                     <CreditCard className="h-4 w-4" /> Billing

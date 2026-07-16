@@ -24,6 +24,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/leaderboard",
     "/notifications",
     "/referrals",
+    "/affiliate",
     "/privacy",
     "/terms",
     "/risk-disclosure",

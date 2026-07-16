@@ -146,6 +146,7 @@ model User {
   referralAsReferred   Referral?            @relation("ReferredReferral")
   commissionsEarned    ReferralCommission[] @relation("CommissionEarner")
   referralPayouts      ReferralPayout[]
+  referralClicks       ReferralClick[]
 
   @@index([referredById])
   @@index([plan])
@@ -410,6 +411,23 @@ model Payment {
 // ─── Referral Program ────────────────────────────────────────────────────────
 
 /// Tracks a referrer → referred user relationship
+model ReferralClick {
+  id          String   @id @default(cuid())
+  referralCode String
+  referrerId  String?
+  source      String?
+  landingPath String?
+  country     String?
+  userAgent   String?
+  createdAt   DateTime @default(now())
+
+  referrer User? @relation(fields: [referrerId], references: [id], onDelete: SetNull)
+
+  @@index([referralCode, createdAt])
+  @@index([referrerId])
+  @@map("referral_clicks")
+}
+
 model Referral {
   id             String         @id @default(cuid())
   referrerId     String

@@ -11,6 +11,7 @@ import {
   Bot,
   DollarSign,
   Eye,
+  Gift,
   Globe2,
   LineChart,
   Plus,
@@ -574,6 +575,12 @@ export default function DashboardPage() {
                 <Link href="/leaderboard">
                   <Trophy className="h-4 w-4" />
                   View Leaderboard
+                </Link>
+              </Button>
+              <Button variant="outline" className="justify-start" asChild>
+                <Link href="/referrals">
+                  <Gift className="h-4 w-4" />
+                  Affiliate Dashboard
                 </Link>
               </Button>
               <Button variant="outline" className="justify-start" asChild>

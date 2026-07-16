@@ -11,6 +11,7 @@ const columns = [
       { href: "/charts", label: "Charts" },
       { href: "/pricing", label: "Pricing" },
       { href: "/mt5", label: "MT5 Connect" },
+      { href: "/referrals", label: "Affiliate" },
     ],
   },
   {

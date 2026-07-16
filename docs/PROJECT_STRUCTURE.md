@@ -25,6 +25,8 @@ tradebib/
 │   │   ├── compare/             # Multi-bot comparison
 │   │   ├── leaderboard/         # Top traders / bots rankings
 │   │   ├── notifications/       # Notification Center
+│   │   ├── referrals/           # Affiliate Dashboard
+│   │   ├── affiliate/           # Redirect → /referrals
 │   │   ├── bots/[slug]/
 │   │   ├── charts/
 │   │   ├── dashboard/
@@ -36,6 +38,7 @@ tradebib/
 │   │   ├── api/bots/            # REST API routes
 │   │   ├── api/recommend/       # Recommendation scoring API
 │   │   ├── api/notifications/   # Notification list API
+│   │   ├── api/affiliate/       # Affiliate summary API
 │   │   └── actions/             # Server actions
 │   ├── components/
 │   │   ├── ui/                  # Shadcn-style primitives
@@ -46,6 +49,7 @@ tradebib/
 │   │   ├── compare/             # Bot comparison UI
 │   │   ├── leaderboard/         # Leaderboard boards
 │   │   ├── notifications/       # Notification Center UI
+│   │   ├── affiliate/           # Affiliate dashboard UI
 │   │   └── landing/
 │   ├── hooks/
 │   ├── lib/
