@@ -100,7 +100,7 @@ export function Navbar() {
     try {
       await logoutAction();
     } catch {
-      router.push("/");
+      router.push("/login");
       router.refresh();
     }
   }

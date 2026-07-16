@@ -12,6 +12,7 @@ import { FormField } from "@/components/forms/form-field";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { loginAction } from "@/app/actions/auth";
+import { syncClientAuth } from "@/services/auth/sync-client";
 import { canUseSupabaseAuth } from "@/services/supabase/client";
 
 export default function LoginForm() {
@@ -35,13 +36,15 @@ export default function LoginForm() {
     formData.set("next", next);
 
     const result = await loginAction(formData);
-    setLoading(false);
 
     if (!result.success) {
+      setLoading(false);
       toast.error(result.error || "Sign in failed");
       return;
     }
 
+    await syncClientAuth();
+    setLoading(false);
     toast.success(result.message || "Welcome back!");
     router.push(result.redirectTo || next);
     router.refresh();

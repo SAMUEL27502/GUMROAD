@@ -9,6 +9,7 @@ import {
   isSupabaseConfigured,
 } from "@/services/supabase/config";
 import { mapDemoUser } from "@/services/auth/user";
+import { mapAuthError } from "@/services/auth/errors";
 import {
   forgotPasswordSchema,
   loginSchema,
@@ -74,7 +75,7 @@ export async function loginAction(formData: FormData): Promise<AuthActionResult>
   const supabase = await createClient();
   const { error } = await supabase.auth.signInWithPassword({ email, password });
   if (error) {
-    return { success: false, error: error.message };
+    return { success: false, error: mapAuthError(error.message) };
   }
 
   const cookieStore = await cookies();
@@ -123,14 +124,14 @@ export async function registerAction(formData: FormData): Promise<AuthActionResu
   });
 
   if (error) {
-    return { success: false, error: error.message };
+    return { success: false, error: mapAuthError(error.message) };
   }
 
   if (data.user && !data.session) {
     return {
       success: true,
       redirectTo: `/auth/verify-email?email=${encodeURIComponent(email)}`,
-      message: "Check your email to verify your account",
+      message: "Check your email to verify your account before signing in.",
     };
   }
 
@@ -159,7 +160,7 @@ export async function forgotPasswordAction(formData: FormData): Promise<AuthActi
   });
 
   if (error) {
-    return { success: false, error: error.message };
+    return { success: false, error: mapAuthError(error.message) };
   }
 
   return {
@@ -189,7 +190,7 @@ export async function resetPasswordAction(formData: FormData): Promise<AuthActio
   const supabase = await createClient();
   const { error } = await supabase.auth.updateUser({ password: parsed.data.password });
   if (error) {
-    return { success: false, error: error.message };
+    return { success: false, error: mapAuthError(error.message) };
   }
 
   return { success: true, redirectTo: "/login", message: "Password updated. Please sign in." };
@@ -204,7 +205,7 @@ export async function logoutAction() {
   const cookieStore = await cookies();
   cookieStore.delete(DEMO_SESSION_COOKIE);
   cookieStore.delete(REMEMBER_ME_COOKIE);
-  redirect("/");
+  redirect("/login");
 }
 
 export async function updateProfileAction(formData: FormData): Promise<AuthActionResult> {
@@ -241,7 +242,7 @@ export async function updateProfileAction(formData: FormData): Promise<AuthActio
   });
 
   if (error) {
-    return { success: false, error: error.message };
+    return { success: false, error: mapAuthError(error.message) };
   }
 
   return { success: true, message: "Profile updated" };
@@ -262,7 +263,7 @@ export async function resendVerificationAction(email: string): Promise<AuthActio
   });
 
   if (error) {
-    return { success: false, error: error.message };
+    return { success: false, error: mapAuthError(error.message) };
   }
 
   return { success: true, message: "Verification email sent" };

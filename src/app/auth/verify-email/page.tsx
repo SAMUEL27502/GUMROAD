@@ -39,8 +39,8 @@ function VerifyEmailContent() {
           </div>
           <CardTitle>Verify your email</CardTitle>
           <CardDescription>
-            We sent a verification link{email ? ` to ${email}` : ""}. Open it to activate your
-            account and unlock the dashboard.
+            We sent a verification link{email ? ` to ${email}` : ""}. You must open that link
+            before you can sign in — until then, login will show “Email not confirmed.”
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-3">

@@ -6,10 +6,18 @@ import {
   isAuthPath,
   isProtectedPath,
   isSupabaseConfigured,
-} from "./config";
+} from "@/services/supabase/config";
 
+/**
+ * Session refresh + route guards.
+ *
+ * Critical: auth actions use `isSupabaseConfigured()` (rejects placeholders) and
+ * fall back to the demo cookie. Middleware MUST use the same check — otherwise
+ * placeholder env vars make middleware call fake Supabase, get no user, and
+ * bounce every post-login /dashboard visit back to /login.
+ */
 export async function updateSession(request: NextRequest) {
-  let supabaseResponse = NextResponse.next({ request });
+  let response = NextResponse.next({ request });
   const pathname = request.nextUrl.pathname;
 
   let user: { id: string; email?: string } | null = null;
@@ -23,9 +31,9 @@ export async function updateSession(request: NextRequest) {
         },
         setAll(cookiesToSet) {
           cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value));
-          supabaseResponse = NextResponse.next({ request });
+          response = NextResponse.next({ request });
           cookiesToSet.forEach(({ name, value, options }) =>
-            supabaseResponse.cookies.set(name, value, options)
+            response.cookies.set(name, value, options)
           );
         },
       },
@@ -39,12 +47,13 @@ export async function updateSession(request: NextRequest) {
       user = { id: supabaseUser.id, email: supabaseUser.email };
     }
   } else {
-    // Demo JWT-like session cookie when Supabase is not configured
     const demo = request.cookies.get(DEMO_SESSION_COOKIE)?.value;
     if (demo) {
       try {
         const parsed = JSON.parse(demo) as { id: string; email: string };
-        user = parsed;
+        if (parsed?.id && parsed?.email) {
+          user = parsed;
+        }
       } catch {
         user = null;
       }
@@ -65,14 +74,5 @@ export async function updateSession(request: NextRequest) {
     return NextResponse.redirect(redirectUrl);
   }
 
-  if (pathname.startsWith("/admin") && user?.email && !user.email.includes("admin")) {
-    // Soft admin check for demo; production should use app_metadata.role
-    if (!isSupabaseConfigured()) {
-      const redirectUrl = request.nextUrl.clone();
-      redirectUrl.pathname = "/dashboard";
-      return NextResponse.redirect(redirectUrl);
-    }
-  }
-
-  return supabaseResponse;
+  return response;
 }

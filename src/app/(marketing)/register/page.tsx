@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { FormField } from "@/components/forms/form-field";
 import { Input } from "@/components/ui/input";
 import { registerAction } from "@/app/actions/auth";
+import { syncClientAuth } from "@/services/auth/sync-client";
 import { canUseSupabaseAuth } from "@/services/supabase/client";
 
 export default function RegisterPage() {
@@ -30,13 +31,19 @@ export default function RegisterPage() {
     formData.set("confirmPassword", confirmPassword);
 
     const result = await registerAction(formData);
-    setLoading(false);
 
     if (!result.success) {
+      setLoading(false);
       toast.error(result.error || "Registration failed");
       return;
     }
 
+    // Only sync session when we actually created one (not email-verify pending).
+    if (!result.redirectTo?.includes("/auth/verify-email")) {
+      await syncClientAuth();
+    }
+
+    setLoading(false);
     toast.success(result.message || "Account created");
     router.push(result.redirectTo || "/dashboard");
     router.refresh();
