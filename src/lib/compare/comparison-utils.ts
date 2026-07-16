@@ -116,3 +116,47 @@ export function parseCompareSlugs(param: string | null, fallback: string[]): str
   const unique = [...new Set(slugs)].slice(0, MAX_COMPARE_BOTS);
   return unique.length >= MIN_COMPARE_BOTS ? unique : fallback;
 }
+
+/** Build a shareable compare deep link from bot slugs. */
+export function buildComparePath(slugs: string[]): string {
+  const unique = [...new Set(slugs.map((s) => s.trim()).filter(Boolean))].slice(
+    0,
+    MAX_COMPARE_BOTS
+  );
+  if (unique.length < MIN_COMPARE_BOTS) return "/compare";
+  return `/compare?bots=${unique.join(",")}`;
+}
+
+/**
+ * Pair a bot with the first other catalog slug for marketplace "Compare" links.
+ */
+export function compareWithDefault(
+  primarySlug: string,
+  catalog: Array<{ slug: string }>
+): string {
+  const other = catalog.find((b) => b.slug !== primarySlug)?.slug;
+  if (!other) return "/compare";
+  return buildComparePath([primarySlug, other]);
+}
+
+/**
+ * Normalize a metric to 0–100 bar width.
+ * Higher-is-better: value / max. Lower-is-better: inverted vs max (lower → longer bar).
+ */
+export function normalizeBarPercent(
+  value: number,
+  values: number[],
+  direction: MetricDirection
+): number {
+  if (!values.length) return 0;
+  const max = Math.max(...values);
+  const min = Math.min(...values);
+  if (max === min) return 100;
+  if (direction === "higher") {
+    return Math.max(4, Math.round((value / max) * 100));
+  }
+  // Lower is better: longest bar for the smallest value
+  const inverted = max - value;
+  const span = max - min;
+  return Math.max(4, Math.round((inverted / span) * 100));
+}

@@ -40,9 +40,13 @@ test.describe("public marketing pages", () => {
     await expect(page.locator("article, main").first()).toBeVisible();
   });
 
-  test("compare page loads", async ({ page }) => {
+  test("compare page loads with metrics and charts", async ({ page }) => {
     await page.goto("/compare");
-    await expect(page.getByText(/compare|bot/i).first()).toBeVisible({ timeout: 20_000 });
+    await expect(page.getByRole("heading", { name: /bot comparison/i })).toBeVisible({
+      timeout: 20_000,
+    });
+    await expect(page.getByText(/best roi|performance|pricing/i).first()).toBeVisible();
+    await expect(page.getByRole("tab", { name: /equity|roi|drawdown/i }).first()).toBeVisible();
   });
 
   test("robots.txt and sitemap are served", async ({ request }) => {

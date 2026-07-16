@@ -3,9 +3,10 @@
 import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { Heart, Star, Users } from "lucide-react";
+import { GitCompareArrows, Heart, Star, Users } from "lucide-react";
 import { toast } from "sonner";
-import type { Bot } from "@/lib/data/bots";
+import { bots, type Bot } from "@/lib/data/bots";
+import { compareWithDefault } from "@/lib/compare/comparison-utils";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
@@ -171,20 +172,28 @@ export function BotCard({
           </div>
         </CardContent>
 
-        <CardFooter className="gap-2">
-          <Button
-            variant="outline"
-            className="flex-1 transition-colors group-hover:border-sky-500/40"
-            asChild={!onViewDetails}
-            onClick={onViewDetails ? () => onViewDetails(bot) : undefined}
-          >
-            {onViewDetails ? "View Details" : <Link href={`/bots/${bot.slug}`}>View Details</Link>}
-          </Button>
-          <Button
-            className="flex-1 shadow-sky-500/0 transition-shadow group-hover:shadow-md group-hover:shadow-sky-500/20"
-            onClick={handleSubscribe}
-          >
-            Subscribe
+        <CardFooter className="flex-col gap-2">
+          <div className="flex w-full gap-2">
+            <Button
+              variant="outline"
+              className="flex-1 transition-colors group-hover:border-sky-500/40"
+              asChild={!onViewDetails}
+              onClick={onViewDetails ? () => onViewDetails(bot) : undefined}
+            >
+              {onViewDetails ? "View Details" : <Link href={`/bots/${bot.slug}`}>View Details</Link>}
+            </Button>
+            <Button
+              className="flex-1 shadow-sky-500/0 transition-shadow group-hover:shadow-md group-hover:shadow-sky-500/20"
+              onClick={handleSubscribe}
+            >
+              Subscribe
+            </Button>
+          </div>
+          <Button variant="ghost" size="sm" className="w-full text-sky-300 hover:text-sky-200" asChild>
+            <Link href={compareWithDefault(bot.slug, bots)}>
+              <GitCompareArrows className="h-3.5 w-3.5" />
+              Compare
+            </Link>
           </Button>
         </CardFooter>
       </Card>

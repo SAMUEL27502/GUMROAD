@@ -5,9 +5,9 @@ import { PageLoader } from "@/components/ui/loader";
 import { createMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = createMetadata({
-  title: "Bot Comparison",
+  title: "Bot Comparison — Performance, ROI, Drawdown & Pricing",
   description:
-    "Compare multiple MetaTrader 5 Expert Advisors on performance, ROI, drawdown, win rate, charts, and pricing.",
+    "Compare multiple MetaTrader 5 Expert Advisors side by side: performance, ROI, drawdown, win rate, charts, and pricing.",
   path: "/compare",
 });
 

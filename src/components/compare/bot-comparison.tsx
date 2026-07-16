@@ -8,6 +8,7 @@ import {
   ArrowRight,
   Check,
   Crown,
+  Link2,
   Plus,
   Scale,
   TrendingDown,
@@ -15,6 +16,7 @@ import {
   Wallet,
   X,
 } from "lucide-react";
+import { toast } from "sonner";
 import {
   Bar,
   BarChart,
@@ -35,6 +37,7 @@ import {
   annualPrice,
   bestIndex,
   botSeriesKey,
+  buildComparePath,
   buildDrawdownSeries,
   buildEquitySeries,
   buildMonthlySeries,
@@ -43,10 +46,14 @@ import {
   parseCompareSlugs,
   pricePerRoiPoint,
 } from "@/lib/compare/comparison-utils";
+import { MetricBars } from "@/components/compare/metric-bars";
+import { Container } from "@/components/layout/container";
+import { PageHeader } from "@/components/layout/page-header";
 import { chartTooltipStyle } from "@/components/ui/charts";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { MetricCard, StatGrid } from "@/components/ui/metric-card";
 import {
   Select,
   SelectContent,
@@ -337,123 +344,134 @@ export function BotComparison() {
     setSelected((prev) => prev.filter((_, i) => i !== index));
   }
 
-  return (
-    <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="mb-10 text-center"
-      >
-        <Badge className="mb-4 border-sky-500/30 bg-sky-500/10 text-sky-300">
-          <Scale className="mr-1.5 h-3.5 w-3.5" />
-          Multi-bot comparison
-        </Badge>
-        <h1 className="text-4xl font-bold tracking-tight">
-          <span className="gradient-text">Bot Comparison</span>
-        </h1>
-        <p className="text-muted-foreground mx-auto mt-3 max-w-2xl">
-          Compare {MIN_COMPARE_BOTS}–{MAX_COMPARE_BOTS} Expert Advisors on performance, ROI,
-          drawdown, win rate, charts, and pricing.
-        </p>
-      </motion.div>
+  async function shareComparison() {
+    const path = buildComparePath(selected);
+    const url = typeof window !== "undefined" ? `${window.location.origin}${path}` : path;
+    try {
+      await navigator.clipboard.writeText(url);
+      toast.success("Comparison link copied");
+    } catch {
+      toast.error("Could not copy link");
+    }
+  }
 
-      <div className="mb-8 flex flex-wrap items-end justify-center gap-4">
-        {selected.map((slug, i) => (
-          <div key={`${slug}-${i}`} className="w-full max-w-xs space-y-2">
-            <div className="flex items-center justify-between">
-              <span className="flex items-center gap-2 text-sm font-medium">
-                <span
-                  className="inline-block h-2.5 w-2.5 rounded-full"
-                  style={{ backgroundColor: COMPARE_COLORS[i % COMPARE_COLORS.length] }}
-                />
-                Bot {i + 1}
-              </span>
-              {selected.length > MIN_COMPARE_BOTS && (
-                <button
-                  type="button"
-                  onClick={() => removeSlot(i)}
-                  className="text-muted-foreground cursor-pointer hover:text-red-400"
-                  aria-label="Remove bot"
-                >
-                  <X className="h-4 w-4" />
-                </button>
-              )}
-            </div>
-            <Select value={slug} onValueChange={(v) => updateSlot(i, v)}>
-              <SelectTrigger>
-                <SelectValue placeholder="Select bot" />
-              </SelectTrigger>
-              <SelectContent>
-                {bots.map((b) => (
-                  <SelectItem
-                    key={b.slug}
-                    value={b.slug}
-                    disabled={selected.includes(b.slug) && b.slug !== slug}
+  return (
+    <Container padY="md">
+      <PageHeader
+        align="center"
+        icon={Scale}
+        eyebrow="Multi-bot comparison"
+        title={<span className="gradient-text">Bot Comparison</span>}
+        description={`Compare ${MIN_COMPARE_BOTS}–${MAX_COMPARE_BOTS} Expert Advisors on performance, ROI, drawdown, win rate, charts, and pricing.`}
+        actions={
+          <>
+            <Button variant="outline" size="sm" onClick={shareComparison}>
+              <Link2 className="h-4 w-4" />
+              Share link
+            </Button>
+            <Button variant="outline" size="sm" asChild>
+              <Link href="/marketplace">Browse marketplace</Link>
+            </Button>
+          </>
+        }
+      />
+
+      <div className="border-border/60 bg-background/80 sticky top-16 z-20 mb-8 rounded-2xl border p-4 backdrop-blur-md sm:p-5">
+        <div className="flex flex-wrap items-end justify-center gap-4">
+          {selected.map((slug, i) => (
+            <div key={`${slug}-${i}`} className="w-full max-w-xs space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="flex items-center gap-2 text-sm font-medium">
+                  <span
+                    className="inline-block h-2.5 w-2.5 rounded-full"
+                    style={{ backgroundColor: COMPARE_COLORS[i % COMPARE_COLORS.length] }}
+                  />
+                  Bot {i + 1}
+                </span>
+                {selected.length > MIN_COMPARE_BOTS && (
+                  <button
+                    type="button"
+                    onClick={() => removeSlot(i)}
+                    className="text-muted-foreground cursor-pointer hover:text-red-400"
+                    aria-label="Remove bot"
                   >
-                    {b.name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-        ))}
-        {selected.length < MAX_COMPARE_BOTS && (
-          <Button variant="outline" onClick={addSlot}>
-            <Plus className="h-4 w-4" />
-            Add Bot
-          </Button>
-        )}
+                    <X className="h-4 w-4" />
+                  </button>
+                )}
+              </div>
+              <Select value={slug} onValueChange={(v) => updateSlot(i, v)}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select bot" />
+                </SelectTrigger>
+                <SelectContent>
+                  {bots.map((b) => (
+                    <SelectItem
+                      key={b.slug}
+                      value={b.slug}
+                      disabled={selected.includes(b.slug) && b.slug !== slug}
+                    >
+                      {b.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          ))}
+          {selected.length < MAX_COMPARE_BOTS && (
+            <Button variant="outline" onClick={addSlot}>
+              <Plus className="h-4 w-4" />
+              Add Bot
+            </Button>
+          )}
+        </div>
       </div>
 
-      <div className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <StatGrid cols={4} className="mb-8">
         {[
           {
             label: "Best ROI",
             icon: TrendingUp,
             index: winners.roi,
             value: (b: Bot) => formatPercent(b.roi),
-            tone: "text-emerald-400",
+            valueClassName: "text-emerald-400",
           },
           {
             label: "Lowest Drawdown",
             icon: TrendingDown,
             index: winners.drawdown,
             value: (b: Bot) => `${b.drawdown.toFixed(1)}%`,
-            tone: "text-sky-400",
+            valueClassName: "text-sky-400",
           },
           {
             label: "Best Win Rate",
             icon: Check,
             index: winners.winRate,
             value: (b: Bot) => `${b.winRate.toFixed(1)}%`,
-            tone: "text-amber-400",
+            valueClassName: "text-amber-400",
           },
           {
             label: "Best Price",
             icon: Wallet,
             index: winners.price,
             value: (b: Bot) => `${formatCurrency(b.price)}/mo`,
-            tone: "text-violet-400",
+            valueClassName: "text-violet-400",
           },
         ].map((card) => {
           const bot = selectedBots[card.index];
-          const Icon = card.icon;
           return (
-            <Card key={card.label} className="border-border/70 bg-card/80">
-              <CardHeader className="pb-2">
-                <CardDescription className="flex items-center gap-2">
-                  <Icon className={cn("h-4 w-4", card.tone)} />
-                  {card.label}
-                </CardDescription>
-                <CardTitle className="text-2xl">{bot ? card.value(bot) : "—"}</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-muted-foreground truncate text-sm">{bot?.name ?? "—"}</p>
-              </CardContent>
-            </Card>
+            <MetricCard
+              key={card.label}
+              label={card.label}
+              icon={card.icon}
+              value={bot ? card.value(bot) : "—"}
+              hint={bot?.name ?? "—"}
+              valueClassName={card.valueClassName}
+            />
           );
         })}
-      </div>
+      </StatGrid>
+
+      <MetricBars selectedBots={selectedBots} />
 
       <div className="mb-8 grid gap-6 lg:grid-cols-2">
         <MetricTable
@@ -481,7 +499,7 @@ export function BotComparison() {
 
       <Card className="border-border/70 bg-card/80 mb-8">
         <CardHeader>
-          <CardTitle>Comparison charts</CardTitle>
+          <CardTitle>Charts</CardTitle>
           <CardDescription>
             Overlay equity, ROI, drawdown, monthly returns, and performance snapshot
           </CardDescription>
@@ -660,35 +678,50 @@ export function BotComparison() {
         </CardContent>
       </Card>
 
-      <div className="mb-8 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        {selectedBots.map((bot, i) => (
-          <Card key={bot.id} className="border-border/70 bg-card/80">
-            <CardHeader className="pb-2">
-              <CardDescription className="flex items-center gap-2">
-                <span
-                  className="inline-block h-2.5 w-2.5 rounded-full"
-                  style={{ backgroundColor: COMPARE_COLORS[i % COMPARE_COLORS.length] }}
-                />
-                {bot.name}
-              </CardDescription>
-              <CardTitle className="text-2xl">{formatCurrency(bot.price)}/mo</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-1 text-sm">
-              <p className="text-muted-foreground">
-                Annual: {formatCurrency(annualPrice(bot.price))}
-              </p>
-              <p className="text-muted-foreground">
-                Value: {formatCurrency(pricePerRoiPoint(bot))} per 1% ROI
-              </p>
-              <Button className="mt-3 w-full" variant="outline" asChild>
-                <Link href={`/bots/${bot.slug}`}>
-                  View details <ArrowRight className="h-4 w-4" />
-                </Link>
-              </Button>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
+      <section className="mb-8" aria-labelledby="compare-pricing-heading">
+        <div className="mb-4">
+          <h2 id="compare-pricing-heading" className="text-xl font-semibold tracking-tight">
+            Pricing
+          </h2>
+          <p className="text-muted-foreground text-sm">
+            Monthly subscription, annual cost, and value per ROI point
+          </p>
+        </div>
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+          {selectedBots.map((bot, i) => (
+            <Card key={bot.id} className="border-border/70 bg-card/80">
+              <CardHeader className="pb-2">
+                <CardDescription className="flex items-center gap-2">
+                  <span
+                    className="inline-block h-2.5 w-2.5 rounded-full"
+                    style={{ backgroundColor: COMPARE_COLORS[i % COMPARE_COLORS.length] }}
+                  />
+                  {bot.name}
+                </CardDescription>
+                <CardTitle className="text-2xl">{formatCurrency(bot.price)}/mo</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-1 text-sm">
+                <p className="text-muted-foreground">
+                  Annual: {formatCurrency(annualPrice(bot.price))}
+                </p>
+                <p className="text-muted-foreground">
+                  Value: {formatCurrency(pricePerRoiPoint(bot))} per 1% ROI
+                </p>
+                <div className="mt-3 flex flex-col gap-2">
+                  <Button className="w-full" asChild>
+                    <Link href={`/bots/${bot.slug}`}>
+                      View details <ArrowRight className="h-4 w-4" />
+                    </Link>
+                  </Button>
+                  <Button className="w-full" variant="outline" asChild>
+                    <Link href="/billing">Subscribe</Link>
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      </section>
 
       <div className="flex flex-wrap justify-center gap-3">
         <Button asChild>
@@ -698,6 +731,6 @@ export function BotComparison() {
           <Link href="/recommend">Get AI recommendations</Link>
         </Button>
       </div>
-    </div>
+    </Container>
   );
 }

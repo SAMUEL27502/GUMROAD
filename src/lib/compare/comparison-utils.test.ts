@@ -2,9 +2,12 @@ import { describe, expect, it } from "vitest";
 import {
   annualPrice,
   bestIndex,
+  buildComparePath,
   buildEquitySeries,
   buildRoiSeries,
+  compareWithDefault,
   MAX_COMPARE_BOTS,
+  normalizeBarPercent,
   parseCompareSlugs,
   pricePerRoiPoint,
 } from "@/lib/compare/comparison-utils";
@@ -65,5 +68,36 @@ describe("pricing helpers", () => {
   it("computes price per ROI point", () => {
     const bot = bots[0];
     expect(pricePerRoiPoint(bot)).toBeCloseTo(bot.price / bot.roi);
+  });
+});
+
+describe("compare links", () => {
+  it("builds a compare path from slugs", () => {
+    expect(buildComparePath(["goldscalper-pro", "eurotrend-ai"])).toBe(
+      "/compare?bots=goldscalper-pro,eurotrend-ai"
+    );
+  });
+
+  it("returns bare /compare when too few slugs", () => {
+    expect(buildComparePath(["only-one"])).toBe("/compare");
+  });
+
+  it("pairs a bot with another catalog slug", () => {
+    const path = compareWithDefault(bots[0].slug, bots);
+    expect(path).toContain("/compare?bots=");
+    expect(path).toContain(bots[0].slug);
+    expect(path).not.toBe(`/compare?bots=${bots[0].slug},${bots[0].slug}`);
+  });
+});
+
+describe("normalizeBarPercent", () => {
+  it("gives the highest value the longest bar when higher is better", () => {
+    expect(normalizeBarPercent(40, [10, 40, 25], "higher")).toBe(100);
+    expect(normalizeBarPercent(10, [10, 40, 25], "higher")).toBeLessThan(100);
+  });
+
+  it("gives the lowest value the longest bar when lower is better", () => {
+    expect(normalizeBarPercent(4, [12, 4, 8], "lower")).toBe(100);
+    expect(normalizeBarPercent(12, [12, 4, 8], "lower")).toBe(4);
   });
 });
