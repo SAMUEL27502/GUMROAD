@@ -9,9 +9,9 @@ test.describe("public marketing pages", () => {
 
   test("marketplace lists bots and opens a detail page", async ({ page }) => {
     await page.goto("/marketplace");
-    await expect(page.getByRole("heading", { name: /marketplace/i }).first()).toBeVisible({
-      timeout: 15_000,
-    });
+    await expect(
+      page.getByRole("heading", { name: /browse.*verified mt5 bots/i })
+    ).toBeVisible({ timeout: 15_000 });
 
     const details = page.getByRole("link", { name: /view details/i }).first();
     await expect(details).toBeVisible();
