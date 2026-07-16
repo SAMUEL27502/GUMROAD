@@ -9,9 +9,11 @@ Modern Forex & MT5 automation platform where traders discover verified Expert Ad
 - **Prisma** · **PostgreSQL** · **Supabase Auth** (ready)
 - **React Query** · **Zustand** · **React Hook Form** · **Zod**
 - **Recharts** · **TradingView Advanced Chart**
+- **Vitest** · **Playwright** · **Sentry** · **Vercel Analytics**
 - **ESLint** · **Prettier** · **Dark mode by default** · **SEO**
 
-See [`docs/PROJECT_STRUCTURE.md`](docs/PROJECT_STRUCTURE.md) for the full folder map and config checklist.
+See [`docs/PROJECT_STRUCTURE.md`](docs/PROJECT_STRUCTURE.md) for the folder map.  
+Production: [`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md) · Testing: [`docs/TESTING.md`](docs/TESTING.md)
 
 ## Getting started
 
@@ -34,30 +36,27 @@ Open [http://localhost:3000](http://localhost:3000).
 
 ## Scripts
 
-| Command               | Description              |
-| --------------------- | ------------------------ |
-| `npm run dev`         | Start development server |
-| `npm run build`       | Production build         |
-| `npm run start`       | Start production server  |
-| `npm run lint`        | ESLint                   |
-| `npm run format`      | Prettier write           |
-| `npm run typecheck`   | TypeScript check         |
-| `npm run db:generate` | Generate Prisma client   |
-| `npm run db:push`     | Push schema to database  |
-| `npm run db:studio`   | Open Prisma Studio       |
+| Command | Description |
+| ------- | ----------- |
+| `npm run dev` | Development server |
+| `npm run build` / `start` | Production build & serve |
+| `npm test` / `test:e2e` | Vitest / Playwright |
+| `npm run lint` / `typecheck` | Quality gates |
+| `npm run db:migrate:deploy` | Apply Prisma migrations |
+| `npm run env:check` | Env readiness |
+| `npm run docker:up` | App + Postgres via Compose |
 
-## Features
+## Deploy
 
-- Landing, Marketplace, Bot Details, Charts (TradingView)
-- Dashboard, MT5 Connect, Pricing, Auth, Profile
-- Admin panel (users, bots, subscriptions, analytics)
-- Compare bots, profit calculator, economic calendar, news
-- Trading journal, leaderboard, referrals
-- Dark mode by default, responsive, SEO (sitemap + robots)
+- **Vercel** — connect repo, set env from `.env.example`, run migrations
+- **Docker** — `docker compose up --build` (migrate on start)
+- **CI** — `.github/workflows/ci.yml` (lint, test, build, e2e, Docker)
+
+Full checklist: [`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md). Health: `/api/health`.
 
 ## Environment
 
-See `.env.example` for required variables (`DATABASE_URL`, Supabase, Stripe, etc.).
+See `.env.example` for `DATABASE_URL`, Supabase, Stripe/PayPal, and Sentry.
 
 ## Risk notice
 

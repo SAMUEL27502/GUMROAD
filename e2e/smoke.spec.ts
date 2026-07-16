@@ -54,6 +54,15 @@ test.describe("public marketing pages", () => {
     expect(sitemap.ok()).toBeTruthy();
     expect(await sitemap.text()).toMatch(/urlset|url/i);
   });
+
+  test("health endpoint responds", async ({ request }) => {
+    const res = await request.get("/api/health");
+    expect(res.status()).toBeLessThan(500);
+    const body = await res.json();
+    expect(body).toHaveProperty("status");
+    expect(body).toHaveProperty("checks");
+    expect(body.service).toBe("tradebib");
+  });
 });
 
 test.describe("auth entry points", () => {

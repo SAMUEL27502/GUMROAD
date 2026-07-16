@@ -68,12 +68,17 @@ tradebib/
 │   ├── stores/                  # Zustand (auth, favorites, recommendations)
 │   └── types/
 ├── e2e/                         # Playwright smoke specs
+├── scripts/                     # docker-entrypoint, env check
+├── .github/workflows/           # CI + migrate workflows
+├── Dockerfile
+├── docker-compose.yml
+├── vercel.json
+├── sentry.*.config.ts
 ├── vitest.config.ts
 ├── vitest.setup.tsx
 ├── playwright.config.ts
 └── tsconfig.json
 ```
-
 ## Config checklist
 
 | Requirement           | Status                                   |
@@ -98,4 +103,5 @@ tradebib/
 | SEO                   | ✅ (metadata, sitemap, robots)           |
 | Performance           | ✅ (lazy charts, image, cache, prefetch) |
 | Testing               | ✅ (Vitest, RTL, Playwright)             |
+| Deployment            | ✅ (Docker, Vercel, CI, Sentry, health)  |
 | Framer Motion         | ✅                                       |

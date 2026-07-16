@@ -8,8 +8,17 @@ Creates all TradeBib tables (users, bots, subscriptions, reviews, favorites, con
 
 ```bash
 npm run db:migrate          # create/apply in development
-npm run db:migrate:deploy   # apply in CI/production
+npm run db:migrate:deploy   # apply in CI/production / Docker entrypoint
 ```
+
+## Production
+
+- Docker entrypoint runs `prisma migrate deploy` when `RUN_MIGRATIONS=true` (default).
+- GitHub Action: **Migrate (manual)** (`.github/workflows/migrate.yml`) with `DATABASE_URL` secret.
+- Vercel: run `npm run db:migrate:deploy` against Production env after first deploy (or use the Action).
+- Do **not** use `db:push` in production.
+
+See [`docs/DEPLOYMENT.md`](DEPLOYMENT.md).
 
 ## Seed — 50 sample bots
 
