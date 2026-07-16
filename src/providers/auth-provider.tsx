@@ -19,46 +19,51 @@ async function fetchDemoSession(): Promise<AuthUser | null> {
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const setUser = useAuthStore((s) => s.setUser);
   const setLoading = useAuthStore((s) => s.setLoading);
-  const clear = useAuthStore((s) => s.clear);
 
   useEffect(() => {
     let mounted = true;
+    let unsubscribe: (() => void) | undefined;
 
     async function init() {
       setLoading(true);
 
-      if (canUseSupabaseAuth()) {
-        const supabase = createClient();
-        const {
-          data: { user },
-        } = await supabase.auth.getUser();
+      try {
+        if (canUseSupabaseAuth()) {
+          const supabase = createClient();
+          const {
+            data: { user },
+          } = await supabase.auth.getUser();
 
-        if (!mounted) return;
-        setUser(user ? mapSupabaseUser(user) : null);
-
-        const {
-          data: { subscription },
-        } = supabase.auth.onAuthStateChange((_event, session) => {
           if (!mounted) return;
-          setUser(session?.user ? mapSupabaseUser(session.user) : null);
-        });
+          setUser(user ? mapSupabaseUser(user) : null);
 
-        return () => subscription.unsubscribe();
+          const {
+            data: { subscription },
+          } = supabase.auth.onAuthStateChange((_event, session) => {
+            if (!mounted) return;
+            setUser(session?.user ? mapSupabaseUser(session.user) : null);
+          });
+
+          unsubscribe = () => subscription.unsubscribe();
+          return;
+        }
+
+        const demoUser = await fetchDemoSession();
+        if (!mounted) return;
+        setUser(demoUser);
+      } catch {
+        if (!mounted) return;
+        setUser(null);
       }
-
-      const demoUser = await fetchDemoSession();
-      if (!mounted) return;
-      setUser(demoUser);
-      return undefined;
     }
 
-    const cleanupPromise = init();
+    void init();
 
     return () => {
       mounted = false;
-      void cleanupPromise.then((cleanup) => cleanup?.());
+      unsubscribe?.();
     };
-  }, [setUser, setLoading, clear]);
+  }, [setUser, setLoading]);
 
   return <>{children}</>;
 }

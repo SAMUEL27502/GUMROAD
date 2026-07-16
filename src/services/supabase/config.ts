@@ -24,9 +24,18 @@ export const PROTECTED_PATHS = [
   "/journal",
   "/referrals",
   "/billing",
+  "/affiliate",
+  "/notifications",
+  "/kyc",
 ] as const;
 
-export const AUTH_PATHS = ["/login", "/register", "/forgot-password", "/reset-password"] as const;
+export const AUTH_PATHS = [
+  "/login",
+  "/register",
+  "/signup",
+  "/forgot-password",
+  "/reset-password",
+] as const;
 
 export function isProtectedPath(pathname: string) {
   return PROTECTED_PATHS.some((path) => pathname === path || pathname.startsWith(`${path}/`));

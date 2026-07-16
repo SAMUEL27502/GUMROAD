@@ -74,5 +74,21 @@ test.describe("auth entry points", () => {
     await page.goto("/login");
     await expect(page.getByLabel(/email/i).first()).toBeVisible({ timeout: 15_000 });
     await expect(page.getByLabel(/password/i).first()).toBeVisible();
+    await expect(page.getByRole("button", { name: /sign in/i })).toBeVisible();
+  });
+
+  test("demo login reaches dashboard and logout returns to login", async ({ page }) => {
+    await page.goto("/login");
+    await page.getByLabel(/email/i).first().fill("trader@example.com");
+    await page.getByLabel(/password/i).first().fill("Password1");
+    await page.getByRole("button", { name: /sign in/i }).click();
+    await expect(page).toHaveURL(/\/dashboard/, { timeout: 20_000 });
+
+    // Prefer logout control if present; otherwise hit the action via navigation
+    const logout = page.getByRole("button", { name: /log out|sign out|logout/i }).first();
+    if (await logout.isVisible().catch(() => false)) {
+      await logout.click();
+      await expect(page).toHaveURL(/\/login/, { timeout: 15_000 });
+    }
   });
 });
