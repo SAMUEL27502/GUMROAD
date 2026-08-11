@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { LayoutDashboard, Store, LineChart, Plug, Settings, Bot } from "lucide-react";
+import { LayoutDashboard, Store, LineChart, Plug, Settings, Bot, Smartphone } from "lucide-react";
 import { Typography } from "@/components/ui/typography";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -80,6 +80,7 @@ const sidebarItems = [
   { href: "/marketplace", label: "Marketplace", icon: Store },
   { href: "/charts", label: "Charts", icon: LineChart },
   { href: "/mt5", label: "MT5 Connect", icon: Plug },
+  { href: "/mt5/mobile", label: "MT5 Mobile", icon: Smartphone },
   { href: "/profile", label: "Settings", icon: Settings },
 ];
 

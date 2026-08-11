@@ -76,3 +76,16 @@ test.describe("auth entry points", () => {
     await expect(page.getByLabel(/password/i).first()).toBeVisible();
   });
 });
+
+test.describe("MT5 mobile terminal", () => {
+  test("mobile terminal shows quotes and tab navigation", async ({ page }) => {
+    await page.goto("/mt5/mobile");
+    await expect(page.getByRole("heading", { name: /mt5 mobile terminal/i })).toBeVisible({
+      timeout: 15_000,
+    });
+    await expect(page.getByText("EURUSD").first()).toBeVisible();
+    await expect(page.getByRole("navigation", { name: /mt5 mobile tabs/i })).toBeVisible();
+    await page.getByRole("button", { name: /^trade$/i }).click();
+    await expect(page.getByText("Equity").first()).toBeVisible();
+  });
+});

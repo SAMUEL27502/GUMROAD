@@ -10,7 +10,7 @@ tradebib/
 │   ├── app/
 │   │   ├── layout.tsx           # Root shell (Navbar, Footer, Providers)
 │   │   ├── (marketing)/         # Public: home, marketplace, blog, auth entry, legal
-│   │   ├── (dashboard)/         # App: dashboard, profile, MT5, billing, referrals…
+│   │   ├── (dashboard)/         # App: dashboard, profile, MT5 (+ /mt5/mobile), billing…
 │   │   ├── (admin)/admin/       # Admin panel (URL /admin)
 │   │   ├── api/                 # REST + webhooks
 │   │   ├── auth/                # OAuth callback + verify routes

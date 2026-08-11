@@ -21,4 +21,6 @@ Store: `useMt5AccountsStore`
 
 Summary strip above the form aggregates connected Balance, Equity, and Free Margin.
 
+Mobile terminal preview: `/mt5/mobile` — see `docs/MT5_MOBILE.md`.
+
 See also: `docs/MT5_ACCOUNT_CARDS.md`

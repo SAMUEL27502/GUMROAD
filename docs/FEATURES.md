@@ -13,6 +13,7 @@ Post-core product surfaces shipped on the platform.
 | Telegram Alerts | `/alerts` | Demo connect `@TradeBibAlertsBot` |
 | Email Alerts | `/alerts` + Profile prefs | Live toggles |
 | Mobile PWA | `manifest.webmanifest` + `sw.js` | Installable shell |
+| MT5 Mobile Terminal | `/mt5/mobile` | Quotes · Chart · Trade · History preview |
 | Multi-language | Locale switcher (EN/ES/DE/FR) | Client dictionaries |
 | Admin Analytics | `/admin/analytics` | Live |
 | Coupon System | `/admin/coupons` + Billing redeem | Admin CRUD + checkout apply |

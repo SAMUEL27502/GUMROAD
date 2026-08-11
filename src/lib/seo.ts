@@ -220,6 +220,7 @@ export const PUBLIC_SITEMAP_ROUTES: {
   { path: "/compare", changeFrequency: "weekly", priority: 0.85 },
   { path: "/leaderboard", changeFrequency: "daily", priority: 0.8 },
   { path: "/mt5", changeFrequency: "weekly", priority: 0.8 },
+  { path: "/mt5/mobile", changeFrequency: "weekly", priority: 0.75 },
   { path: "/charts", changeFrequency: "weekly", priority: 0.75 },
   { path: "/calculator", changeFrequency: "monthly", priority: 0.7 },
   { path: "/calendar", changeFrequency: "daily", priority: 0.7 },

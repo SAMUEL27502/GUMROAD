@@ -8,6 +8,7 @@ const HEAVY = new Set([
   "/charts",
   "/compare",
   "/mt5",
+  "/mt5/mobile",
   "/recommend",
   "/notifications",
   "/referrals",
@@ -31,6 +32,7 @@ const columns = [
       { href: "/vps", label: "VPS Hosting" },
       { href: "/pricing", label: "Pricing" },
       { href: "/mt5", label: "MT5 Connect" },
+      { href: "/mt5/mobile", label: "MT5 Mobile" },
     ],
   },
   {
