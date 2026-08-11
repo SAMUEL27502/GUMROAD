@@ -82,6 +82,8 @@ export {
 export { DashboardCharts } from "@/components/dashboard/dashboard-charts";
 export { TradingViewAdvancedChart } from "@/components/charts/tradingview-advanced-chart";
 export { Mt5AccountCard, getAccountProfit } from "@/components/mt5/mt5-account-card";
+export { Mt5MobileTerminal } from "@/components/mt5/mt5-mobile-terminal";
+export { Mt5MobileChart } from "@/components/mt5/mt5-mobile-chart";
 export { notify, toast } from "@/components/ui/toast";
 export { Separator } from "@/components/ui/separator";
 export { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";

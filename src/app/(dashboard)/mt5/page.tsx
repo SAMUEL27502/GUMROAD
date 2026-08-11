@@ -4,12 +4,14 @@ import { useMemo } from "react";
 import { motion } from "framer-motion";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
+import Link from "next/link";
 import {
   ArrowDownRight,
   ArrowUpRight,
   Link2,
   Server,
   Shield,
+  Smartphone,
   TrendingUp,
   Wallet,
 } from "lucide-react";
@@ -115,16 +117,26 @@ export default function MT5Page() {
           transition={{ duration: 0.5 }}
           className="mb-8"
         >
-          <Badge variant="secondary" className="mb-3">
-            MetaTrader 5
-          </Badge>
-          <h1 className="text-3xl font-bold tracking-tight">
-            Connect Your <span className="gradient-text">MT5 Account</span>
-          </h1>
-          <p className="mt-2 max-w-2xl text-muted-foreground">
-            Link your broker with investor (read-only) access to sync balance, equity, margin, and
-            deploy bots securely.
-          </p>
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <Badge variant="secondary" className="mb-3">
+                MetaTrader 5
+              </Badge>
+              <h1 className="text-3xl font-bold tracking-tight">
+                Connect Your <span className="gradient-text">MT5 Account</span>
+              </h1>
+              <p className="mt-2 max-w-2xl text-muted-foreground">
+                Link your broker with investor (read-only) access to sync balance, equity, margin, and
+                deploy bots securely.
+              </p>
+            </div>
+            <Button variant="outline" asChild className="shrink-0">
+              <Link href="/mt5/mobile">
+                <Smartphone className="h-4 w-4" />
+                Mobile Terminal
+              </Link>
+            </Button>
+          </div>
         </motion.div>
 
         {/* Portfolio summary */}

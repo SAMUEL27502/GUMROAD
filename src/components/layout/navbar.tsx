@@ -257,6 +257,9 @@ export function Navbar() {
                   <DropdownMenuItem onClick={() => router.push("/mt5")}>
                     <Plug className="h-4 w-4" /> MT5 Connect
                   </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => router.push("/mt5/mobile")}>
+                    <Plug className="h-4 w-4" /> MT5 Mobile
+                  </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => router.push("/kyc")}>
                     <Shield className="h-4 w-4" /> KYC Verification
                   </DropdownMenuItem>
