@@ -20,10 +20,13 @@ Post-core product surfaces shipped on the platform.
 | Broker Directory | `/brokers` | Live directory |
 | Public Trader Profiles | `/traders/[handle]` | SSG profiles from leaderboard |
 | Copy Trading Dashboard | `/copy` | Leaders + allocations |
+| MT5 Code Lab | `/learn` | Educational MQL5 samples + downloads |
 
 ## Data modules
 
-`src/lib/data/{heatmap,vps,signals,brokers,copy-trading,kyc,alerts}.ts` plus leaderboard trader slugs.
+`src/lib/data/{heatmap,vps,signals,brokers,copy-trading,kyc,alerts,mt5-education}.ts` plus leaderboard trader slugs.
+
+See [`docs/MT5_EDUCATION.md`](MT5_EDUCATION.md).
 
 ## PWA
 

@@ -42,6 +42,7 @@ import { logoutAction } from "@/app/actions/auth";
 const links = [
   { href: "/marketplace", label: "Marketplace", prefetch: true },
   { href: "/signals", label: "Signals", prefetch: true },
+  { href: "/learn", label: "Learn", prefetch: true },
   { href: "/compare", label: "Compare", prefetch: false },
   { href: "/leaderboard", label: "Leaderboard", prefetch: true },
   { href: "/charts", label: "Charts", prefetch: false },
