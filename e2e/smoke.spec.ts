@@ -49,6 +49,16 @@ test.describe("public marketing pages", () => {
     await expect(page.getByRole("tab", { name: /equity|roi|drawdown/i }).first()).toBeVisible();
   });
 
+  test("MT5 code lab shares educational samples", async ({ page }) => {
+    await page.goto("/learn");
+    await expect(page.getByRole("heading", { name: /mt5 code/i })).toBeVisible({
+      timeout: 15_000,
+    });
+    await expect(page.getByRole("button", { name: /copy code/i })).toBeVisible();
+    await expect(page.getByRole("link", { name: /download \.mq5/i })).toBeVisible();
+    await expect(page.getByText(/educational use only/i)).toBeVisible();
+  });
+
   test("robots.txt and sitemap are served", async ({ request }) => {
     const robots = await request.get("/robots.txt");
     expect(robots.ok()).toBeTruthy();

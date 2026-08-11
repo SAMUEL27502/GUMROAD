@@ -55,6 +55,7 @@ const columns = [
       { href: "/kyc", label: "KYC Verification" },
       { href: "/recommend", label: "AI Recommendations" },
       { href: "/compare", label: "Bot Comparison" },
+      { href: "/learn", label: "MT5 Code Lab" },
     ],
   },
   {

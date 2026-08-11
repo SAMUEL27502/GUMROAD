@@ -225,6 +225,7 @@ export const PUBLIC_SITEMAP_ROUTES: {
   { path: "/calendar", changeFrequency: "daily", priority: 0.7 },
   { path: "/news", changeFrequency: "daily", priority: 0.7 },
   { path: "/signals", changeFrequency: "daily", priority: 0.85 },
+  { path: "/learn", changeFrequency: "weekly", priority: 0.8 },
   { path: "/brokers", changeFrequency: "weekly", priority: 0.75 },
   { path: "/copy", changeFrequency: "weekly", priority: 0.8 },
   { path: "/heatmap", changeFrequency: "weekly", priority: 0.65 },
